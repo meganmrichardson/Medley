@@ -1,4 +1,4 @@
-# languagename
+# Medley
 
 Team Members: 
 * Henno Kublin
