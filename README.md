@@ -14,6 +14,8 @@ Medley is created by [@Henno Kublin](https://github.com/hjkublin), [@Amanda Marq
 
 ## Types & Variable Declarations
 
+#### Primitive Types
+
 | Types      | Types in Medley           | Variable Declarations                                        |
 | ---------- | ------------------------- | ------------------------------------------------------------ |
 | string     | `stringberry`             | ``                                                           |
@@ -21,16 +23,42 @@ Medley is created by [@Henno Kublin](https://github.com/hjkublin), [@Amanda Marq
 | int        | `intberry`                | ``                                                           |
 | float      | `floatberry`              | ``                                                           |
 
+#### Data Types
+
+| Types      | Types in Medley           | Variable Declarations                                        |
+| ---------- | ------------------------- | ------------------------------------------------------------ |
+| array      | ``                        | ``                                                           |
+
 ## Operators
 
-| Operation  | Operator in Medley        | Type Compatability.                                          |
-| ---------- | ------------------------- | ------------------------------------------------------------ |
-| add        | ``                        | ``                                                           |
-| subtract   | ``                        | ``                                                           |
-| mulitply   | ``                        | ``                                                           |
-| divide     | ``                        | ``                                                           |
+#### Binary Operators
+
+| Operation                  | Operator in Medley        | Type Compatability.                                          |
+| -------------------------- | ------------------------- | ------------------------------------------------------------ |
+| add `+`                    | ``                        | ``                                                           |
+| subtract `-`               | ``                        | ``                                                           |
+| multiply `*`               | ``                        | ``                                                           |
+| divide `/`                 | ``                        | ``                                                           |
+| modulus `%`                | ``                        | ``                                                           |
+| less than `<`              | ``                        | ``                                                           |
+| greater than `>`           | ``                        | ``                                                           |
+| less than or equal `<=`    | ``                        | ``                                                           |
+| greater than or equal `>=` | ``                        | ``                                                           |
+| logical AND `&&`           | ``                        | ``                                                           |
+| logical OR `||`            | ``                        | ``                                                           |
+
+#### Unary Operators
+
+| Operation                  | Operator in Medley        | Type Compatability.                                          |
+| -------------------------- | ------------------------- | ------------------------------------------------------------ |
+| negative `-`               | ``                        | ``                                                           |
+| negation `!`, `not`        | ``                        | ``                                                           |
 
 ## Comments
 
 * Single Line: `::`
 * Block: `::: :::`
+
+## Medley Examples
+
+
