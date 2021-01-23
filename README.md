@@ -44,8 +44,8 @@ Medley is created by [@Henno Kublin](https://github.com/hjkublin), [@Amanda Marq
 | greater than `>`           | ``                        | ``                                                           |
 | less than or equal `<=`    | ``                        | ``                                                           |
 | greater than or equal `>=` | ``                        | ``                                                           |
-| logical AND `&&`           | ``                        | ``                                                           |
-| logical OR `||`            | ``                        | ``                                                           |
+| logical AND `and`, `&&`    | ``                        | ``                                                           |
+| logical OR `or`, `\|\|`      | ``                        | ``                                                           |
 
 #### Unary Operators
 
