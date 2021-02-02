@@ -23,6 +23,18 @@ Medley is created by [@Henno Kublin](https://github.com/hjkublin), [@Amanda Marq
 | int        | `intberry`                | ``                                                           |
 | float      | `floatberry`              | ``                                                           |
 
+## Variable Declaration and Assignment
+
+| JavaScript                           | RealHotGirlScript                     |
+| ------------------------------------ | ------------------------------------- |
+| let x = 5;                           | ''                                    |
+| let y = “hello!”;                    | ''                                    |
+| let z = 6.9;                         | ''                                    |
+| let t = true;                        | ''                                    |
+| let f = false;                       | ''                                    |
+| const name = “real hot girl script”; | ''                                    |
+
+
 #### Data Types
 
 | Types      | Types in Medley           | Variable Declarations                                        |
