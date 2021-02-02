@@ -47,7 +47,7 @@ Medley is created by [@Henno Kublin](https://github.com/hjkublin), [@Amanda Marq
 | logical AND `and`, `&&`    | ``                        | ``                                                           |
 | logical OR `or`, `\|\|`      | ``                        | ``                                                           |
 
-#### Unary Operators
+### Unary Operators
 
 | Operation                  | Operator in Medley        | Type Compatability.                                          |
 | -------------------------- | ------------------------- | ------------------------------------------------------------ |
@@ -59,9 +59,9 @@ Medley is created by [@Henno Kublin](https://github.com/hjkublin), [@Amanda Marq
 * Single Line: `::`
 * Block: `::: :::`
 
-### Medley Examples
+## Medley Examples
 
-#### Variable Declaration and Assignment
+### Variable Declaration and Assignment
 
 | JavaScript                           | Medley                                |
 | ------------------------------------ | ------------------------------------- |
