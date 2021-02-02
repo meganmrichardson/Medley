@@ -14,7 +14,7 @@ Medley is created by [@Henno Kublin](https://github.com/hjkublin), [@Amanda Marq
 
 ## Types & Variable Declarations
 
-#### Primitive Types
+### Primitive Types
 
 | Types      | Types in Medley           | Variable Declarations                                        |
 | ---------- | ------------------------- | ------------------------------------------------------------ |
@@ -23,7 +23,7 @@ Medley is created by [@Henno Kublin](https://github.com/hjkublin), [@Amanda Marq
 | int        | `intberry`                | ``                                                           |
 | float      | `floatberry`              | ``                                                           |
 
-## Variable Declaration and Assignment
+#### Variable Declaration and Assignment
 
 | JavaScript                           | RealHotGirlScript                     |
 | ------------------------------------ | ------------------------------------- |
@@ -35,15 +35,15 @@ Medley is created by [@Henno Kublin](https://github.com/hjkublin), [@Amanda Marq
 | const name = “real hot girl script”; | ''                                    |
 
 
-#### Data Types
+### Data Types
 
 | Types      | Types in Medley           | Variable Declarations                                        |
 | ---------- | ------------------------- | ------------------------------------------------------------ |
 | array      | ``                        | ``                                                           |
 
-## Operators
+### Operators
 
-#### Binary Operators
+### Binary Operators
 
 | Operation                  | Operator in Medley        | Type Compatability.                                          |
 | -------------------------- | ------------------------- | ------------------------------------------------------------ |
@@ -66,11 +66,11 @@ Medley is created by [@Henno Kublin](https://github.com/hjkublin), [@Amanda Marq
 | negative `-`               | ``                        | ``                                                           |
 | negation `!`, `not`        | ``                        | ``                                                           |
 
-## Comments
+### Comments
 
 * Single Line: `::`
 * Block: `::: :::`
 
-## Medley Examples
+### Medley Examples
 
 
