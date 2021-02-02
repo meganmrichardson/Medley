@@ -41,7 +41,7 @@ Medley is created by [@Henno Kublin](https://github.com/hjkublin), [@Amanda Marq
 | ---------- | ------------------------- | ------------------------------------------------------------ |
 | array      | ``                        | ``                                                           |
 
-### Operators
+## Operators
 
 ### Binary Operators
 
