@@ -10,66 +10,467 @@ Medley is created by [@Henno Kublin](https://github.com/hjkublin), [@Amanda Marq
 
 ## Features
 
-* Statically Typed
+- Statically Typed
 
 ## Types & Variable Declarations
 
-### Primitive Types
+| Keywords in Javascript | Medley       |
+| ---------------------- | ------------ |
+| function               | blend        |
+| return                 | squeeze      |
+| if()                   | ifmelon()    |
+| else if()              | elifmelon()  |
+| else                   | elsemelon    |
+| for()                  | formelon()   |
+| while()                | whilemelon() |
 
-| Types      | Types in Medley           | Variable Declarations                                        |
-| ---------- | ------------------------- | ------------------------------------------------------------ |
-| string     | `stringberry`             | ``                                                           |
-| boolean    | `boolberry`               | ``                                                           |
-| int        | `intberry`                | ``                                                           |
-| float      | `floatberry`              | ``                                                           |
+## Built In Functions
 
-### Data Types
+| JavaScript                     | Medley                   |
+| ------------------------------ | ------------------------ |
+| `console.log(“Hello World!”);` | `juice "Hello World!" |` |
 
-| Types      | Types in Medley           | Variable Declarations                                        |
-| ---------- | ------------------------- | ------------------------------------------------------------ |
-| array      | ``                        | ``                                                           |
+## Primitive Types
 
-## Operators
+| Types in JavaScript | Types in Medley | Variable Declarations Example       |
+| ------------------- | --------------- | ----------------------------------- |
+| string              | `stringberry`   | `stringberry title is "medley" |`   |
+| boolean             | `boolberry`     | `boolberry bestLanguagee is true |` |
+| int                 | `intberry`      | `intberry teamSize is 6 |`          |
+| float               | `floatberry`    | `floatberry ourIQ is 156.7 |`       |
 
-### Binary Operators
+| Booomglean Types In Javascript | Boolean Types In Medley |
+| ------------------------------ | ----------------------- |
+| `true`                         | `organic`               |
+| `false`                        | `gmo`                   |
 
-| Operation                  | Operator in Medley        | Type Compatability.                                          |
-| -------------------------- | ------------------------- | ------------------------------------------------------------ |
-| add `+`                    | ``                        | ``                                                           |
-| subtract `-`               | ``                        | ``                                                           |
-| multiply `*`               | ``                        | ``                                                           |
-| divide `/`                 | ``                        | ``                                                           |
-| modulus `%`                | ``                        | ``                                                           |
-| less than `<`              | ``                        | ``                                                           |
-| greater than `>`           | ``                        | ``                                                           |
-| less than or equal `<=`    | ``                        | ``                                                           |
-| greater than or equal `>=` | ``                        | ``                                                           |
-| logical AND `and`, `&&`    | ``                        | ``                                                           |
-| logical OR `or`, `\|\|`      | ``                        | ``                                                           |
+## Data Types
 
-### Unary Operators
+| Types in Javascript | Types in Medley | Variable Declaration Example in Medley                                            |
+| ------------------- | --------------- | --------------------------------------------------------------------------------- |
+| Array               | `berrybasket`   | `berrybasket~stringberry~ s = ~"strawberry" ; "blueberry"~ |`                     |
+| Dictionary          | `fruitbasket`   | `fruitbasket~stringberry, stringberry~ s = ~"key1","value1" ; "key2","value2"~ |` |
 
-| Operation                  | Operator in Medley        | Type Compatability.                                          |
-| -------------------------- | ------------------------- | ------------------------------------------------------------ |
-| negative `-`               | ``                        | ``                                                           |
-| negation `!`, `not`        | ``                        | ``                                                           |
+## Binary Operators
 
-### Comments
+| Operation                              | Type Compatability           |
+| -------------------------------------- | ---------------------------- |
+| add `plus`                             | `Strings, Numbers`           |
+| subtract `minus`                       | `Numbers`                    |
+| multiply `times`                       | `Numbers`                    |
+| divide `divby`                         | `Numbers`                    |
+| modulus `mod`                          | `Numbers`                    |
+| less than `less`                       | `Numbers`                    |
+| greater than `more`                    | `Numbers`                    |
+| less than or equal to `less equals`    | `Numbers`                    |
+| greater than or equal to `more equals` | `Numbers`                    |
+| strictly equal `equals`                | `Strings, Numbers, Booleans` |
+| logical AND `apple`                    | `Booleans`                   |
+| logical OR `orange`                    | `Booleans`                   |
 
-* Single Line: `::`
-* Block: `::: :::`
+## Unary Operators
+
+| Operation      | Type Compatability |
+| -------------- | ------------------ |
+| negative `-`   | `Numbers`          |
+| negation `nut` | `Booleans`         |
+| increment `++` | `Numbers`          |
+| decrement `--` | `Numbers`          |
+
+## Comments
+
+- Single Line: `::`
+- Block: `::: :::`
 
 ## Medley Examples
 
-### Variable Declaration and Assignment
+### If Statements
 
-| JavaScript                           | Medley                                |
-| ------------------------------------ | ------------------------------------- |
-| let x = 5;                           | ''                                    |
-| let y = “hello!”;                    | ''                                    |
-| let z = 6.9;                         | ''                                    |
-| let t = true;                        | ''                                    |
-| let f = false;                       | ''                                    |
-| const name = “real hot girl script”; | ''                                    |
+```
+ifmelon 1 plus 1 equals 2  ->
+  juice "this is factual information" |
+<-
 
+```
 
+### For Loops
+
+```
+formelon i is 10 | i more equals num | i-- ->
+  juice "the number is " plus i |
+<-
+```
+
+### While Loops
+
+```
+whilemelon i less 10 ->
+  juice " " plus i |
+  i++ |
+<-
+```
+
+### Hello World
+
+Javascript:
+
+```
+console.log('Hello World');
+```
+
+Medley:
+
+```
+juice "Hello, World!" |
+```
+
+### Fibonacci
+
+Javascript:
+
+```
+function fibonacci(num) {
+    var num1 = 0;
+    var num2 = 1;
+    var sum;
+    var i = 0;
+    for (i = 0; i < num; i++) {
+        sum = num1 + num2;
+        num1 = num2;
+        num2 = sum;
+    }
+    return num2;
+}
+```
+
+Medley:
+
+```
+blend fibonacci(intberry num) ->
+    intberry num1 is 0 |
+    intberry num2 is 1 |
+    intberry sum |
+    intberry i is 0 |
+    formelon i is 0 | i less num | i++ ->
+        sum is num1 plus num2 |
+        num1 is num2 |
+        num2 is sum |
+    <-
+    squeeze num2 |
+<-
+```
+
+### Function to find if a number is odd
+
+Javascript:
+
+```
+def odd_or_even(num):
+    if(num % 2 == 0) {
+        console.log("The number is even.");
+    } else {
+        console.log("The number is odd.");
+    }
+```
+
+Medley:
+
+```
+blend oddOrEven(intberry num) ->
+    ifmelon num mod 2 equals 0 ->
+        juice "The number is even." |
+    <- elsemelon ->
+        juice "The number is odd." |
+    <-
+<-
+```
+
+### Fahrenheit to celsius
+
+Javascript:
+
+```
+function toCelsius(fahrenheit) {
+    return (5/9) * (fahrenheit-32);
+}
+```
+
+Medley:
+
+```
+blend toCelsius(floatberry fahrenheit) ->
+    squeeze (5 divby 9) times (fahrenheit minus 32) |
+<-
+```
+
+### First factorial
+
+Javascript:
+
+```
+function firstFactorial(x) {
+    if (x == 0 || x == 1) {
+        return 1;
+    }
+    return x * firstFactorial(x - 1);
+}
+```
+
+Medley:
+
+```
+blend firstFactorial(num) ->
+    ifmelon num equals 0 or num equals 1 ->
+        squeeze 1 |
+    <-
+    squeeze num times firstFactorial(num minus 1) |
+<-
+```
+
+### Types of Static Semantic Errors
+
+\*Incompatible types
+
+*Use of a non-initialized variable
+*Index out of range
+*Type mismatch in declaration
+*Not a function
+\*Not a dictionary
+\*Not a string
+
+Variable already declared
+Variable assignment type mismatch
+Variable not yet declared
+Non-existing function call
+Incorrect number of function parameters
+Mismatched function return type
+Types are not compatible
+Function missing return statement
+Arithmetic with undefined variable
+Invalid types used with addition
+Invalid types used with multiplication
+Invalid types used with subtraction
+Invalid types used with division
+Incorrect use of unary operator
+Inconsistent list types
+Invalid variable type
+Break outside of loops or task
+Deterministic condition
+Invalid dict types
+Unreachable statement
+Inconsistent dict expression types
+```o`|` ` | OMG | eslaf |\||\ cxinagro | \ eurt | \
+| ----------------------- | | ---------------------------
+|
+yeldeM Beovno n s pyTpoaelot | pBiitrcsaoaJ nI selyT nae sepl##o DaBta |Types
+
+| Types in Javascript | Types in Medley | Variable Declaration Example in Medley                                            |
+| ------------------- | --------------- | --------------------------------------------------------------------------------- |
+| Array               | `berrybasket`   | `berrybasket~stringberry~ s = ~"strawberry" ; "blueberry"~ |`                     |
+| Dictionary          | `fruitbasket`   | `fruitbasket~stringberry, stringberry~ s = ~"key1","value1" ; "key2","value2"~ |` |
+
+## Binary Operators
+
+| Operation                              | Type Compatability           |
+| -------------------------------------- | ---------------------------- |
+| add `plus`                             | `Strings, Numbers`           |
+| subtract `minus`                       | `Numbers`                    |
+| multiply `times`                       | `Numbers`                    |
+| divide `divby`                         | `Numbers`                    |
+| modulus `mod`                          | `Numbers`                    |
+| less than `less`                       | `Numbers`                    |
+| greater than `more`                    | `Numbers`                    |
+| less than or equal to `less equals`    | `Numbers`                    |
+| greater than or equal to `more equals` | `Numbers`                    |
+| strictly equal `equals`                | `Strings, Numbers, Booleans` |
+| logical AND `apple`                    | `Booleans`                   |
+| logical OR `orange`                    | `Booleans`                   |
+
+## Unary Operators
+
+| Operation      | Type Compatability |
+| -------------- | ------------------ |
+| negative `-`   | `Numbers`          |
+| negation `nut` | `Booleans`         |
+| increment `++` | `Numbers`          |
+| decrement `--` | `Numbers`          |
+
+## Comments
+
+- Single Line: `::`
+- Block: `::: :::`
+
+## Medley Examples
+
+### If Statements
+
+```
+ifmelon 1 plus 1 equals 2  ->
+  juice "this is factual information" |
+<-
+
+```
+
+### For Loops
+
+```
+formelon i is 10 | i more equals num | i-- ->
+  juice "the number is " plus i |
+<-
+```
+
+### While Loops
+
+```
+whilemelon i less 10 ->
+  juice " " plus i |
+  i++ |
+<-
+```
+
+### Hello World
+
+Javascript:
+
+```
+console.log('Hello World');
+```
+
+Medley:
+
+```
+juice "Hello, World!" |
+```
+
+### Fibonacci
+
+Javascript:
+
+```
+function fibonacci(num) {
+    var num1 = 0;
+    var num2 = 1;
+    var sum;
+    var i = 0;
+    for (i = 0; i < num; i++) {
+        sum = num1 + num2;
+        num1 = num2;
+        num2 = sum;
+    }
+    return num2;
+}
+```
+
+Medley:
+
+```
+blend fibonacci(intberry num) ->
+    intberry num1 is 0 |
+    intberry num2 is 1 |
+    intberry sum |
+    intberry i is 0 |
+    formelon i is 0 | i less num | i++ ->
+        sum is num1 plus num2 |
+        num1 is num2 |
+        num2 is sum |
+    <-
+    squeeze num2 |
+<-
+```
+
+### Function to find if a number is odd
+
+Javascript:
+
+```
+def odd_or_even(num):
+    if(num % 2 == 0) {
+        console.log("The number is even.");
+    } else {
+        console.log("The number is odd.");
+    }
+```
+
+Medley:
+
+```
+blend oddOrEven(intberry num) ->
+    ifmelon num mod 2 equals 0 ->
+        juice "The number is even." |
+    <- elsemelon ->
+        juice "The number is odd." |
+    <-
+<-
+```
+
+### Fahrenheit to celsius
+
+Javascript:
+
+```
+function toCelsius(fahrenheit) {
+    return (5/9) * (fahrenheit-32);
+}
+```
+
+Medley:
+
+```
+blend toCelsius(floatberry fahrenheit) ->
+    squeeze (5 divby 9) times (fahrenheit minus 32) |
+<-
+```
+
+### First factorial
+
+Javascript:
+
+```
+function firstFactorial(x) {
+    if (x == 0 || x == 1) {
+        return 1;
+    }
+    return x * firstFactorial(x - 1);
+}
+```
+
+Medley:
+
+```
+blend firstFactorial(num) ->
+    ifmelon num equals 0 or num equals 1 ->
+        squeeze 1 |
+    <-
+    squeeze num times firstFactorial(num minus 1) |
+<-
+```
+
+### Types of Static Semantic Errors
+
+- Incompatible types
+- Variable has already been declared
+- Use of a non-initialized variable
+- Index out of range
+- Type mismatch in declaration
+- Function call does not exist
+- Incorrect use of unary operator
+- Break outside of loops or task
+
+Non-existing function call
+Incorrect number of function parameters
+Mismatched function return type
+Types are not compatible
+Function missing return statement
+Arithmetic with undefined variable
+Invalid types used with addition
+Invalid types used with multiplication
+Invalid types used with subtraction
+Invalid types used with division
+Incorrect use of unary operator
+Inconsistent list types
+Invalid variable type
+Break outside of loops or task
+Deterministic condition
+Invalid dict types
+Unreachable statement
+Inconsistent dict expression types
