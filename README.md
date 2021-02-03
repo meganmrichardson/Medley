@@ -26,14 +26,14 @@ Medley is created by [@Henno Kublin](https://github.com/hjkublin), [@Amanda Marq
 
 ## Built In Functions
 
-| JavaScript                     | Medley                   |
-| ------------------------------ | ------------------------ |
+| JavaScript                     | Medley                    |
+| ------------------------------ | ------------------------- |
 | `console.log(“Hello World!”);` | `juice "Hello World!" \|` |
 
 ## Primitive Types
 
-| Types in JavaScript | Types in Medley | Variable Declarations Example       |
-| ------------------- | --------------- | ----------------------------------- |
+| Types in JavaScript | Types in Medley | Variable Declarations Example        |
+| ------------------- | --------------- | ------------------------------------ |
 | string              | `stringberry`   | `stringberry title is "medley" \|`   |
 | boolean             | `boolberry`     | `boolberry bestLanguagee is true \|` |
 | int                 | `intberry`      | `intberry teamSize is 6 \|`          |
@@ -46,8 +46,8 @@ Medley is created by [@Henno Kublin](https://github.com/hjkublin), [@Amanda Marq
 
 ## Data Types
 
-| Types in Javascript | Types in Medley | Variable Declaration Example in Medley                                            |
-| ------------------- | --------------- | --------------------------------------------------------------------------------- |
+| Types in Javascript | Types in Medley | Variable Declaration Example in Medley                                             |
+| ------------------- | --------------- | ---------------------------------------------------------------------------------- |
 | Array               | `berrybasket`   | `berrybasket~stringberry~ s = ~"strawberry" ; "blueberry"~ \|`                     |
 | Dictionary          | `fruitbasket`   | `fruitbasket~stringberry, stringberry~ s = ~"key1","value1" ; "key2","value2"~ \|` |
 
