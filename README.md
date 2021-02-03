@@ -95,7 +95,7 @@ ifmelon 1 plus 1 equals 2  ->
 ### For Loops
 
 ```
-formelon i is 10 | i more equals num | i-- ->
+formelon intberry i is 10 | i more equals num | i-- ->
   juice "the number is " plus i |
 <-
 ```
@@ -103,6 +103,7 @@ formelon i is 10 | i more equals num | i-- ->
 ### While Loops
 
 ```
+intberry i is 2 | 
 whilemelon i less 10 ->
   juice " " plus i |
   i++ |
@@ -231,27 +232,15 @@ blend firstFactorial(num) ->
 - Incompatible types
 - Variable has already been declared
 - Use of a non-initialized variable
+- Invalid variable type
+- Invalid types used with add, sub, mult, div, or mod 
+- Incorrect use of unary operator
 - Index out of range
 - Type mismatch in declaration
+- Function missing return statement
+- Mismatched function return type
+- Incorrect number of function parameters
 - Function call does not exist
-- Incorrect use of unary operator
 - Break outside of loops or task
-
-Non-existing function call
-Incorrect number of function parameters
-Mismatched function return type
-Types are not compatible
-Function missing return statement
-Arithmetic with undefined variable
-Invalid types used with addition
-Invalid types used with multiplication
-Invalid types used with subtraction
-Invalid types used with division
-Incorrect use of unary operator
-Inconsistent list types
-Invalid variable type
-Break outside of loops or task
-Deterministic condition
-Invalid dict types
-Unreachable statement
-Inconsistent dict expression types
+- Unreachable statement
+- Types are not compatible
