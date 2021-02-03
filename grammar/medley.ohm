@@ -1,157 +1,78 @@
-medley {
-  Program     =  Stmt*
-  Stmt        =  SimpleStmt "!!!"                           -- simple
-              |  class id "(" Params ")" Block              -- class
-              |  async? funcDecl (Type | void)
-                 id "(" Params ")" Block                    -- function
-              |  while Exp Block                            -- while
-              |  if Exp Block (elseif Exp Block)*
-                 (else Block)?                              -- if
-              |  switch Exp "$" Case+ DefaultCase? "#"      -- switch
-              |  for (intType | longType)  id ":"
-                 Exp "🔥" Exp "🔥" id incremop Block        -- forloop1
-              |  for "[" numlit spread
-                   numlit "]" Block                         -- forloop2
-  SimpleStmt  =  const? Type DeclIds ":" Exps               -- varDecl
-              |  VarExps ":" Exps                           -- assign
-              |  Call                                       -- call
-              |  print Exp                                  -- print
-              |  break                                      -- break
-              |  continue                                   -- continue
-              |  return Exp?                                -- return
-              |  Exp
-  Block       =  "$" Stmt* "#"
-  Case        =  case Exp Block
-  DefaultCase =  default Block
-  Exp         =  Exp "||" Exp1                              -- or
-              |  Exp "&&" Exp1                              -- and
-              |  Exp1
-  Exp1        =  Exp2 relop Exp2                            -- binary
-              |  Exp2
-  Exp2        =  Exp2 addop Exp3                            -- binary
-              |  Exp3
-  Exp3        =  Exp3 mulop Exp4                            -- binary
-              |  Exp4
-  Exp4        =  prefixop Exp5                              -- unary
-              |  Exp5
-  Exp5        =  Exp6 incremop                              -- increment
-              |  Exp6
-  Exp6        =  Exp7 "^" Exp7                              -- exponentiation
-              |  Exp7
-  Exp7        =  boollit
-              |  numlit
-              |  strlit
-              |  nonelit
-              |  "(" Exp ")"                                -- parens
-              |  "[" ListOf<Exp, ","> "]"                   -- arrays
-              |  "$" ListOf<Exp, ","> "#"                   -- set
-              |  "$" ListOf<KeyValue, ","> "#"              -- dict
-              |  "(" ListOf<Exp, ","> ")"                   -- tuple
-              |  Call
-              |  VarExp
-  KeyValue    =  Exp "~" Exp
-  Call        =  await? id "(" Args ")"
-  Exps        =  NonemptyListOf<Exp, ",">
-  DeclId      =  id
-  DeclIds     =  NonemptyListOf<DeclId, ",">
-  VarExp      =  VarExp "[" Exp "]"                         -- subscripted
-              |  VarExp "." id                              -- member
-              |  id                                         -- simple
-  VarExps     =  NonemptyListOf<VarExp, ",">
-  Param       =  Type id (":" Exp)?
-  Params      =  ListOf<Param, ",">
-  Arg         =  id ":" Exp
-  Args        =  ListOf<Arg, ",">
-  Type        =  intType
-  			     |  longType
-              |  stringType
-              |  booleanType
-              |  ArrayType
-              |  SetType
-              |  DictType
-              |  TupleType
-              |  id                                         -- id
-  intType     =  "intberry"
-  floatType   =  "floatberry"
-  stringType  =  "stringberry"
-  booleanType =  "boolbery"
-  ArrayType   =  arrayDecl "<"Type">"
-  SetType     =  setDecl "<"Type">"
-  DictType    =  dictDecl "<" Type "," Type ">"
-  class       =  "ATTENTIONATTENTION🗣" ~alnum
-  spread      =  "spreadThatThang🍯" ~alnum
-  singleLnCmt =  "::" ~alnum
-  negate      =  "nut" ~alnum
-  while       =  "whilemelon"  ~alnum
-  if          =  "ifmelon" ~alnum
-  elseif      =  "elifmelon" ~alnum
-  else        =  "elsemelon" ~alnum
-  switch      =  "shutUpGirlfriend😈" ~alnum
-  void        =  "leftOnRead" ~alnum
-  for         =  "formelon" ~alnum
-  case        =  "andWhatAboutIt👉" ~alnum
-  print       =  "juice" ~alnum
-  default     =  "andLetMeDoMe🤑" ~alnum
-  await       =  "hotlineBling💎" ~alnum
-  true        =  "organic" ~alnum
-  false       =  "gmo" ~alnum
-  arrayDecl   =  "arrayz" ~alnum
-  setDecl     =  "setz" ~alnum
-  dictDecl    =  "dictz" ~alnum
-  tupleDecl   =  "tuplez" ~alnum
-  funcDecl    =  "weOutHereTryinToFunction" ~alnum
-  return      =  "andThemsTheFacts" ~alnum
-  break       =  "GTFO💩" ~alnum
-  keyword     =  (intType
-              |  floatType
-              |  stringType
-              |  booleanType
-              |  arrayDecl
-              |  const
-              |  class
-              |  continue
-              |  spread
-              |  singleLnCmt
-              |  negate
-              |  while
-              |  if
-              |  elseif
-              |  else
-              |  switch
-              |  void
-              |  for
-              |  async
-              |  case
-              |  print
-              |  default
-              |  await
-              |  true
-              |  arrayDecl
-              |  setDecl
-              |  dictDecl
-              |  tupleDecl
-              |  nonelit
-              |  false
-              |  funcDecl
-              |  return
-              |  break) ~idrest
-  id          =  ~keyword ("_" | letter+) idrest*
-  idrest      =  "_" | alnum
-  numlit      =  (("+" | "-")?) digit+ frac? eExpo?
-  frac        =  "." digit*
-  eExpo       =  (caseInsensitive<"e">) ("+" | "-")?
-                 digit+
-  boollit     =  true | false
-  strlit      =  "\"" (~"\\" ~"\"" ~"\n" any | escape)*
-                 "\""
-  nonelit     =  "deceasedOnYouHoes"  ~alnum
-  escape      =  "\\" ("\\" | "\"" | "n")                      -- simple
-  incremop 	  =  "++" | "--"
-  addop       =  "+" | "-"
-  relop       =  "<=" | "<" | "==" | "!="| ">=" | ">"
-  mulop       =  "*" | "/" | "%"
-  prefixop    =  "-" | negate | "+"
-  space      +=  " " | "\t" | comment
-  comment     =  singleLnCmt (~"\n" any)*                      -- singleline
-              |  ":/" (~"/:" any)* "/:"                        -- multiline
+Medley {
+  Program    = Statement*
+  Statement  = Function                              --declare
+             | Assignment
+             | Reassign
+             | Declaration
+             | Conditional
+             | WLoop
+             | FLoop
+             | Print
+             | Return
+             | Call
+             | Increment
+             | Comment
+  Assignment = stringberry id ("is" (strLit | noneLit)) "|"
+             | intberry id ("is" (intLit | noneLit)) "|"
+             | floatberry id ("is" (floatLit | noneLit)) "|"
+             | boolberry id ("is" (boolLit | noneLit)) "|"
+  Declaration= stringberry id "|"
+             | intberry id "|"
+             | floatberry id "|"
+             | boolberry id "|"
+  Reassign   = id ("is" Exp) "|"
+  Conditional= "ifmelon" Exp Block ("elifmelon" Exp Block)*
+               ("elsemelon" Block)?
+  WLoop      = "whilemelon" Exp Block
+  FLoop      = "formelon" (Assignment)? (Exp "|")? Increment? Block
+  Block      = "->"Statement*"<-"
+  Function   = blend id "(" Params ")" Block --declare
+  Print      = juice Exp "|"
+  Return     = "squeeze" Exp "|"
+  Call       = id "(" Args ")" "|"                      --call
+  Args       = ListOf<id, ",">
+  Params     = type id ("," type id)*
+  Exp        = Exp "orange" Exp2                        --binary
+             | Exp2
+  Exp2       = Exp2 "apple" Exp3                        --binary
+             | Exp3
+  Exp3       = Exp3 relop Exp4                          --binary
+             | Exp4
+  Exp4       = Exp4 ("plus" | "minus") Exp5             --binary
+             | Exp5
+  Exp5       = Exp5 mulop Exp6                          --binary
+             | Exp6
+  Exp6       = Exp7 "to the power of" Exp6              --binary
+             | Exp7
+  Exp7       = prefix Exp8                              --unary
+             | Exp8
+  Exp8       = Literal
+             | id
+             | "(" Exp ")"                              --unary                         
+  Increment  = id ("++" | "--") "|"?
+  Literal    = strLit
+             | intLit
+             | floatLit
+             | boolLit
+  strLit     = "\"" char* "\"" | "\'" char* "\'"
+  char       = ~"\\" ~"\"" ~"\n" any
+  intLit     = digit+
+  floatLit   = digit+ ("." digit+)?
+  boolLit    = "organic" | "gmo"
+  noneLit    = "none"
+  blend      = "blend" ~alnum
+  juice      = "juice" ~alnum
+  let        = "let" ~alnum
+  stringberry= "stringberry" ~alnum
+  intberry   = "intberry" ~alnum
+  floatberry = "floatberry" ~alnum
+  boolberry  = "boolberry" ~alnum
+  relop      = "less" | "more" | "less equals" | "more equals" | "equals"
+  mulop      = "times" | "divby" | "mod"
+  prefix     = "-" | "not"
+  type       = stringberry | intberry | floatberry | boolberry
+  keyword    = let | juice | blend
+  id         = ~keyword letter alnum*
+  Comment    = "::" (~"\n" any)* ("\n" | end)
+             | ":::" (~"\n" any)* ":::"
 }
