@@ -1,13 +1,14 @@
 {
-  "name": "ohm-js",
+  "name": "medley",
   "version": "1.0.0",
   "description": "Compiler for Medley using Ohm",
   "main": "index.js",
+  "type": "module",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "c8 node_modules/.bin/mocha"
   },
   "repository": {
     "type": "git",
@@ -21,5 +22,9 @@
   "homepage": "https://github.com/meganmrichardson/Medley#readme",
   "dependencies": {
     "ohm-js": "^15.4.1"
+  },
+  "devDependencies": {
+    "c8": "^7.5.0",
+    "mocha": "^8.2.1"
   }
 }
