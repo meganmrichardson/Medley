@@ -48,8 +48,8 @@ Medley is created by [@Henno Kublin](https://github.com/hjkublin), [@Amanda Marq
 
 | Types in Javascript | Types in Medley | Variable Declaration Example in Medley                                             |
 | ------------------- | --------------- | ---------------------------------------------------------------------------------- |
-| Array               | `berrybasket`   | `berrybasket~stringberry~ s = ~"strawberry" ; "blueberry"~ \|`                     |
-| Dictionary          | `fruitbasket`   | `fruitbasket~stringberry, stringberry~ s = ~"key1","value1" ; "key2","value2"~ \|` |
+| Array               | `berrybasket`   | `berrybasket~stringberry~ s is ~"strawberry" ; "blueberry"~ \|`                     |
+| Dictionary          | `fruitbasket`   | `fruitbasket~stringberry, stringberry~ s is ~"key1","value1" ; "key2","value2"~ \|` |
 
 ## Binary Operators
 
@@ -219,7 +219,7 @@ function firstFactorial(x) {
 Medley:
 
 ```
-blend firstFactorial(num) ->
+blend firstFactorial(intberry num) ->
     ifmelon num equals 0 or num equals 1 ->
         squeeze 1 |
     <-
