@@ -12,6 +12,39 @@ We hope you enjoy!
 
 Medley is created by [@Henno Kublin](https://github.com/hjkublin), [@Amanda Marques](https://github.com/amandacmarques), [@Nick Morgan](https://github.com/nmorgan8), [@Megan Richardson](https://github.com/meganmrichardson), [@Josh Seaman](https://github.com/jseaman1), and [@Tigerlilly Zietz](https://github.com/tigerlillyz).
 
+## Contents
+
+- [ Contents ](#contents)
+- [ Features ](#features)
+- [ Types and Variable Declarations ](#types-and-variable-declarations)
+- [ Built in Functions ](#built-in-functions)
+- [ Primitive Types ](#primitive-types)
+- [ Data Types ](#data-types)
+- [ Operators ](#operators)
+  - [ Binary Operators ](#binary-operators)
+  - [ Unary Operators ](#unary-operators)
+- [ Comments ](#comments)
+- [ Medley Examples ](#medley-examples)
+  - [ If Statements ](#if-statements)
+  - [ For Loops ](#for-loops)
+  - [ While Loops ](#while-loops)
+  - [ Hello World ](#hello-world)
+    - [ Javascript ](#javascript)
+    - [ Medley ](#medley)
+  - [ Fibonacci ](#fibonacci)
+    - [ Javascript ](#javascript-1)
+    - [ Medley ](#medley-1)
+  - [ Number Odd or Even ](#fibonacci)
+    - [ Javascript ](#javascript-2)
+    - [ Medley ](#medley-2)
+  - [ Fahrenheit to Celsius ](#fahrenheit-to-celsius)
+    - [ Javascript ](#javascript-3)
+    - [ Medley ](#medley-3) 
+  - [ First Factorial ](#first-factorial)
+    - [ Javascript ](#javascript-4)
+    - [ Medley ](#medley-4)
+  - [ Types of Static Semantic Errors ](#types-of-static-semantic-errors)
+
 ## Features
 
 - Statically Typed
@@ -20,7 +53,7 @@ Medley is created by [@Henno Kublin](https://github.com/hjkublin), [@Amanda Marq
 - Data Structures such as Arrays and Dictionaries
 - Built-in Functions
 
-## Types & Variable Declarations
+## Types and Variable Declarations
 
 | Keywords in Javascript | Medley       |
 | ---------------------- | ------------ |
@@ -32,7 +65,7 @@ Medley is created by [@Henno Kublin](https://github.com/hjkublin), [@Amanda Marq
 | for()                  | formelon()   |
 | while()                | whilemelon() |
 
-## Built In Functions
+## Built in Functions
 
 | JavaScript                     | Medley                    |
 | ------------------------------ | ------------------------- |
@@ -59,7 +92,9 @@ Medley is created by [@Henno Kublin](https://github.com/hjkublin), [@Amanda Marq
 | Array               | `berrybasket`   | `berrybasket~stringberry~ s is ~"strawberry" ; "blueberry"~ \|`                     |
 | Dictionary          | `fruitbasket`   | `fruitbasket~stringberry, stringberry~ s is ~"key1","value1" ; "key2","value2"~ \|` |
 
-## Binary Operators
+## Operators 
+
+### Binary Operators
 
 | Operation                              | Type Compatability           |
 | -------------------------------------- | ---------------------------- |
@@ -76,7 +111,7 @@ Medley is created by [@Henno Kublin](https://github.com/hjkublin), [@Amanda Marq
 | logical AND `apple`                    | `Booleans`                   |
 | logical OR `orange`                    | `Booleans`                   |
 
-## Unary Operators
+### Unary Operators
 
 | Operation      | Type Compatability |
 | -------------- | ------------------ |
@@ -120,13 +155,13 @@ whilemelon i less 10 ->
 
 ### Hello World
 
-Javascript:
+#### Javascript
 
 ```
 console.log('Hello World');
 ```
 
-Medley:
+#### Medley
 
 ```
 juice "Hello, World!" |
@@ -134,7 +169,7 @@ juice "Hello, World!" |
 
 ### Fibonacci
 
-Javascript:
+#### Javascript
 
 ```
 function fibonacci(num) {
@@ -151,7 +186,7 @@ function fibonacci(num) {
 }
 ```
 
-Medley:
+#### Medley
 
 ```
 blend fibonacci(intberry num) ->
@@ -168,9 +203,9 @@ blend fibonacci(intberry num) ->
 <-
 ```
 
-### Function to find if a number is odd
+### Number Odd or Even
 
-Javascript:
+#### Javascript
 
 ```
 def odd_or_even(num):
@@ -181,7 +216,7 @@ def odd_or_even(num):
     }
 ```
 
-Medley:
+#### Medley
 
 ```
 blend oddOrEven(intberry num) ->
@@ -193,9 +228,9 @@ blend oddOrEven(intberry num) ->
 <-
 ```
 
-### Fahrenheit to celsius
+### Fahrenheit to Celsius
 
-Javascript:
+#### Javascript
 
 ```
 function toCelsius(fahrenheit) {
@@ -203,7 +238,7 @@ function toCelsius(fahrenheit) {
 }
 ```
 
-Medley:
+#### Medley
 
 ```
 blend toCelsius(floatberry fahrenheit) ->
@@ -211,9 +246,9 @@ blend toCelsius(floatberry fahrenheit) ->
 <-
 ```
 
-### First factorial
+### First Factorial
 
-Javascript:
+#### Javascript
 
 ```
 function firstFactorial(x) {
@@ -224,7 +259,7 @@ function firstFactorial(x) {
 }
 ```
 
-Medley:
+#### Medley
 
 ```
 blend firstFactorial(intberry num) ->
