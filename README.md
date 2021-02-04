@@ -15,6 +15,10 @@ Medley is created by [@Henno Kublin](https://github.com/hjkublin), [@Amanda Marq
 ## Features
 
 - Statically Typed
+- Strongly Typed
+- Object Oriented
+- Data Structures such as Arrays and Dictionaries
+- Built-in Functions
 
 ## Types & Variable Declarations
 
