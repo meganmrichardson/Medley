@@ -14,6 +14,7 @@ Medley is created by [@Henno Kublin](https://github.com/hjkublin), [@Amanda Marq
 
 ## Contents
 
+- [ Introduction ](#introduction)
 - [ Contents ](#contents)
 - [ Features ](#features)
 - [ Types and Variable Declarations ](#types-and-variable-declarations)
