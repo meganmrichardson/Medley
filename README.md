@@ -219,7 +219,7 @@ function firstFactorial(x) {
 Medley:
 
 ```
-blend firstFactorial(num) ->
+blend firstFactorial(intberry num) ->
     ifmelon num equals 0 or num equals 1 ->
         squeeze 1 |
     <-
