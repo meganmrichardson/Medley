@@ -1,6 +1,6 @@
 import ohm from "ohm-js";
 
-const medleyGrammar = ohm.grammar(`
+const medleyGrammar = ohm.grammar(String.raw`
   Medley {
     Program    = Statement*
     Statement  = Function                              
@@ -66,8 +66,8 @@ const medleyGrammar = ohm.grammar(`
                | intLit
                | floatLit
                | boolLit
-    strLit     = "\"" char* "\"" | "\'" char* "\'"
-    char       = ~"\\" ~"\"" ~"\n" any
+    strLit     = "\"" (~"\\" ~"\"" any | escape)* 
+                 "\""
     intLit     = digit+
     floatLit   = digit+ ("." digit+)?
     boolLit    = "organic" | "gmo"
@@ -105,6 +105,7 @@ const medleyGrammar = ohm.grammar(`
     mulop      = "times" | "divby" | "mod"
     addop      = "plus" | "minus"
     prefix     = "-" | "not"
+    escape      =  "\\" ("\\" | "\"" | "n")                      -- simple
     type       = stringberry | intberry | floatberry | boolberry
     keyword    = let | juice | blend | orange | apple | less | more
                | lesseq | moreeq | equals | times | divby | mod
@@ -119,5 +120,5 @@ const medleyGrammar = ohm.grammar(`
 
 export default function parse(source) {
   const match = medleyGrammar.match(source);
-  return match.secceeded;
+  return match.succeeded();
 }
