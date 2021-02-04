@@ -1,2 +1,25 @@
-
-
+{
+  "name": "ohm-js",
+  "version": "1.0.0",
+  "description": "Compiler for Medley using Ohm",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/meganmrichardson/Medley.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/meganmrichardson/Medley/issues"
+  },
+  "homepage": "https://github.com/meganmrichardson/Medley#readme",
+  "dependencies": {
+    "ohm-js": "^15.4.1"
+  }
+}
