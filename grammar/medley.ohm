@@ -1,6 +1,6 @@
 Medley {
   Program    = Statement*
-  Statement  = Function                              --declare
+  Statement  = Function                              
              | Assignment
              | Reassign
              | Declaration
@@ -10,7 +10,7 @@ Medley {
              | Print
              | Return
              | Call
-             | Increment
+             | Increment "|"                            --increment
              | Comment
   Assignment = stringberry id ("is" (strLit | noneLit)) "|"
              | intberry id ("is" (intLit | noneLit)) "|"
@@ -24,32 +24,32 @@ Medley {
   Conditional= "ifmelon" Exp Block ("elifmelon" Exp Block)*
                ("elsemelon" Block)?
   WLoop      = "whilemelon" Exp Block
-  FLoop      = "formelon" (Assignment)? (Exp "|")? Increment? Block
+  FLoop      = "formelon" ((Assignment)? (Exp "|")? Increment?) Block
   Block      = "->"Statement*"<-"
-  Function   = blend id "(" Params ")" Block --declare
+  Function   = blend id "(" Params ")" Block
   Print      = juice Exp "|"
   Return     = "squeeze" Exp "|"
-  Call       = id "(" Args ")" "|"                      --call
+  Call       = id "(" Args ")" "|"
   Args       = ListOf<id, ",">
   Params     = type id ("," type id)*
-  Exp        = Exp "orange" Exp2                        --binary
+  Exp        = Exp orange Exp2                          --binary
              | Exp2
-  Exp2       = Exp2 "apple" Exp3                        --binary
+  Exp2       = Exp2 apple Exp3                          --binary
              | Exp3
   Exp3       = Exp3 relop Exp4                          --binary
              | Exp4
-  Exp4       = Exp4 ("plus" | "minus") Exp5             --binary
+  Exp4       = Exp4 addop Exp5                          --binary
              | Exp5
   Exp5       = Exp5 mulop Exp6                          --binary
              | Exp6
-  Exp6       = Exp7 "to the power of" Exp6              --binary
+  Exp6       = Exp7 power Exp6                          --binary
              | Exp7
   Exp7       = prefix Exp8                              --unary
              | Exp8
   Exp8       = Literal
              | id
-             | "(" Exp ")"                              --unary                         
-  Increment  = id ("++" | "--") "|"?
+             | "(" Exp ")"                              --parens                         
+  Increment  = id ("++" | "--")
   Literal    = strLit
              | intLit
              | floatLit
@@ -67,11 +67,27 @@ Medley {
   intberry   = "intberry" ~alnum
   floatberry = "floatberry" ~alnum
   boolberry  = "boolberry" ~alnum
+  orange     = "orange" ~alnum
+  apple      = "apple" ~alnum
+  less       = "less" ~alnum
+  more       = "more" ~alnum
+  lesseq     = "less equals" ~alnum
+  moreeq     = "more equals" ~alnum
+  equals     = "equals" ~alnum
+  times      = "times" ~alnum
+  divby      = "divby" ~alnum
+  mod        = "mod" ~alnum
+  plus       = "plus" ~alnum
+  minus      = "minus" ~alnum
+  power      = "to the power of" ~alnum
   relop      = "less" | "more" | "less equals" | "more equals" | "equals"
   mulop      = "times" | "divby" | "mod"
+  addop      = "plus" | "minus"
   prefix     = "-" | "not"
   type       = stringberry | intberry | floatberry | boolberry
-  keyword    = let | juice | blend
+  keyword    = let | juice | blend | orange | apple | less | more
+             | lesseq | moreeq | equals | times | divby | mod
+             | plus | minus | power
   id         = ~keyword letter alnum*
   Comment    = "::" (~"\n" any)* ("\n" | end)
              | ":::" (~"\n" any)* ":::"
