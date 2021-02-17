@@ -78,10 +78,10 @@ Medley {
   boolberry    = "boolberry" ~alnum
   orange       = "orange" ~alnum
   apple        = "apple" ~alnum
-  less         = "less" ~alnum
-  more         = "more" ~alnum
   lesseq       = "less equals" ~alnum
   moreeq       = "more equals" ~alnum
+  less         = "less" ~alnum
+  more         = "more" ~alnum
   equals       = "equals" ~alnum
   times        = "times" ~alnum
   divby        = "divby" ~alnum
@@ -98,7 +98,7 @@ Medley {
   whilemelon   = "whilemelon" ~alnum
   formelon     = "formelon" ~alnum
   squeeze      = "squeeze" ~alnum
-  relop        = "less" | "more" | "less equals" | "more equals" | "equals"
+  relop        = "less equals" | "more equals" | "less" | "more" | "equals"
   mulop        = "times" | "divby" | "mod"
   addop        = "plus" | "minus"
   prefix       = "-" | "not"
