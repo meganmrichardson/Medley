@@ -31,7 +31,7 @@ Medley {
   Conditional  = ifmelon Exp Block (elifmelon Exp Block)*
                  (elsemelon Block)?
   WLoop        = whilemelon Exp Block
-  FLoop        = formelon DecAssign? Exp? "|" Increment? Block
+  FLoop        = formelon (Assignment | DecAssign)? Exp? "|" Increment? Block
   Block        = "->" Statement* "<-"
   Function     = blend id "(" Params ")" Block
   Print        = juice Exp "|"
