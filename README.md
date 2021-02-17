@@ -81,7 +81,7 @@ Medley is created by [@Henno Kublin](https://github.com/hjkublin), [@Amanda Marq
 | int                 | `intberry`      | `intberry teamSize is 6 \|`          |
 | float               | `floatberry`    | `floatberry ourIQ is 156.7 \|`       |
 
-| Booomglean Types In Javascript | Boolean Types In Medley |
+| Boolean Types In Javascript    | Boolean Types In Medley |
 | ------------------------------ | ----------------------- |
 | `true`                         | `organic`               |
 | `false`                        | `gmo`                   |
@@ -264,7 +264,7 @@ function firstFactorial(x) {
 
 ```
 blend firstFactorial(intberry num) ->
-    ifmelon num equals 0 or num equals 1 ->
+    ifmelon num equals 0 orange num equals 1 ->
         squeeze 1 |
     <-
     squeeze num times firstFactorial(num minus 1) |
