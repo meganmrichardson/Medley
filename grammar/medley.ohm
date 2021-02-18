@@ -98,7 +98,7 @@ Medley {
   whilemelon   = "whilemelon" ~alnum
   formelon     = "formelon" ~alnum
   squeeze      = "squeeze" ~alnum
-  relop        = "lesseq" | "moreeq" | "less" | "more" | "equals"
+  relop        = "less equal" | "more equal" | "less" | "more" | "equals"
   mulop        = "times" | "divby" | "mod"
   addop        = "plus" | "minus"
   prefix       = "-" | "not"
