@@ -158,15 +158,15 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   ForLoop(_formelon, assignment, expression, increment, block) { // what should we do with optional params?
     return new ast.FLoop(assignment.ast(), expression.ast(), increment.ast(), block.ast())
   },
-  Conditionals() {},
-  Expressions() {},
-  Call() {},
-  Args() {},
-  Params() {},
-  Increment() {},
-  Literal() {},
-  Comments() {},
-  Type() {},
+  Conditionals() { },
+  Expressions() { },
+  Call() { },
+  Args() { },
+  Params() { },
+  Increment() { },
+  Literal() { },
+  Comments() { },
+  Type() { },
 });
 
 export default function parse(source) {
@@ -187,7 +187,7 @@ export default function parse(source) {
 //   space := ~instruction any
 // }
 // ` );
- 
+
 // const astBuilder = grammar.createSemantics().addOperation('ast', {
 //  Program(body) {
 //    return new ast.Program(body.ast());

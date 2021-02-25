@@ -4,12 +4,6 @@ export class Program {
   }
 }
 
-export class Statement {
-  constructor(statements) {
-    this.statements = statements
-  }
-}
-
 export class Assignment {
   constructor(type, targets, sources) {
     Object.assign(this, { type, targets, sources })
@@ -17,10 +11,10 @@ export class Assignment {
 }
 
 export class Declaration {
-    constructor(type, targets) {
-      Object.assign(this, { type, targets })
-    }
+  constructor(type, targets) {
+    Object.assign(this, { type, targets })
   }
+}
 
 export class Reassignment {
   constructor(targets, sources) {
@@ -29,27 +23,27 @@ export class Reassignment {
 }
 
 export class Array {
-    constructor(type, targets, sources) {
-        Object.assign(this, { type, targets, sources })
-    }
+  constructor(type, targets, sources) {
+    Object.assign(this, { type, targets, sources })
+  }
 }
 
 export class Dictionary {
-    constructor(type, targets, sources) {
-        Object.assign(this, { type, targets, sources })
-    }
+  constructor(type, targets, sources) {
+    Object.assign(this, { type, targets, sources })
+  }
 }
 
 export class DictionaryContent {
-    constructor(literal1, literal2) {
-        Object.assign(this, { literal1, literal2 })
-    }
+  constructor(literal1, literal2) {
+    Object.assign(this, { literal1, literal2 })
+  }
 }
 
 export class Conditional {
-    constructor(sources, blocks) {
-        Object.assign(this, { sources, blocks })
-    }
+  constructor(sources, blocks) {
+    Object.assign(this, { sources, blocks })
+  }
 }
 
 
@@ -66,14 +60,14 @@ export class FLoop {
 }
 
 export class Block {
-    constructor(statements) {
-      this.statement = statements
-    }
+  constructor(statements) {
+    this.statement = statements
   }
+}
 
 export class Function {
-    constructor(type, parameters, block) {
-      Object.assign(this, { type, parameters, block })
+  constructor(type, parameters, block) {
+    Object.assign(this, { type, parameters, block })
   }
 }
 
@@ -96,28 +90,28 @@ export class Call {
 }
 
 export class Arguments {
-    constructor(arguments) {
-      this.arguments = arguments
-    }
+  constructor(arguments) {
+    this.arguments = arguments
   }
+}
 
-  export class Parameter {
-    constructor(names, types) {
-      Object.assign(this, { names, types })
-    }
+export class Parameter {
+  constructor(names, types) {
+    Object.assign(this, { names, types })
   }
+}
 
-  export class LiteralList {
-    constructor(literals) {
-      this.literals = literals
-    }
+export class LiteralList {
+  constructor(literals) {
+    this.literals = literals
   }
+}
 
-  export class DictionaryList {
-    constructor(content) {
-      this.content = content
-    }
+export class DictionaryList {
+  constructor(content) {
+    this.content = content
   }
+}
 
 
 export class BinaryExpression {
@@ -133,10 +127,10 @@ export class IdentifierExpression {
 }
 
 export class Increment {
-    constructor(identifier) {
-      this.identifier = identifier
-    }
+  constructor(identifier) {
+    this.identifier = identifier
   }
+}
 
 
 
