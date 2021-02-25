@@ -17,20 +17,11 @@ Medley {
              | Comment
              | Array
              | Dictionary
-  Assignment = stringberry id (is (strLit | noneLit)) "|"
-             | intberry id (is (intLit | noneLit)) "|"
-             | floatberry id (is (floatLit | noneLit)) "|"
-             | boolberry id (is (boolLit | noneLit)) "|"
-  Declaration= stringberry id "|"
-             | intberry id "|"
-             | floatberry id "|"
-             | boolberry id "|"
+  Assignment = Type id is Exp "|"
+  Declaration= Type id "|"
   Reassign   = id (is Exp) "|"
-  Array      = berrybasket "~"stringberry"~" id is "~"ListOf<strLit, ";">"~" "|"
-             | berrybasket "~"intberry"~" id is "~"ListOf<intLit, ";">"~" "|"
-             | berrybasket "~"floatberry"~" id is "~"ListOf<floatLit, ";">"~" "|"
-             | berrybasket "~"boolberry"~" id is "~"ListOf<boolLit, ";">"~" "|"
-  Dictionary = fruitbasket "~"type"," type"~" id is "~"ListOf<DictContent, ";"> "~" "|"
+  Array      = berrybasket "~"Type"~" id is "~"LitList"~" "|"
+  Dictionary = fruitbasket "~"Type"," Type"~" id is "~"DictList"~" "|"
   DictContent= Literal "," Literal
   Conditional= ifmelon Exp Block (elifmelon Exp Block)*
                (elsemelon Block)?
@@ -42,7 +33,9 @@ Medley {
   Return     = squeeze Exp "|"
   Call       = id "(" Args ")"
   Args       = ListOf<Exp, ",">
-  Params     = type id ("," type id)*
+  Params     = Type id ("," Type id)*
+  LitList    = ListOf<Literal, ";">
+  DictList   = ListOf<DictContent, ";">
   Exp        = Exp orange Exp2                          --binary
              | Exp2
   Exp2       = Exp2 apple Exp3                          --binary
@@ -66,6 +59,7 @@ Medley {
              | intLit
              | floatLit
              | boolLit
+  Type       = stringberry | intberry | boolberry | floatberry
   strLit     = "\"" char* "\"" | "\'" char* "\'"
   char       = ~"\\" ~"\"" ~"\n" any
   intLit     = digit+
@@ -74,7 +68,6 @@ Medley {
   noneLit    = "none"
   blend      = "blend" ~alnum
   juice      = "juice" ~alnum
-  let        = "let" ~alnum
   stringberry= "stringberry" ~alnum
   intberry   = "intberry" ~alnum
   floatberry = "floatberry" ~alnum
@@ -105,8 +98,7 @@ Medley {
   mulop      = "times" | "divby" | "mod"
   addop      = "plus" | "minus"
   prefix     = "-" | "not"
-  type       = stringberry | intberry | floatberry | boolberry
-  keyword    = let | juice | blend | orange | apple | less | more
+  keyword    = juice | blend | orange | apple | less | more
              | lesseq | moreeq | equals | times | divby | mod
              | plus | minus | power | is | berrybasket | fruitbasket
              | ifmelon | elifmelon | elsemelon | whilemelon | elsemelon
@@ -114,15 +106,67 @@ Medley {
   id         = ~keyword letter alnum*
   Comment    = "::" (~"\n" any)* ("\n" | end)
              | ":::" (~"\n" any)* ":::"
-}
-
-`);
+}`
+);
 
 const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   Program(statements) {
     return new ast.Program(statements.ast())
-  }
-  Declaration()
+  },
+  Declaration(type, identifier) {
+    return new ast.Declaration(type.ast(), identifier.ast())
+  },
+  Function(_blend, identifier, _left, parameters, _right, block) {
+    return new ast.Function(identifier.ast(), parameters.ast(), block.ast())
+  },
+  Assignment(type, target, _equals, source) {
+    return new ast.Assignment(type.ast(), target.ast(), source.ast())
+  },
+  Reassignment(target, _equals, source) {
+    return new ast.Reassignment(target.ast(), source.ast())
+  },
+  Return(_squeeze, expression) {
+    return new ast.Return(expression.ast())
+  },
+  Print(_juice, expression) {
+    return new ast.Print(expression.ast())
+  },
+  id(_first, _rest) {
+    return new ast.IdentifierExpression(this.sourceString)
+  },
+  Block(_left, statements, _right) {
+    return statements.ast()
+  },
+  Array(_berrybasket, _tilde1, type, _tilde2, _equals, _tilde3, LitList, _tilde4) {
+    return new ast.Array(type.ast(), LitList.ast())
+  },
+  Dictionary(_fruitbasket, _tilde1, type, _tilde2, _equals, _tilde3, DictList, _tilde4) {
+    return new ast.Dictionary(type.ast(), DictList.ast())
+  },
+  LitList(first, _semis, rest) {
+    return [first.tree(), ...rest.tree()]
+  },
+  DictList(first, _semis, rest) {
+    return [first.tree(), ...rest.tree()]
+  },
+  DictContent(literal1, _comma, literal2) { // ask toal about this
+    return new ast.DictContent(literal1.ast(), literal2.ast())
+  },
+  WhileLoop(_whilemelon, expression, block) {
+    return new ast.WLoop(expression.ast(), block.ast())
+  },
+  ForLoop(_formelon, assignment, expression, increment, block) { // what should we do with optional params?
+    return new ast.FLoop(assignment.ast(), expression.ast(), increment.ast(), block.ast())
+  },
+  Conditionals() {},
+  Expressions() {},
+  Call() {},
+  Args() {},
+  Params() {},
+  Increment() {},
+  Literal() {},
+  Comments() {},
+  Type() {},
 });
 
 export default function parse(source) {
