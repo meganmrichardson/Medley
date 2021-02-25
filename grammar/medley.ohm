@@ -1,5 +1,5 @@
 Medley {
-  Program    = Statement*
+  Program    = Statement+
   Statement  = Function                              
              | Assignment
              | Reassign
