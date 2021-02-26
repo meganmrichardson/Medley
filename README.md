@@ -88,10 +88,17 @@ Medley is created by [@Henno Kublin](https://github.com/hjkublin), [@Amanda Marq
 
 ## Data Types
 
-| Types in Javascript | Types in Medley | Variable Declaration Example in Medley                                             |
-| ------------------- | --------------- | ---------------------------------------------------------------------------------- |
-| Array               | `berrybasket`   | `berrybasket~stringberry~ s is ~"strawberry" ; "blueberry"~ \|`                     |
-| Dictionary          | `fruitbasket`   | `fruitbasket~stringberry, stringberry~ s is ~"key1","value1" ; "key2","value2"~ \|` |
+| Types in Javascript | Types in Medley | 
+| ------------------- | --------------- | 
+| Array               | `berrybasket`   |
+| Dictionary          | `fruitbasket`   | 
+
+
+| Variable Declaration Example in Javascript    | Variable Declaration Example in Medley                                               |
+| ----------------------------------------------| -------------------------------------------------------------------------------------|
+| var array = ["strawberry", "blueberry",];     | `berrybasket~stringberry~ s is ~"strawberry" ; "blueberry"~ \|`                      |
+| let dict = {key1: "value1", key2: "value2"};  | `fruitbasket~stringberry, stringberry~ s is ~"key1","value1" ; "key2","value2"~ \|`  |
+
 
 ## Operators 
 
