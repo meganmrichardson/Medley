@@ -96,7 +96,7 @@ Medley is created by [@Henno Kublin](https://github.com/hjkublin), [@Amanda Marq
 
 | Variable Declaration Example in Javascript    | Variable Declaration Example in Medley                                               |
 | ----------------------------------------------| -------------------------------------------------------------------------------------|
-| var array = ["strawberry", "blueberry"];     | `berrybasket~stringberry~ s is ~"strawberry" ; "blueberry"~ \|`                      |
+| let array = ["strawberry", "blueberry"];      | `berrybasket~stringberry~ s is ~"strawberry" ; "blueberry"~ \|`                      |
 | let dict = {key1: "value1", key2: "value2"};  | `fruitbasket~stringberry, stringberry~ s is ~"key1","value1" ; "key2","value2"~ \|`  |
 
 
