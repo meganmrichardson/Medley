@@ -97,7 +97,7 @@ Medley is created by [@Henno Kublin](https://github.com/hjkublin), [@Amanda Marq
 | Variable Declaration Example in Javascript    | Variable Declaration Example in Medley                                               |
 | ----------------------------------------------| -------------------------------------------------------------------------------------|
 | let toppings = ["strawberry", "blueberry"];    | `berrybasket~stringberry~ toppings is ~"strawberry" ; "blueberry"~ \|`                      |
-| let flavors = {lemon: "tart", starfruit: "sweet"};  | `fruitbasket~stringberry, stringberry~ s is ~"lemon","tart" ; "starfruit","sweet"~ \|`  |
+| let flavors = {lemon: "tart", starfruit: "sweet"};  | `fruitbasket~stringberry, stringberry~ flavors is ~"lemon","tart" ; "starfruit","sweet"~ \|`  |
 
 
 ## Operators 
