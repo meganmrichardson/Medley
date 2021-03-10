@@ -5,7 +5,7 @@ Medley {
   Program     = Statement*
   Statement   = Function                              
               | Assignment
-              | Reassign
+              | Reassignment
               | Declaration
               | Conditional
               | WLoop
@@ -17,14 +17,13 @@ Medley {
               | Comment
   Assignment  = Type id is Exp "|"
   Declaration = Type id "|"
-  Reassign    = id (is Exp) "|"
-  ArrType     = berrybasket "~"Type"~"
+  Reassignment= id (is Exp) "|"
+  ArrayType     = berrybasket "~"Type"~"
   DictType    = fruitbasket "~"Type"," Type"~"
-  DictContent = Literal "," Literal
-  Conditional = ifmelon Exp Block (elifmelon Exp Block)*
+  Conditional= ifmelon Exp Block (elifmelon Exp Block)*
                 (elsemelon Block)?
   WLoop       = whilemelon Exp Block
-  FLoop       = formelon ((Assignment)? (Exp "|")? Increment?) Block
+  FLoop       = formelon Assignment "|" Exp "|" Increment Block
   Block       = "->"Statement*"<-"
   Function    = blend id "(" Params ")" Block
   Print       = juice Exp "|"
@@ -33,7 +32,8 @@ Medley {
   Args        = ListOf<Exp, ",">
   Params      = Type id ("," Type id)*
   LitList     = "~" ListOf<Literal, ";"> "~"
-  DictList    = "~" ListOf<DictContent, ";"> "~"
+  DictObj    = "~" ListOf<DictContent, ";"> "~"
+  DictContent = Literal "," Exp
   Exp         = Exp orange Exp2                          --binary
               | Exp2
   Exp2        = Exp2 apple Exp3                          --binary
@@ -50,7 +50,7 @@ Medley {
               | Exp8
   Exp8        = Call
               | Literal
-              | DictList
+              | DictObj
               | LitList
               | id
               | "(" Exp ")"                              --parens                         
@@ -59,7 +59,7 @@ Medley {
               | intLit
               | floatLit
               | boolLit
-  Type        = stringberry | intberry | boolberry | floatberry | ArrType | DictType
+  Type        = stringberry | intberry | boolberry | floatberry | ArrayType | DictType
   strLit      = "\"" char* "\"" | "\'" char* "\'"
   char        = ~"\\" ~"\"" ~"\n" any
   intLit      = digit+
@@ -113,22 +113,22 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   Program(statements) {
     return new ast.Program(statements.ast())
   },
-  Declaration(type, identifier) {
+  Declaration(type, identifier, _bar ) {
     return new ast.Declaration(type.ast(), identifier.ast())
   },
   Function(_blend, identifier, _left, parameters, _right, block) {
     return new ast.Function(identifier.ast(), parameters.ast(), block.ast())
   },
-  Assignment(type, target, _equals, source) {
+  Assignment(type, target, _equals, source, _bar) {
     return new ast.Assignment(type.ast(), target.ast(), source.ast())
   },
-  Reassignment(target, _equals, source) {
+  Reassignment(target, _equals, source, _bar) {
     return new ast.Reassignment(target.ast(), source.ast())
   },
-  Return(_squeeze, expression) {
+  Return(_squeeze, expression, _bar) {
     return new ast.Return(expression.ast())
   },
-  Print(_juice, expression) {
+  Print(_juice, expression, _bar) {
     return new ast.Print(expression.ast())
   },
   id(_first, _rest) {
@@ -137,29 +137,29 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   Block(_left, statements, _right) {
     return statements.ast()
   },
-  Array(_berrybasket, _tilde1, type, _tilde2, _equals, _tilde3, LitList, _tilde4) {
+  ArrayType(_berrybasket, _tilde1, type, _tilde2) { 
     return new ast.Array(type.ast(), LitList.ast())
   },
-  Dictionary(_fruitbasket, _tilde1, type, _tilde2, _equals, _tilde3, DictList, _tilde4) {
-    return new ast.Dictionary(type.ast(), DictList.ast())
+  DictType(_fruitbasket, _tilde1, keytype, _comma, valuetype, _tilde4) { 
+    return new ast.Dictionary(keytype.ast(), valuetype.ast())
   },
   LitList(first, _semis, rest) {
-    return [first.tree(), ...rest.tree()]
+    return [first.ast(), ...rest.ast()]
   },
-  DictList(first, _semis, rest) {
-    return [first.tree(), ...rest.tree()]
+  DictObj(_tilde1, content, _tilde2) { 
+    return content.asIteration().ast()
   },
-  DictContent(literal1, _comma, literal2) { // ask toal about this
+  DictContent(literal, _comma, expression) { // ask toal about this
     return new ast.DictContent(literal1.ast(), literal2.ast())
   },
-  WhileLoop(_whilemelon, expression, block) {
+  WLoop(_whilemelon, expression, block) {
     return new ast.WLoop(expression.ast(), block.ast())
   },
-  ForLoop(_formelon, assignment, expression, increment, block) { // what should we do with optional params?
+  FLoop(_formelon, assignment, _firstBar, expression, _secondBar, increment, block) {
     return new ast.FLoop(assignment.ast(), expression.ast(), increment.ast(), block.ast())
   },
-  Conditionals() { },
-  Expressions() { },
+  Conditional() { },
+  Expression() { },
   Call() { },
   Args() { },
   Params() { },
