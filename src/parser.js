@@ -29,7 +29,7 @@ Medley {
  Print       = juice Exp "|"
  Return      = squeeze Exp "|"
  Call        = id "(" Args ")"
- Args        = ListOf<Exp, ",">
+ Args        = ListOf<Exp, ",">                        
  Params      = Type id ("," Type id)*
  LitList     = "~" ListOf<Literal, ";"> "~"
  DictObj     = "~" ListOf<DictContent, ";"> "~"
@@ -105,8 +105,7 @@ Medley {
              | ifmelon | elifmelon | elsemelon | whilemelon | elsemelon
              | squeeze | intberry | stringberry | floatberry | boolberry
  id          = ~keyword letter alnum*
- comment     = ":::" (~"\n" any)* ":::"                 --multiLine
-             | "::" (~"\n" any)* ("\n" | end)           --singleLine
+ comment     = "::" (~"\n" any)* ("\n" | end)           --singleLine
  space      += comment
 }`)
 
@@ -118,10 +117,10 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
     return assignment.ast()
   },
   Statement_call(call, _bar) {
-    return new ast.Call()
+    return call.ast()
   },
   Statement_increment(increment, _bar) {
-    return new ast.Increment()
+    return increment.ast()
   },
   Declaration(type, identifier, _bar) {
     return new ast.Declaration(type.ast(), identifier.sourceString)
@@ -136,7 +135,7 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   Assignment(type, target, _is, source) {
     return new ast.Assignment(type.ast(), target.sourceString, source.ast())
   },
-  Reassignment(target, _equals, source, _bar) {
+  Reassignment(target, _is, source, _bar) {
     return new ast.Reassignment(target.ast(), source.ast())
   },
   Return(_squeeze, expression, _bar) {
@@ -151,27 +150,21 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   Block(_left, statements, _right) {
     return statements.ast()
   },
-  // TEST
   ArrayType(_berrybasket, _tilde1, type, _tilde2) {
     return new ast.ArrayType(type.ast())
   },
-  // TEST
   DictType(_fruitbasket, _tilde1, keytype, _comma, valuetype, _tilde4) {
     return new ast.Dictionary(keytype.ast(), valuetype.ast())
   },
-  // TEST
-  LitList(_open, content, _close) {
+  LitList(_tilde1, content, _tilde2) {
     return content.asIteration().ast()
   },
-  // TEST
   DictObj(_tilde1, content, _tilde2) {
     return content.asIteration().ast()
   },
-  // TEST
   DictContent(literal, _comma, expression) {
     return new ast.DictContent(literal.sourceString, expression.ast())
   },
-  // TEST
   WLoop(_whilemelon, expression, block) {
     return new ast.WLoop(expression.ast(), block.ast())
   },
@@ -209,13 +202,11 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
       block3.ast()
     )
   },
-  // TEST
   Call(id, _left, args, _right) {
     return new ast.Call(id.ast(), args.ast())
   },
-  // TEST
   Args(expressions) {
-    return new expressions.asIteration().ast()
+    return expressions.asIteration().ast()
   },
   Params(type1, id1, _comma, type2, id2) {
     return new ast.Params(type1.ast(), id1.ast(), type2.ast(), id2.ast())
@@ -263,16 +254,9 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   Exp8_parens(_open, expression, _close) {
     return new ast.Exp8(expression.ast())
   },
-  // Comment_singleLine(_colons, comment, _nextOrTerminal) {
-  //   return new ast.Comment(comment.ast())
-  // },
-  // // TEST
-  // Comment_multiLine(_open, comment, _close) {
-  //   return new ast.Comment(comment.ast())
-  // },
   _terminal() {
     this.sourceString
-  },
+  }
 })
 
 export default function parse(source) {

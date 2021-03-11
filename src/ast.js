@@ -204,11 +204,11 @@ export class Exp8 {
   }
 }
 
-export class Comment {
-  constructor(comment) {
-    this.comment = comment
-  }
-}
+// export class Comment {
+//   constructor(comment) {
+//     this.comment = comment
+//   }
+// }
 
 function prettied(node) {
   // Return a compact and pretty string representation of the node graph,

@@ -10,9 +10,6 @@ const goodPrograms = [
   `fruitbasket~stringberry, stringberry~ s is ~"key1","value1" ; "key2","value2"~ |`,
   `berrybasket~stringberry~ s is ~"strawberry" ; "blueberry"~ |`,
   `:: this is a comment`,
-  `:::
- This is a multiline comment
- :::`,
   `fn(arg1, arg2, arg3) |`,
   `blend oddOrEven(intberry num) ->
    ifmelon num mod 2 equals 0 ->
@@ -37,7 +34,12 @@ const goodPrograms = [
    squeeze num2 |
  <-`,
   `juice 2 to the power of -6 |`,
-  `intberry i is none |`
+  `intberry i is none |`,
+  `intberry i is 2 | 
+  whilemelon i less 10 ->
+    juice " " plus i |
+    i++ |
+  <-`
 ]
 
 const badPrograms = [
