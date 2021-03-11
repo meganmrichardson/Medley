@@ -21,7 +21,8 @@
   },
   "homepage": "https://github.com/meganmrichardson/Medley#readme",
   "dependencies": {
-    "ohm-js": "^15.4.1"
+    "ohm-js": "^15.4.1",
+    "util": "^0.12.3"
   },
   "devDependencies": {
     "c8": "^7.5.0",

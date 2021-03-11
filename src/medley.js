@@ -1,8 +1,8 @@
 #! /usr/bin/env node
 
-const fs = require("fs/promises")
-const process = require("process")
-const compile = require("./compiler.js")
+import fs from "fs/promises"
+import process from "process"
+import compile from "./compiler.js"
 
 const help = `Medley compiler
 Syntax: src/medley.js <filename> <outputType>

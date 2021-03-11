@@ -118,6 +118,12 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   Statement_assign(assign, _bar) {
     return new ast.Assignment()
   },
+  Statement_call(call, _bar) {
+    return new ast.Call()
+  },
+  Statement_increment(increment, _bar) {
+    return new ast.Increment()
+  },
   Declaration(type, identifier, _bar) {
     return new ast.Declaration(type.ast(), identifier.sourceString)
   },
