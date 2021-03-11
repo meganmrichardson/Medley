@@ -1,0 +1,18 @@
+intberry i is 2 | 
+whilemelon i less 10 ->
+  juice " " plus i |
+  i++ |
+<-
+
+blend fibonacci(intberry num) ->
+  intberry num1 is 0 |
+  intberry num2 is 1 |
+  intberry sum |
+  intberry i is 0 |
+  formelon intberry i is 0 | i less num | i++ ->
+    sum is num1 plus num2 |
+    num1 is num2 |
+    num2 is sum |
+  <-
+  squeeze num2 |
+<-
