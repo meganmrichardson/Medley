@@ -10,8 +10,8 @@ export class Program {
 }
 
 export class Assignment {
-  constructor(type, targets, sources) {
-    Object.assign(this, { type, targets, sources })
+  constructor(type, target, source) {
+    Object.assign(this, { type, target, source })
   }
 }
 
@@ -27,9 +27,9 @@ export class Reassignment {
   }
 }
 
-export class Array {
-  constructor(type, targets, sources) {
-    Object.assign(this, { type, targets, sources })
+export class ArrayType {
+  constructor(type, baseType) {
+    Object.assign(this, { type, baseType })
   }
 }
 

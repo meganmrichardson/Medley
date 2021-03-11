@@ -20,7 +20,7 @@ async function compileFromFile(filename, outputType) {
     const buffer = await fs.readFile(filename)
     console.log(compile(buffer.toString(), outputType))
   } catch (e) {
-    console.error(`${e}`)
+    console.trace(e)
     process.exitCode = 1
   }
 }

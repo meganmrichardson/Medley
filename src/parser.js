@@ -4,7 +4,7 @@ import * as ast from "./ast.js"
 const medleyGrammar = ohm.grammar(String.raw`
 Medley {
  Program     = Statement*
- Statement   = Function                             
+ Statement   = Function
              | Assignment "|"                        --assign
              | Reassignment
              | Declaration
@@ -15,11 +15,10 @@ Medley {
              | Return
              | Call "|"                              --call
              | Increment "|"                         --increment
-             | Comment
  Assignment  = Type id is Exp
  Declaration = Type id "|"
  Reassignment= id (is Exp) "|"
- ArrayType     = berrybasket "~"Type"~"
+ ArrayType   = berrybasket "~"Type"~"
  DictType    = fruitbasket "~"Type"," Type"~"
  Conditional = ifmelon Exp Block (elifmelon Exp Block)*
                (elsemelon Block)?
@@ -54,7 +53,7 @@ Medley {
              | DictObj
              | LitList
              | id
-             | "(" Exp ")"                              --parens                        
+             | "(" Exp ")"                              --parens
  Increment   = id ("++" | "--")
  Literal     = strLit
              | floatLit
@@ -106,17 +105,17 @@ Medley {
              | ifmelon | elifmelon | elsemelon | whilemelon | elsemelon
              | squeeze | intberry | stringberry | floatberry | boolberry
  id          = ~keyword letter alnum*
- Comment     = ":::" (~"\n" any)* ":::"                 --multiLine
+ comment     = ":::" (~"\n" any)* ":::"                 --multiLine
              | "::" (~"\n" any)* ("\n" | end)           --singleLine
-              
+ space      += comment
 }`)
 
 const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   Program(statements) {
     return new ast.Program(statements.ast())
   },
-  Statement_assign(assign, _bar) {
-    return new ast.Assignment()
+  Statement_assign(assignment, _bar) {
+    return assignment.ast()
   },
   Statement_call(call, _bar) {
     return new ast.Call()
@@ -134,8 +133,8 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
       block.ast()
     )
   },
-  Assignment(type, target, _equals, source) {
-    return new ast.Assignment(type.ast(), target.ast(), source.ast())
+  Assignment(type, target, _is, source) {
+    return new ast.Assignment(type.ast(), target.sourceString, source.ast())
   },
   Reassignment(target, _equals, source, _bar) {
     return new ast.Reassignment(target.ast(), source.ast())
@@ -154,15 +153,15 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   },
   // TEST
   ArrayType(_berrybasket, _tilde1, type, _tilde2) {
-    return new ast.Array(type.ast(), LitList.ast())
+    return new ast.ArrayType(type.ast())
   },
   // TEST
   DictType(_fruitbasket, _tilde1, keytype, _comma, valuetype, _tilde4) {
     return new ast.Dictionary(keytype.ast(), valuetype.ast())
   },
   // TEST
-  LitList(first, _semis, rest) {
-    return [first.ast(), ...rest.ast()]
+  LitList(_open, content, _close) {
+    return content.asIteration().ast()
   },
   // TEST
   DictObj(_tilde1, content, _tilde2) {
@@ -264,16 +263,16 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   Exp8_parens(_open, expression, _close) {
     return new ast.Exp8(expression.ast())
   },
-  Comment_singleLine(_colons, comment, _nextOrTerminal) {
-    return new ast.Comment(comment.ast())
-  },
-  // TEST
-  Comment_multiLine(_open, comment, _close) {
-    return new ast.Comment(comment.ast())
-  },
+  // Comment_singleLine(_colons, comment, _nextOrTerminal) {
+  //   return new ast.Comment(comment.ast())
+  // },
+  // // TEST
+  // Comment_multiLine(_open, comment, _close) {
+  //   return new ast.Comment(comment.ast())
+  // },
   _terminal() {
     this.sourceString
-  }
+  },
 })
 
 export default function parse(source) {
