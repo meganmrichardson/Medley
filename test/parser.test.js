@@ -3,6 +3,8 @@ import parse from "../src/parser.js"
 
 const goodPrograms = [
   `stringberry medley is "hi" |`,
+  `five is 5 orange 6 |`,
+  `hi is "hello" apple "hey" |`,
   `intberry num is 34 |`,
   `floatberry flt is 4.223523 |`,
   `fruitbasket~stringberry, stringberry~ s is ~"key1","value1" ; "key2","value2"~ |`,
@@ -11,6 +13,7 @@ const goodPrograms = [
   `:::
  This is a multiline comment
  :::`,
+  `fn(arg1, arg2, arg3) |`,
   `blend oddOrEven(intberry num) ->
    ifmelon num mod 2 equals 0 ->
      juice "The number is even." |
@@ -34,7 +37,7 @@ const goodPrograms = [
    squeeze num2 |
  <-`,
   `juice 2 to the power of -6 |`,
-  `intberry i is none |`,
+  `intberry i is none |`
 ]
 
 const badPrograms = [
@@ -49,7 +52,7 @@ const badPrograms = [
   `intberry i = 32 |`,
   `blend toCelsius floatberry fahrenheit  ->
    squeeze 5 |
- <-`,
+ <-`
 ]
 
 describe("The parser", () => {

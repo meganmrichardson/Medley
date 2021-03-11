@@ -99,6 +99,7 @@ export class Arguments {
   }
 }
 
+// TEST
 export class Parameter {
   constructor(names, types) {
     Object.assign(this, { names, types })
@@ -123,6 +124,7 @@ export class BinaryExpression {
   }
 }
 
+// TEST
 export class IdentifierExpression {
   constructor(name) {
     this.name = name
@@ -141,6 +143,7 @@ export class Literal {
   }
 }
 
+// TEST
 export class DictContent {
   constructor(literal, expression) {
     Object.assign(this, { literal, expression })

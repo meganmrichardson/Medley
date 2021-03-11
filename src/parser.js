@@ -104,10 +104,11 @@ Medley {
              | lesseq | moreeq | equals | times | divby | mod
              | plus | minus | power | is | berrybasket | fruitbasket
              | ifmelon | elifmelon | elsemelon | whilemelon | elsemelon
-             | squeeze
+             | squeeze | intberry | stringberry | floatberry | boolberry
  id          = ~keyword letter alnum*
- Comment     = "::" (~"\n" any)* ("\n" | end)           --singleLine
-             | ":::" (~"\n" any)* ":::"                 --multiLine
+ Comment     = ":::" (~"\n" any)* ":::"                 --multiLine
+             | "::" (~"\n" any)* ("\n" | end)           --singleLine
+              
 }`)
 
 const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
@@ -145,21 +146,27 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   Block(_left, statements, _right) {
     return statements.ast()
   },
+  // TEST
   ArrayType(_berrybasket, _tilde1, type, _tilde2) {
     return new ast.Array(type.ast(), LitList.ast())
   },
+  // TEST
   DictType(_fruitbasket, _tilde1, keytype, _comma, valuetype, _tilde4) {
     return new ast.Dictionary(keytype.ast(), valuetype.ast())
   },
+  // TEST
   LitList(first, _semis, rest) {
     return [first.ast(), ...rest.ast()]
   },
+  // TEST
   DictObj(_tilde1, content, _tilde2) {
     return content.asIteration().ast()
   },
+  // TEST
   DictContent(literal, _comma, expression) {
     return new ast.DictContent(literal.sourceString, expression.ast())
   },
+  // TEST
   WLoop(_whilemelon, expression, block) {
     return new ast.WLoop(expression.ast(), block.ast())
   },
@@ -197,9 +204,11 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
       block3.ast()
     )
   },
+  // TEST
   Call(id, _left, args, _right) {
     return new ast.Call(id.ast(), args.ast())
   },
+  // TEST
   Args(expressions) {
     return new expressions.asIteration().ast()
   },
@@ -218,6 +227,7 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   strLit(_open, chars, _close) {
     return chars.sourceString
   },
+  // TEST
   intLit(_digits) {
     return Number(this.sourceString)
   },
@@ -251,12 +261,13 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   Comment_singleLine(_colons, comment, _nextOrTerminal) {
     return new ast.Comment(comment.ast())
   },
+  // TEST
   Comment_multiLine(_open, comment, _close) {
     return new ast.Comment(comment.ast())
   },
   _terminal() {
     this.sourceString
-  },
+  }
 })
 
 export default function parse(source) {
@@ -266,59 +277,3 @@ export default function parse(source) {
   }
   return astBuilder(match).ast()
 }
-
-// --> BRAINFUCK EXAMPLE BEGIN
-// const grammar = ohm.grammar(String.raw`Brainfuck {
-//   Program = instruction+
-//   instruction = "[" instruction* "]"                 -- loop
-//               | simpleInstruction
-//   simpleInstruction =  "," | "." | "+" | "-" | "<" | ">"
-//   space := ~instruction any
-// }
-// ` );
-
-// const astBuilder = grammar.createSemantics().addOperation('ast', {
-//  Program(body) {
-//    return new ast.Program(body.ast());
-//  },
-//  instruction_loop(_left, tokens, _right) {
-//    return new ast.LoopInstruction(tokens.ast());
-//  },
-//  instruction(token) {
-//    return new ast.SimpleInstruction(token.sourceString);
-//  },
-// });
-// <-- BRAINFUCK EXAMPLE END
-
-// <-- AEL EXAMPLE BEGIN
-// Statement_variable(_let, id, _eq, expression) {
-//   return new ast.Variable(id.sourceString, expression.ast())
-// },
-// Statement_assign(id, _eq, expression) {
-//   return new ast.Assignment(
-//     new ast.IdentifierExpression(id.sourceString),
-//     expression.ast()
-//   )
-// },
-// Statement_print(_print, expression) {
-//   return new ast.PrintStatement(expression.ast())
-// },
-// Exp_binary(left, op, right) {
-//   return new ast.BinaryExpression(op.sourceString, left.ast(), right.ast())
-// },
-// Term_binary(left, op, right) {
-//   return new ast.BinaryExpression(op.sourceString, left.ast(), right.ast())
-// },
-// Factor_unary(op, operand) {
-//   return new ast.UnaryExpression(op.sourceString, operand.ast())
-// },
-// Factor_parens(_open, expression, _close) {
-//   return expression.ast()
-// },
-// num(_whole, _point, _fraction) {
-//   return new ast.Literal(Number(this.sourceString))
-// },
-// id(_first, _rest) {
-//   return new ast.IdentifierExpression(this.sourceString)
-// },
-// <-- AEL EXAMPLE END
