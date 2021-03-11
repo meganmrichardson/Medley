@@ -1,9 +1,11 @@
 import util from "util"
 
+
 export class Program {
   constructor(statements) {
     this.statements = statements
   }
+  // TEST
   [util.inspect.custom]() {
     return prettied(this)
   }
@@ -39,11 +41,18 @@ export class Dictionary {
   }
 }
 
-export class DictionaryContent {
-  constructor(literal1, literal2) {
-    Object.assign(this, { literal1, literal2 })
+export class DictContent {
+  constructor(literal, expression) {
+    Object.assign(this, { literal, expression })
   }
 }
+
+export class DictionaryList {
+  constructor(content) {
+    this.content = content
+  }
+}
+
 
 export class Conditional {
   constructor(sources, blocks) {
@@ -99,10 +108,9 @@ export class Arguments {
   }
 }
 
-// TEST
-export class Parameter {
-  constructor(names, types) {
-    Object.assign(this, { names, types })
+export class Params {
+  constructor(type1, id1, type2, id2) {
+    Object.assign(this, { type1, id1, type2, id2 })
   }
 }
 
@@ -112,19 +120,7 @@ export class LiteralList {
   }
 }
 
-export class DictionaryList {
-  constructor(content) {
-    this.content = content
-  }
-}
 
-export class BinaryExpression {
-  constructor(op, left, right) {
-    Object.assign(this, { op, left, right })
-  }
-}
-
-// TEST
 export class IdentifierExpression {
   constructor(name) {
     this.name = name
@@ -140,19 +136,6 @@ export class Increment {
 export class Literal {
   constructor(type) {
     this.type = type
-  }
-}
-
-// TEST
-export class DictContent {
-  constructor(literal, expression) {
-    Object.assign(this, { literal, expression })
-  }
-}
-
-export class Params {
-  constructor(type1, id1, type2, id2) {
-    Object.assign(this, { type1, id1, type2, id2 })
   }
 }
 
@@ -210,6 +193,7 @@ export class Exp8 {
 //   }
 // }
 
+// TEST
 function prettied(node) {
   // Return a compact and pretty string representation of the node graph,
   // taking care of cycles. Written here from scratch because the built-in

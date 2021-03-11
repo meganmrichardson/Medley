@@ -148,7 +148,7 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
     return new ast.IdentifierExpression(this.sourceString)
   },
   Block(_left, statements, _right) {
-    return statements.ast()
+    return new ast.Block(statements.ast())
   },
   ArrayType(_berrybasket, _tilde1, type, _tilde2) {
     return new ast.ArrayType(type.ast())
@@ -157,10 +157,10 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
     return new ast.Dictionary(keytype.ast(), valuetype.ast())
   },
   LitList(_tilde1, content, _tilde2) {
-    return content.asIteration().ast()
+    return new ast.LiteralList(content.asIteration().ast())
   },
   DictObj(_tilde1, content, _tilde2) {
-    return content.asIteration().ast()
+    return new ast.DictionaryList(content.asIteration().ast())
   },
   DictContent(literal, _comma, expression) {
     return new ast.DictContent(literal.sourceString, expression.ast())
@@ -206,7 +206,7 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
     return new ast.Call(id.ast(), args.ast())
   },
   Args(expressions) {
-    return expressions.asIteration().ast()
+    return new ast.Arguments(expressions.asIteration().ast())
   },
   Params(type1, id1, _comma, type2, id2) {
     return new ast.Params(type1.ast(), id1.ast(), type2.ast(), id2.ast())
