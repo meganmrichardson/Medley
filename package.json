@@ -2,7 +2,7 @@
   "name": "medley",
   "version": "1.0.0",
   "description": "Compiler for Medley using Ohm",
-  "main": "index.js",
+  "main": "src/medley.js",
   "type": "module",
   "directories": {
     "test": "test"
