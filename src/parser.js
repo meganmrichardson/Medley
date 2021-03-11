@@ -1,4 +1,5 @@
-import ohm from "ohm-js";
+import ohm from "ohm-js"
+import * as ast from "./ast.js"
 
 const medleyGrammar = ohm.grammar(String.raw`
 Medley {
@@ -20,7 +21,7 @@ Medley {
   Reassignment= id (is Exp) "|"
   ArrayType     = berrybasket "~"Type"~"
   DictType    = fruitbasket "~"Type"," Type"~"
-  Conditional= ifmelon Exp Block (elifmelon Exp Block)*
+  Conditional = ifmelon Exp Block (elifmelon Exp Block)*
                 (elsemelon Block)?
   WLoop       = whilemelon Exp Block
   FLoop       = formelon Assignment "|" Exp "|" Increment Block
@@ -32,7 +33,7 @@ Medley {
   Args        = ListOf<Exp, ",">
   Params      = Type id ("," Type id)*
   LitList     = "~" ListOf<Literal, ";"> "~"
-  DictObj    = "~" ListOf<DictContent, ";"> "~"
+  DictObj     = "~" ListOf<DictContent, ";"> "~"
   DictContent = Literal "," Exp
   Exp         = Exp orange Exp2                          --binary
               | Exp2
@@ -59,7 +60,8 @@ Medley {
               | intLit
               | floatLit
               | boolLit
-  Type        = stringberry | intberry | boolberry | floatberry | ArrayType | DictType
+  Type        = SimpleType | ArrayType | DictType
+  SimpleType  = stringberry | intberry | boolberry | floatberry 
   strLit      = "\"" char* "\"" | "\'" char* "\'"
   char        = ~"\\" ~"\"" ~"\n" any
   intLit      = digit+
@@ -106,18 +108,21 @@ Medley {
   id          = ~keyword letter alnum*
   Comment     = "::" (~"\n" any)* ("\n" | end)
               | ":::" (~"\n" any)* ":::"
-}`
-);
+}`)
 
 const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   Program(statements) {
     return new ast.Program(statements.ast())
   },
-  Declaration(type, identifier, _bar ) {
-    return new ast.Declaration(type.ast(), identifier.ast())
+  Declaration(type, identifier, _bar) {
+    return new ast.Declaration(type.ast(), identifier.sourceString)
   },
   Function(_blend, identifier, _left, parameters, _right, block) {
-    return new ast.Function(identifier.ast(), parameters.ast(), block.ast())
+    return new ast.Function(
+      identifier.sourceString,
+      parameters.ast(),
+      block.ast()
+    )
   },
   Assignment(type, target, _equals, source, _bar) {
     return new ast.Assignment(type.ast(), target.ast(), source.ast())
@@ -137,46 +142,86 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   Block(_left, statements, _right) {
     return statements.ast()
   },
-  ArrayType(_berrybasket, _tilde1, type, _tilde2) { 
+  ArrayType(_berrybasket, _tilde1, type, _tilde2) {
     return new ast.Array(type.ast(), LitList.ast())
   },
-  DictType(_fruitbasket, _tilde1, keytype, _comma, valuetype, _tilde4) { 
+  DictType(_fruitbasket, _tilde1, keytype, _comma, valuetype, _tilde4) {
     return new ast.Dictionary(keytype.ast(), valuetype.ast())
   },
   LitList(first, _semis, rest) {
     return [first.ast(), ...rest.ast()]
   },
-  DictObj(_tilde1, content, _tilde2) { 
+  DictObj(_tilde1, content, _tilde2) {
     return content.asIteration().ast()
   },
-  DictContent(literal, _comma, expression) { // ask toal about this
-    return new ast.DictContent(literal1.ast(), literal2.ast())
+  DictContent(literal, _comma, expression) {
+    // ask toal about this
+    return new ast.DictContent(literal.sourceString, expression.ast())
   },
   WLoop(_whilemelon, expression, block) {
     return new ast.WLoop(expression.ast(), block.ast())
   },
-  FLoop(_formelon, assignment, _firstBar, expression, _secondBar, increment, block) {
-    return new ast.FLoop(assignment.ast(), expression.ast(), increment.ast(), block.ast())
+  FLoop(
+    _formelon,
+    assignment,
+    _firstBar,
+    expression,
+    _secondBar,
+    increment,
+    block
+  ) {
+    return new ast.FLoop(
+      assignment.ast(),
+      expression.ast(),
+      increment.ast(),
+      block.ast()
+    )
   },
-  Conditional() { },
-  Expression() { },
-  Call() { },
-  Args() { },
-  Params() { },
-  Increment() { },
-  Literal() { },
-  Comments() { },
-  Type() { },
-});
+  Conditional(
+    _ifmelon,
+    expression1,
+    block1,
+    _elifmelon,
+    expression2,
+    block2,
+    _elsemelon,
+    block3
+  ) {
+    return new ast.Conditional(
+      expression1.ast(),
+      block1.ast(),
+      expression2.ast(),
+      block2.ast(),
+      block3.ast()
+    )
+  },
+  Call(id, _left, args, _right) {
+    return new ast.Call(id.ast(), args.ast())
+  },
+  Args(expressions) {
+    return new expressions.asIteration().ast()
+  },
+  Params(type1, id1, _comma, type2, id2) {
+    return new ast.Params(type1.ast(), id1.ast(), type2.ast(), id2.ast())
+  },
+  Increment(id, sign) {
+    return new ast.Increment(id.ast(), sign.ast())
+  },
+  Literal(type) {
+    return new ast.Literal(type.ast())
+  },
+  SimpleType(typename) {
+    return typename.sourceString
+  }
+})
 
 export default function parse(source) {
-  const match = medleyGrammar.match(source);
+  const match = medleyGrammar.match(source)
   if (!match.succeeded()) {
-    throw new Error(match.message);
+    throw new Error(match.message)
   }
-  return astBuilder(match).ast();
+  return astBuilder(match).ast()
 }
-
 
 // --> BRAINFUCK EXAMPLE BEGIN
 // const grammar = ohm.grammar(String.raw`Brainfuck {
@@ -200,7 +245,6 @@ export default function parse(source) {
 //  },
 // });
 // <-- BRAINFUCK EXAMPLE END
-
 
 // <-- AEL EXAMPLE BEGIN
 // Statement_variable(_let, id, _eq, expression) {

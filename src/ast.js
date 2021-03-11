@@ -3,8 +3,7 @@ import util from "util"
 export class Program {
   constructor(statements) {
     this.statements = statements
-  } 
-
+  }
   [util.inspect.custom]() {
     return prettied(this)
   }
@@ -52,7 +51,6 @@ export class Conditional {
   }
 }
 
-
 export class WLoop {
   constructor(test, body) {
     Object.assign(this, { test, body })
@@ -96,8 +94,8 @@ export class Call {
 }
 
 export class Arguments {
-  constructor(arguments) {
-    this.arguments = arguments
+  constructor(argumentList) {
+    this.argumentList = argumentList
   }
 }
 
@@ -119,7 +117,6 @@ export class DictionaryList {
   }
 }
 
-
 export class BinaryExpression {
   constructor(op, left, right) {
     Object.assign(this, { op, left, right })
@@ -137,14 +134,7 @@ export class Increment {
     this.identifier = identifier
   }
 }
-//copied from Dr. toal notes
-function prettied(node) {
-  // Return a compact and pretty string representation of the node graph,
-  // taking care of cycles. Written here from scratch because the built-in
-  // inspect function, while nice, isn't nice enough.
-  const tags = new Map()
 
-  function tag(node) {
     if (tags.has(node) || typeof node !== "object" || node === null) return
     tags.set(node, tags.size + 1)
     for (const child of Object.values(node)) {
@@ -168,11 +158,3 @@ function prettied(node) {
   tag(node)
   return [...lines()].join("\n")
 }
-
-
-
-
-
-
-
-
