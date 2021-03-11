@@ -135,6 +135,85 @@ export class Increment {
   }
 }
 
+export class Literal {
+  constructor(type) {
+    this.type = type
+  }
+}
+
+export class DictContent {
+  constructor(literal, expression) {
+    Object.assign(this, { literal, expression })
+  }
+}
+
+export class Params {
+  constructor(type1, id1, type2, id2) {
+    Object.assign(this, { type1, id1, type2, id2 })
+  }
+}
+
+export class Exp {
+  constructor(expression1, expression2) {
+    Object.assign(this, { expression1, expression2 })
+  }
+}
+
+export class Exp2 {
+  constructor(expression1, expression2) {
+    Object.assign(this, { expression1, expression2 })
+  }
+}
+
+export class Exp3 {
+  constructor(expression1, expression2) {
+    Object.assign(this, { expression1, expression2 })
+  }
+}
+
+export class Exp4 {
+  constructor(expression1, expression2) {
+    Object.assign(this, { expression1, expression2 })
+  }
+}
+
+export class Exp5 {
+  constructor(expression1, expression2) {
+    Object.assign(this, { expression1, expression2 })
+  }
+}
+
+export class Exp6 {
+  constructor(expression1, expression2) {
+    Object.assign(this, { expression1, expression2 })
+  }
+}
+
+export class Exp7 {
+  constructor(expression) {
+    this.expression = expression
+  }
+}
+
+export class Exp8 {
+  constructor(expression) {
+    this.expression = expression
+  }
+}
+
+export class Comment {
+  constructor(comment) {
+    this.comment = comment
+  }
+}
+
+function prettied(node) {
+  // Return a compact and pretty string representation of the node graph,
+  // taking care of cycles. Written here from scratch because the built-in
+  // inspect function, while nice, isn't nice enough.
+  const tags = new Map()
+
+  function tag(node) {
     if (tags.has(node) || typeof node !== "object" || node === null) return
     tags.set(node, tags.size + 1)
     for (const child of Object.values(node)) {

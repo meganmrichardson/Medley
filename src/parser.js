@@ -106,8 +106,8 @@ Medley {
               | ifmelon | elifmelon | elsemelon | whilemelon | elsemelon
               | squeeze
   id          = ~keyword letter alnum*
-  Comment     = "::" (~"\n" any)* ("\n" | end)
-              | ":::" (~"\n" any)* ":::"
+  Comment     = "::" (~"\n" any)* ("\n" | end)           --singleLine
+              | ":::" (~"\n" any)* ":::"                 --multiLine
 }`)
 
 const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
@@ -212,7 +212,49 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   },
   SimpleType(typename) {
     return typename.sourceString
-  }
+  },
+  strLit(_open, chars, _close) {
+    return chars.sourceString
+  },
+  intLit(_digits) {
+    return Number(this.sourceString)
+  },
+  floatLit(_whole, _point, _fraction) {
+    return Number(this.sourceString)
+  },
+  Exp_binary(expression1, _orange, expression2) {
+    return new ast.Exp(expression1.ast(), expression2.ast())
+  },
+  Exp2_binary(expression1, _apple, expression2) {
+    return new ast.Exp2(expression1.ast(), expression2.ast())
+  },
+  Exp3_binary(expression1, _relop, expression2) {
+    return new ast.Exp3(expression1.ast(), expression2.ast())
+  },
+  Exp4_binary(expression1, _addop, expression2) {
+    return new ast.Exp4(expression1.ast(), expression2.ast())
+  },
+  Exp5_binary(expression1, _mulop, expression2) {
+    return new ast.Exp5(expression1.ast(), expression2.ast())
+  },
+  Exp6_binary(expression1, _power, expression2) {
+    return new ast.Exp6(expression1.ast(), expression2.ast())
+  },
+  Exp7_unary(_prefix, expression) {
+    return new ast.Exp7(expression.ast())
+  },
+  Exp8_parens(_open, expression, _close) {
+    return new ast.Exp8(expression.ast())
+  },
+  Comment_singleLine(_colons, comment, _nextOrTerminal) {
+    return new ast.Comment(comment.ast())
+  },
+  Comment_multiLine(_open, comment, _close) {
+    return new ast.Comment(comment.ast())
+  },
+  _terminal() {
+    this.sourceString
+  },
 })
 
 export default function parse(source) {
