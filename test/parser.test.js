@@ -1,5 +1,26 @@
 import assert from "assert"
+import util from "util"
 import parse from "../src/parser.js"
+
+const source = `blend toCelsius(floatberry fahrenheit) ->
+squeeze (5 divby 9) times (fahrenheit minus 32) |
+<-`
+
+const expectedAst = `   1 | Program statements=[#2]
+   2 | Function type='toCelsius' parameters=#3 block=#5
+   3 | Params type1='floatberry' id1=#4 type2=[] id2=[]
+   4 | IdentifierExpression name='fahrenheit'
+   5 | Block statement=[#6]
+   6 | Return returnValue=#7
+   7 | Exp5 expression1=#8 expression2=#12
+   8 | Exp8 expression=#9
+   9 | Exp5 expression1=#10 expression2=#11
+  10 | Literal type=5
+  11 | Literal type=9
+  12 | Exp8 expression=#13
+  13 | Exp4 expression1=#14 expression2=#15
+  14 | IdentifierExpression name='fahrenheit'
+  15 | Literal type=32`
 
 const goodPrograms = [
   `stringberry medley is "hi" |`,
@@ -68,4 +89,7 @@ describe("The parser", () => {
       assert.throws(() => parse(program))
     })
   }
+  it("produces the expected AST for all node types", () => {
+    assert.deepStrictEqual(util.format(parse(source)), expectedAst)
+  })
 })

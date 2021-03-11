@@ -1,0 +1,3 @@
+blend toCelsius(floatberry fahrenheit) ->
+   squeeze (5 divby 9) times (fahrenheit minus 32) |
+<-
