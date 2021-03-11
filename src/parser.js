@@ -142,14 +142,16 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   Block(_left, statements, _right) {
     return statements.ast()
   },
-  ArrayType(_berrybasket, _tilde1, literals, _tilde2) {
-    return new ast.Array(type.ast(), literals.ast())
+
+  ArrayType(_berrybasket, _tilde1, type, _tilde2) {
+    return new ast.Array(type.ast())
+
   },
   DictType(_fruitbasket, _tilde1, keytype, _comma, valuetype, _tilde4) {
     return new ast.Dictionary(keytype.ast(), valuetype.ast())
   },
-  LitList(first, _semis, rest) {
-    return [first.ast(), ...rest.ast()]
+  LitList(_tilde1, content, _tilde2) {
+    return content.asIteration().ast()
   },
   DictObj(_tilde1, content, _tilde2) {
     return content.asIteration().ast()
