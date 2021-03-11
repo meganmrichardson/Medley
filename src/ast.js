@@ -1,11 +1,9 @@
 import util from "util"
 
-
 export class Program {
   constructor(statements) {
     this.statements = statements
   }
-  // TEST
   [util.inspect.custom]() {
     return prettied(this)
   }
@@ -52,7 +50,6 @@ export class DictionaryList {
     this.content = content
   }
 }
-
 
 export class Conditional {
   constructor(sources, blocks) {
@@ -120,7 +117,6 @@ export class LiteralList {
   }
 }
 
-
 export class IdentifierExpression {
   constructor(name) {
     this.name = name
@@ -187,13 +183,6 @@ export class Exp8 {
   }
 }
 
-// export class Comment {
-//   constructor(comment) {
-//     this.comment = comment
-//   }
-// }
-
-// TEST
 function prettied(node) {
   // Return a compact and pretty string representation of the node graph,
   // taking care of cycles. Written here from scratch because the built-in

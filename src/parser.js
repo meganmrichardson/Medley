@@ -168,11 +168,39 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   WLoop(_whilemelon, expression, block) {
     return new ast.WLoop(expression.ast(), block.ast())
   },
-  FLoop(_formelon, assignment, _firstBar, expression, _secondBar, increment, block) {
-    return new ast.FLoop(assignment.ast(), expression.ast(), increment.ast(), block.ast())
+  FLoop(
+    _formelon,
+    assignment,
+    _firstBar,
+    expression,
+    _secondBar,
+    increment,
+    block
+  ) {
+    return new ast.FLoop(
+      assignment.ast(),
+      expression.ast(),
+      increment.ast(),
+      block.ast()
+    )
   },
-  Conditional(_ifmelon, expression1, block1, _elifmelon, expression2, block2, _elsemelon, block3) {
-    return new ast.Conditional(expression1.ast(), block1.ast(), expression2.ast(), block2.ast(), block3.ast())
+  Conditional(
+    _ifmelon,
+    expression1,
+    block1,
+    _elifmelon,
+    expression2,
+    block2,
+    _elsemelon,
+    block3
+  ) {
+    return new ast.Conditional(
+      expression1.ast(),
+      block1.ast(),
+      expression2.ast(),
+      block2.ast(),
+      block3.ast()
+    )
   },
   Call(id, _left, args, _right) {
     return new ast.Call(id.ast(), args.ast())
@@ -195,7 +223,6 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   strLit(_open, chars, _close) {
     return chars.sourceString
   },
-  // TEST
   intLit(_digits) {
     return Number(this.sourceString)
   },
