@@ -3,116 +3,119 @@ import * as ast from "./ast.js"
 
 const medleyGrammar = ohm.grammar(String.raw`
 Medley {
-  Program     = Statement*
-  Statement   = Function                              
-              | Assignment
-              | Reassignment
-              | Declaration
-              | Conditional
-              | WLoop
-              | FLoop
-              | Print
-              | Return
-              | Call "|"                              --call
-              | Increment "|"                         --increment
-              | Comment
-  Assignment  = Type id is Exp "|"
-  Declaration = Type id "|"
-  Reassignment= id (is Exp) "|"
-  ArrayType     = berrybasket "~"Type"~"
-  DictType    = fruitbasket "~"Type"," Type"~"
-  Conditional = ifmelon Exp Block (elifmelon Exp Block)*
-                (elsemelon Block)?
-  WLoop       = whilemelon Exp Block
-  FLoop       = formelon Assignment "|" Exp "|" Increment Block
-  Block       = "->"Statement*"<-"
-  Function    = blend id "(" Params ")" Block
-  Print       = juice Exp "|"
-  Return      = squeeze Exp "|"
-  Call        = id "(" Args ")"
-  Args        = ListOf<Exp, ",">
-  Params      = Type id ("," Type id)*
-  LitList     = "~" ListOf<Literal, ";"> "~"
-  DictObj     = "~" ListOf<DictContent, ";"> "~"
-  DictContent = Literal "," Exp
-  Exp         = Exp orange Exp2                          --binary
-              | Exp2
-  Exp2        = Exp2 apple Exp3                          --binary
-              | Exp3
-  Exp3        = Exp3 relop Exp4                          --binary
-              | Exp4
-  Exp4        = Exp4 addop Exp5                          --binary
-              | Exp5
-  Exp5        = Exp5 mulop Exp6                          --binary
-              | Exp6
-  Exp6        = Exp7 power Exp6                          --binary
-              | Exp7
-  Exp7        = prefix Exp8                              --unary
-              | Exp8
-  Exp8        = Call
-              | Literal
-              | DictObj
-              | LitList
-              | id
-              | "(" Exp ")"                              --parens                         
-  Increment   = id ("++" | "--")
-  Literal     = strLit
-              | intLit
-              | floatLit
-              | boolLit
-  Type        = SimpleType | ArrayType | DictType
-  SimpleType  = stringberry | intberry | boolberry | floatberry 
-  strLit      = "\"" char* "\"" | "\'" char* "\'"
-  char        = ~"\\" ~"\"" ~"\n" any
-  intLit      = digit+
-  floatLit    = digit+ ("." digit+)?
-  boolLit     = "organic" | "gmo"
-  noneLit     = "none"
-  blend       = "blend" ~alnum
-  juice       = "juice" ~alnum
-  stringberry = "stringberry" ~alnum
-  intberry    = "intberry" ~alnum
-  floatberry  = "floatberry" ~alnum
-  boolberry   = "boolberry" ~alnum
-  orange      = "orange" ~alnum
-  apple       = "apple" ~alnum
-  lesseq      = "less equals" ~alnum
-  moreeq      = "more equals" ~alnum
-  less        = "less" ~alnum
-  more        = "more" ~alnum
-  equals      = "equals" ~alnum
-  times       = "times" ~alnum
-  divby       = "divby" ~alnum
-  mod         = "mod" ~alnum
-  plus        = "plus" ~alnum
-  minus       = "minus" ~alnum
-  power       = "to the power of" ~alnum
-  is          = "is" ~alnum
-  berrybasket = "berrybasket" ~alnum
-  fruitbasket = "fruitbasket" ~alnum
-  ifmelon     = "ifmelon" ~alnum
-  elifmelon   = "elifmelon" ~alnum
-  elsemelon   = "elsemelon" ~alnum
-  whilemelon  = "whilemelon" ~alnum
-  formelon    = "formelon" ~alnum
-  squeeze     = "squeeze" ~alnum
-  relop       = "less equals" | "more equals" | "less" | "more" | "equals"
-  mulop       = "times" | "divby" | "mod"
-  addop       = "plus" | "minus"
-  prefix      = "-" | "not"
-  keyword     = juice | blend | orange | apple | less | more
-              | lesseq | moreeq | equals | times | divby | mod
-              | plus | minus | power | is | berrybasket | fruitbasket
-              | ifmelon | elifmelon | elsemelon | whilemelon | elsemelon
-              | squeeze
-  id          = ~keyword letter alnum*
-  Comment     = "::" (~"\n" any)* ("\n" | end)           --singleLine
-              | ":::" (~"\n" any)* ":::"                 --multiLine
+ Program     = Statement*
+ Statement   = Function                             
+             | Assignment "|"                        --assign
+             | Reassignment
+             | Declaration
+             | Conditional
+             | WLoop
+             | FLoop
+             | Print
+             | Return
+             | Call "|"                              --call
+             | Increment "|"                         --increment
+             | Comment
+ Assignment  = Type id is Exp
+ Declaration = Type id "|"
+ Reassignment= id (is Exp) "|"
+ ArrayType     = berrybasket "~"Type"~"
+ DictType    = fruitbasket "~"Type"," Type"~"
+ Conditional = ifmelon Exp Block (elifmelon Exp Block)*
+               (elsemelon Block)?
+ WLoop       = whilemelon Exp Block
+ FLoop       = formelon Assignment "|" Exp "|" Increment Block
+ Block       = "->"Statement*"<-"
+ Function    = blend id "(" Params ")" Block
+ Print       = juice Exp "|"
+ Return      = squeeze Exp "|"
+ Call        = id "(" Args ")"
+ Args        = ListOf<Exp, ",">
+ Params      = Type id ("," Type id)*
+ LitList     = "~" ListOf<Literal, ";"> "~"
+ DictObj     = "~" ListOf<DictContent, ";"> "~"
+ DictContent = Literal "," Exp
+ Exp         = Exp orange Exp2                          --binary
+             | Exp2
+ Exp2        = Exp2 apple Exp3                          --binary
+             | Exp3
+ Exp3        = Exp3 relop Exp4                          --binary
+             | Exp4
+ Exp4        = Exp4 addop Exp5                          --binary
+             | Exp5
+ Exp5        = Exp5 mulop Exp6                          --binary
+             | Exp6
+ Exp6        = Exp7 power Exp6                          --binary
+             | Exp7
+ Exp7        = prefix Exp8                              --unary
+             | Exp8
+ Exp8        = Call
+             | Literal
+             | DictObj
+             | LitList
+             | id
+             | "(" Exp ")"                              --parens                        
+ Increment   = id ("++" | "--")
+ Literal     = strLit
+             | floatLit
+             | intLit
+             | boolLit
+ Type        = SimpleType | ArrayType | DictType
+ SimpleType  = stringberry | intberry | boolberry | floatberry
+ strLit      = "\"" char* "\"" | "\'" char* "\'"
+ char        = ~"\\" ~"\"" ~"\n" any
+ intLit      = digit+
+ floatLit    = digit+ ("." digit+)?
+ boolLit     = "organic" | "gmo"
+ noneLit     = "none"
+ blend       = "blend" ~alnum
+ juice       = "juice" ~alnum
+ stringberry = "stringberry" ~alnum
+ intberry    = "intberry" ~alnum
+ floatberry  = "floatberry" ~alnum
+ boolberry   = "boolberry" ~alnum
+ orange      = "orange" ~alnum
+ apple       = "apple" ~alnum
+ lesseq      = "less equals" ~alnum
+ moreeq      = "more equals" ~alnum
+ less        = "less" ~alnum
+ more        = "more" ~alnum
+ equals      = "equals" ~alnum
+ times       = "times" ~alnum
+ divby       = "divby" ~alnum
+ mod         = "mod" ~alnum
+ plus        = "plus" ~alnum
+ minus       = "minus" ~alnum
+ power       = "to the power of" ~alnum
+ is          = "is" ~alnum
+ berrybasket = "berrybasket" ~alnum
+ fruitbasket = "fruitbasket" ~alnum
+ ifmelon     = "ifmelon" ~alnum
+ elifmelon   = "elifmelon" ~alnum
+ elsemelon   = "elsemelon" ~alnum
+ whilemelon  = "whilemelon" ~alnum
+ formelon    = "formelon" ~alnum
+ squeeze     = "squeeze" ~alnum
+ relop       = "less equals" | "more equals" | "less" | "more" | "equals"
+ mulop       = "times" | "divby" | "mod"
+ addop       = "plus" | "minus"
+ prefix      = "-" | "not"
+ keyword     = juice | blend | orange | apple | less | more
+             | lesseq | moreeq | equals | times | divby | mod
+             | plus | minus | power | is | berrybasket | fruitbasket
+             | ifmelon | elifmelon | elsemelon | whilemelon | elsemelon
+             | squeeze
+ id          = ~keyword letter alnum*
+ Comment     = "::" (~"\n" any)* ("\n" | end)           --singleLine
+             | ":::" (~"\n" any)* ":::"                 --multiLine
 }`)
 
 const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   Program(statements) {
     return new ast.Program(statements.ast())
+  },
+  Statement_assign(assign, _bar) {
+    return new ast.Assignment()
   },
   Declaration(type, identifier, _bar) {
     return new ast.Declaration(type.ast(), identifier.sourceString)
@@ -124,7 +127,7 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
       block.ast()
     )
   },
-  Assignment(type, target, _equals, source, _bar) {
+  Assignment(type, target, _equals, source) {
     return new ast.Assignment(type.ast(), target.ast(), source.ast())
   },
   Reassignment(target, _equals, source, _bar) {
@@ -142,22 +145,19 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   Block(_left, statements, _right) {
     return statements.ast()
   },
-
   ArrayType(_berrybasket, _tilde1, type, _tilde2) {
-    return new ast.Array(type.ast())
-
+    return new ast.Array(type.ast(), LitList.ast())
   },
   DictType(_fruitbasket, _tilde1, keytype, _comma, valuetype, _tilde4) {
     return new ast.Dictionary(keytype.ast(), valuetype.ast())
   },
-  LitList(_tilde1, content, _tilde2) {
-    return content.asIteration().ast()
+  LitList(first, _semis, rest) {
+    return [first.ast(), ...rest.ast()]
   },
   DictObj(_tilde1, content, _tilde2) {
     return content.asIteration().ast()
   },
   DictContent(literal, _comma, expression) {
-    // ask toal about this
     return new ast.DictContent(literal.sourceString, expression.ast())
   },
   WLoop(_whilemelon, expression, block) {
@@ -256,7 +256,7 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   },
   _terminal() {
     this.sourceString
-  }
+  },
 })
 
 export default function parse(source) {
