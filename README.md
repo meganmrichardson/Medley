@@ -4,7 +4,7 @@
 
 ## Introduction
 
-#### Welcome to Medley!
+#### [Welcome to Medley!](https://meganmrichardson.github.io/Medley/)
 
 Medley is a fruitful take on a programming language, with strengths in both enjoyability and ease of use. Medley employs a more natural language approach to programming, all while having a unique theme that makes it both easy and fun to use. The target is for either younger or newer beginning programmers, where a lot of the more complex concepts of programming is simplified by making it similar to English. 
 
