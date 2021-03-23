@@ -131,7 +131,6 @@ Medley is created by [@Henno Kublin](https://github.com/hjkublin), [@Amanda Marq
 ## Comments
 
 - Single Line: `::`
-- Block: `::: :::`
 
 ## Medley Examples
 
