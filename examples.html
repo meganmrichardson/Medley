@@ -29,56 +29,56 @@
       <section>
         <h1>Program Examples</h1>
 
-        <h2>Hello World</h2>
+        <h3>Hello World</h3>
         <pre><code>juice "Hello, World!" |</code></pre>
 
-        <h2>While Loop</h2>
+        <h3>While Loop</h3>
         <pre><code>
-            intberry i is 2 |
-            whilemelon i less 10 ->
-              juice " " plus i |
-              i++ |
-            <-
+intberry i is 2 |
+whilemelon i less 10 ->
+  juice " " plus i |
+  i++ |
+<-
         </code></pre>
 
-        <h2>For Loop</h2>
+        <h3>For Loop</h3>
         <pre><code>
-            formelon intberry i is 10 | i more equals num | i-- ->
-              juice "the number is " plus i |
-            <-
+formelon intberry i is 10 | i more equals num | i-- ->
+  juice "the number is " plus i |
+<-
         </code></pre>
 
-        <h2>If Statement</h2>
+        <h3>If Statement</h3>
         <pre><code>
-            ifmelon 1 plus 1 equals 2  ->
-              juice "this is factual information" | :: this is a comment
-            <-
+ifmelon 1 plus 1 equals 2  ->
+  juice "this is factual information" | :: this is a comment
+<-
         </code></pre>
 
-        <h2>Fibonacci</h2>
+        <h3>Fibonacci</h3>
         <pre><code>
-            blend fibonacci(intberry num) ->
-              intberry num1 is 0 |
-              intberry num2 is 1 |
-              intberry sum |
-              intberry i is 0 |
-              formelon i is 0 | i less num | i++ ->
-                sum is num1 plus num2 |
-                num1 is num2 |
-                num2 is sum |
-              <-
-              squeeze num2 |
-            <-
+blend fibonacci(intberry num) ->
+  intberry num1 is 0 |
+  intberry num2 is 1 |
+  intberry sum |
+  intberry i is 0 |
+  formelon i is 0 | i less num | i++ ->
+    sum is num1 plus num2 |
+    num1 is num2 |
+    num2 is sum |
+  <-
+  squeeze num2 |
+<-
         </code></pre>
 
-        <h2>First Factorial</h2>
+        <h3>First Factorial</h3>
         <pre><code>
-            blend firstFactorial(intberry num) ->
-              ifmelon num equals 0 orange num equals 1 ->
-                squeeze 1 |
-              <-
-              squeeze num times firstFactorial(num minus 1) |
-            <-
+blend firstFactorial(intberry num) ->
+  ifmelon num equals 0 orange num equals 1 ->
+    squeeze 1 |
+  <-
+  squeeze num times firstFactorial(num minus 1) |
+<-
         </code></pre>
       </section>
       <footer>
