@@ -89,12 +89,8 @@ const semanticChecks = [
   // ["array length", "print(#[1,2,3]);"],
   // ["optional types", "let x = no int; x = some 100;"],
   // ["variables", "let x=[[[[1]]]]; print(x[0][0][0][0]+2);"],
-  // ["recursive structs", "struct S {z: S?} let x = S(no S);"],
-  // ["nested structs", "struct T{y:int} struct S{z: T} let x=S(T(1)); print(x.z.y);"],
   // ["member exp", "struct S {x: int} let y = S(1);print(y.x);"],
   // ["subscript exp", "let a=[1,2];print(a[0]);"],
-  // ["array of struct", "struct S{} let x=[S(), S()];"],
-  // ["struct of arrays and opts", "struct S{x: [int] y: string??}"],
   [
     "assigned functions",
     "blend fn (intberry five) -> intberry seven is 2 plus five | <-"
