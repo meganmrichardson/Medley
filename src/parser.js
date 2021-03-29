@@ -48,69 +48,12 @@ Medley {
               | Exp6
   Exp6        = Exp7 power Exp6                          --binary
               | Exp7
-  Exp7        = prefix Exp8                              --unary
+  Exp7        = Exp7 "?" BasicCond                       --binary
               | Exp8
-  Exp8        = Call
-              | Literal
-              | DictObj
-              | LitList
-              | id
-              | "(" Exp ")"                              --parens
-  Increment   = id ("++" | "--")
-  Literal     = strLit
-              | floatLit
-              | intLit
-              | boolLit
-  Type        = SimpleType | ArrayType | DictType
-  SimpleType  = stringberry | intberry | boolberry | floatberry
-  strLit      = "\"" char* "\"" | "\'" char* "\'"
-  char        = ~"\\" ~"\"" ~"\n" any
-  intLit      = digit+
-  floatLit    = digit+ "." digit+
-  boolLit     = "organic" | "gmo"
-  noneLit     = "none"
-  split       = "split" ~alnum 
-  blend       = "blend" ~alnum
-  juice       = "juice" ~alnum
-  stringberry = "stringberry" ~alnum
-  intberry    = "intberry" ~alnum
-  floatberry  = "floatberry" ~alnum
-  boolberry   = "boolberry" ~alnum
-  orange      = "orange" ~alnum
-  apple       = "apple" ~alnum
-  lesseq      = "less equals" ~alnum
-  moreeq      = "more equals" ~alnum
-  less        = "less" ~alnum
-  more        = "more" ~alnum
-  equals      = "equals" ~alnum
-  times       = "times" ~alnum
-  divby       = "divby" ~alnum
-  mod         = "mod" ~alnum
-  plus        = "plus" ~alnum
-  minus       = "minus" ~alnum
-  power       = "to the power of" ~alnum
-  is          = "is" ~alnum
-  berrybasket = "berrybasket" ~alnum
-  fruitbasket = "fruitbasket" ~alnum
-  ifmelon     = "ifmelon" ~alnum
-  elifmelon   = "elifmelon" ~alnum
-  elsemelon   = "elsemelon" ~alnum
-  whilemelon  = "whilemelon" ~alnum
-  formelon    = "formelon" ~alnum
-  squeeze     = "squeeze" ~alnum
-  relop       = "less equals" | "more equals" | "less" | "more" | "equals"
-  mulop       = "times" | "divby" | "mod"
-  addop       = "plus" | "minus"
-  prefix      = "-" | "not"
-  keyword     = juice | blend | split | orange | apple | less | more
-              | lesseq | moreeq | equals | times | divby | mod
-              | plus | minus | power | is | berrybasket | fruitbasket
-              | ifmelon | elifmelon | elsemelon | whilemelon | elsemelon
-              | squeeze | intberry | stringberry | floatberry | boolberry
-  id          = ~keyword letter alnum*
-  comment     = "::" (~"\n" any)* ("\n" | end)           --singleLine
-  space      += comment
- }`)
+  Exp8        = prefix Exp9                              --unary
+              | Exp9
+  Exp9        = Call
+ `)
 
 const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   Program(statements) {
