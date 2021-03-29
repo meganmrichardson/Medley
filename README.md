@@ -77,7 +77,7 @@ Medley is created by [@Henno Kublin](https://github.com/hjkublin), [@Amanda Marq
 | Types in JavaScript | Types in Medley | Variable Declarations Example        |
 | ------------------- | --------------- | ------------------------------------ |
 | string              | `stringberry`   | `stringberry title is "medley" \|`   |
-| boolean             | `boolberry`     | `boolberry bestLanguagee is fmo \|`  |
+| boolean             | `boolberry`     | `boolberry bestLanguagee is gmo \|`  |
 | int                 | `intberry`      | `intberry teamSize is 6 \|`          |
 | float               | `floatberry`    | `floatberry ourIQ is 156.7 \|`       |
 
