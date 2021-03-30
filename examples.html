@@ -38,6 +38,12 @@
         <h3>Hello World</h3>
         <pre><code>juice "Hello, World!" |</code></pre>
 
+        <h3>Array</h3>
+        <pre><code>berrybasket ~intberry~ arr is ~3; 4; 3~ |</code></pre>
+
+        <h3>Dictionary</h3>
+        <pre><code>fruitbasket ~stringberry, intberry~ dict is ~"a", 1; "b", 2; "c", 3~ |</code></pre>
+
         <h3>While Loop</h3>
         <pre><code>
 intberry i is 2 |
@@ -61,9 +67,35 @@ ifmelon 1 plus 1 equals 2  ->
 <-
         </code></pre>
 
+        <h3>If-Else Statement</h3>
+        <pre><code>
+ifmelon organic -> 
+  juice 1 | 
+<- elifmelon gmo -> 
+  juice 0 |
+<- elsemelon -> 
+  juice 2 | 
+<-
+        </code></pre>
+
+        <h3>Simple Add Function</h3>
+        <pre><code>
+intberry blend add(intberry first, intberry second) ->
+  squeeze first plus second |
+<-
+juice add(10, 15) |
+        </code></pre>
+
+        <h3>Printing Operation Results</h3>
+        <pre><code>
+juice 3 to the power of 2 | :: = 9 
+juice 20 mod 10 | :: = 0
+juice 5 less equals 6 | :: = organic (true)
+        </code></pre>
+
         <h3>Fibonacci</h3>
         <pre><code>
-blend fibonacci(intberry num) ->
+intberry blend fibonacci(intberry num) ->
   intberry num1 is 0 |
   intberry num2 is 1 |
   intberry sum |
@@ -75,11 +107,12 @@ blend fibonacci(intberry num) ->
   <-
   squeeze num2 |
 <-
+juice fibonacci(10) | :: function call
         </code></pre>
 
         <h3>First Factorial</h3>
         <pre><code>
-blend firstFactorial(intberry num) ->
+intberry blend firstFactorial(intberry num) ->
   ifmelon num equals 0 orange num equals 1 ->
     squeeze 1 |
   <-
