@@ -24,16 +24,16 @@ const semanticChecks = [
   ["initialize with empty array", "berrybasket~intberry~ toppings is ~~ |"],
   [
     "initialize with empty dictionary",
-    "berrybasket~intberry, intberry~ x is ~~ |"
+    "berrybasket~intberry, intberry~ x is ~~ |",
   ],
 
   [
     "array declaration",
-    'berrybasket~stringberry~ toppings is ~"strawberry" ; "blueberry"~ |'
+    'berrybasket~stringberry~ toppings is ~"strawberry" ; "blueberry"~ |',
   ],
   [
     "dictonary declaration",
-    'fruitbasket~stringberry, stringberry~ flavors is ~"lemon","tart" ; "starfruit","sweet"~ |'
+    'fruitbasket~stringberry, stringberry~ flavors is ~"lemon","tart" ; "starfruit","sweet"~ |',
   ],
   ["int declaration", "intberry x is 4 |"],
   ["boolean declaration", "boolberry x is organic |"],
@@ -54,11 +54,11 @@ const semanticChecks = [
   ["long if", "ifmelon organic -> juice 1 | <- elsemelon -> juice 3 | <-"],
   [
     "else if",
-    "ifmelon organic -> squeeze 1 | <- elifmelon organic -> squeeze 0 |<- elsemelon -> squeeze 2 | <-"
+    "ifmelon organic -> squeeze 1 | <- elifmelon organic -> squeeze 0 |<- elsemelon -> squeeze 2 | <-",
   ],
   [
     "for with conditions",
-    "formelon intberry i is 5 | i less 10 | i++ -> squeeze `hi` | <-"
+    "formelon intberry i is 5 | i less 10 | i++ -> squeeze `hi` | <-",
   ],
   // ["repeat", "repeat 3 {let a = 1; print(a);}"],
   ["or", "squeeze gmo orange organic |"],
@@ -69,7 +69,7 @@ const semanticChecks = [
   // ["shifts", "print(1<<3<<5<<8>>2>>0);"],
   [
     "arithmetic",
-    "intberry x is 1 | juice 2 times 3 plus 5 divby 2 minus 5 mod 8 |"
+    "intberry x is 1 | juice 2 times 3 plus 5 divby 2 minus 5 mod 8 |",
   ],
   // ["array length", "print(#[1,2,3]);"],
   // ["variables", "let x=[[[[1]]]]; print(x[0][0][0][0]+2);"],
@@ -77,9 +77,9 @@ const semanticChecks = [
   // ["subscript exp", "let a=[1,2];print(a[0]);"],
   [
     "assigned functions",
-    "blend fn (intberry five) -> intberry seven is 2 plus five | <-"
+    "blend fn (intberry five) -> intberry seven is 2 plus five | <-",
   ],
-  ["call of assigned functions", "intberry num is f (4, 3, 2) |"]
+  ["call of assigned functions", "intberry num is f (4, 3, 2) |"],
   // ["type equivalence of nested arrays", "function f(x: [[int]]) {} print(f([[1],[2]]));"],
   // [
   //   "call of assigned function in expression",
@@ -115,12 +115,12 @@ const semanticErrors = [
     // ["non-distinct fields", "struct S {x: boolean x: int}", /Fields must be distinct/],
     "non-int increment",
     "boolberry x is gmo | x++ |",
-    /an integer, found boolean/
+    /an integer, found boolean/,
   ],
   [
     "non-int decrement",
     'strinberry x is "" | x-- |',
-    /an integer, found [string]?/
+    /an integer, found [string]?/,
   ],
   ["undeclared id", "juice x |", /Identifier x not declared/],
   // ["redeclared id", "let x = 1;let x = 1;", /Identifier x already declared/],
@@ -128,12 +128,12 @@ const semanticErrors = [
   [
     "assign bad type",
     "intberry x is 1 | x is organic |",
-    /Cannot assign a boolean to a int/
+    /Cannot assign a boolean to a int/,
   ],
   [
     "assign bad array type",
     "berrybasket~intberry~ toppings is ~3;organic~ |",
-    /Cannot assign a \[boolean\] to a int/
+    /Cannot assign a \[boolean\] to a int/,
   ],
   // ["assign bad optional type", "let x=1;x=some 2;", /Cannot assign a int\? to a int/],
   // ["break outside loop", "break;", /Break can only appear in a loop/],
@@ -145,7 +145,7 @@ const semanticErrors = [
   [
     "return outside function",
     "squeeze |",
-    /Return can only appear in a function/
+    /Return can only appear in a function/,
   ],
   // [
   //   "return value from void function",
@@ -162,7 +162,7 @@ const semanticErrors = [
   [
     "non-boolean if test",
     "ifmelon 1 -><- elsemelon -><-",
-    /a boolean, found int/
+    /a boolean, found int/,
   ],
   ["non-boolean while test", "whilemelon 1 -><-", /a boolean, found int/],
   // ["non-integer repeat", 'repeat "1" {}', /an integer, found string/],
@@ -177,12 +177,12 @@ const semanticErrors = [
   [
     "bad types for ==",
     "juice gmo equals 1 |",
-    /Operands do not have the same type/
+    /Operands do not have the same type/,
   ],
   [
     "bad types for !=",
     "juice gmo nut equals 1 |",
-    /Operands do not have the same type/
+    /Operands do not have the same type/,
   ],
   ["bad types for +", "juice gmo plus 1 |", /number or string, found boolean/],
   ["bad types for -", "juice gmo minus 1 |", /a number, found boolean/],
@@ -193,13 +193,13 @@ const semanticErrors = [
   [
     "bad types for <=",
     "juice gmo less equals 1 |",
-    /number or string, found bool/
+    /number or string, found bool/,
   ],
   ["bad types for >", "juice gmo more 1 |", /number or string, found bool/],
   [
     "bad types for >=",
     "juice gmo more equals 1 |",
-    /number or string, found bool/
+    /number or string, found bool/,
   ],
   ["bad types for ==", "juice 2 equals 2.0 |", /not have the same type/],
   ["bad types for negation", "juice nut organic |", /a number, found boolean/],
@@ -214,7 +214,7 @@ const semanticErrors = [
   [
     "Too many args",
     "blend f(intberry x) -><-\nf(1,2) |",
-    /1 argument\(s\) required but 2 passed/
+    /1 argument\(s\) required but 2 passed/,
   ],
   // [
   //   "Too few args",
@@ -224,8 +224,8 @@ const semanticErrors = [
   [
     "Parameter type mismatch",
     "blend f(intberry x) -><-\nf(gmo);",
-    /Cannot assign a boolean to a int/
-  ]
+    /Cannot assign a boolean to a int/,
+  ],
   // [
   //   "function type mismatch",
   //   `function f(x: int, y: (boolean)->void): int { return 1; }
@@ -286,9 +286,9 @@ describe("The analyzer", () => {
       assert.throws(() => analyze(parse(source)), errorMessagePattern)
     })
   }
-  for (const [scenario, source, graph] of graphChecks) {
-    it(`properly rewrites the AST for ${scenario}`, () => {
-      assert.deepStrictEqual(analyze(parse(source)), new ast.Program(graph))
-    })
-  }
+  // for (const [scenario, source, graph] of graphChecks) {
+  //   it(`properly rewrites the AST for ${scenario}`, () => {
+  //     assert.deepStrictEqual(analyze(parse(source)), new ast.Program(graph))
+  //   })
+  // }
 })

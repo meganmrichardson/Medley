@@ -13,9 +13,10 @@ export const types = {
   int: Type.INT,
   float: Type.FLOAT,
   boolean: Type.BOOLEAN,
-  string: Type.STRING
+  string: Type.STRING,
+  void: Type.VOID,
 }
 
 export const functions = {
-  print: makeFunction("squeeze", new FunctionType([Type.ANY], Type.VOID))
+  print: makeFunction("squeeze", new FunctionType([Type.ANY], Type.VOID)),
 }

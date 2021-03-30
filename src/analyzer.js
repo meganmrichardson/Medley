@@ -7,18 +7,42 @@ function must(condition, errorMessage) {
   }
 }
 
-// Object.assign(ArrayType.prototype, {
-//   isEquivalentTo(target) {
-//     // [T] equivalent to [U] only when T is equivalent to U.
-//     return (
-//       target.constructor === ArrayType &&
-//       this.baseType.isEquivalentTo(target.baseType)
-//     )
-//   },
-//   isAssignableTo(target) {
-//     return this.isEquivalentTo(target)
-//   }
-// })
+Object.assign(ArrayType.prototype, {
+  isEquivalentTo(target) {
+    // [T] equivalent to [U] only when T is equivalent to U.
+    return (
+      target.constructor === ArrayType &&
+      this.baseType.isEquivalentTo(target.baseType)
+    )
+  },
+  isAssignableTo(target) {
+    return this.isEquivalentTo(target)
+  },
+})
+
+Object.assign(FunctionType.prototype, {
+  isEquivalentTo(target) {
+    return (
+      target.constructor === FunctionType &&
+      this.returnType.isEquivalentTo(target.returnType) &&
+      this.parameterTypes.length === target.parameterTypes.length &&
+      this.parameterTypes.every((t, i) =>
+        target.parameterTypes[i].isEquivalentTo(t)
+      )
+    )
+  },
+  isAssignableTo(target) {
+    // Functions are covariant on return types, contravariant on parameters.
+    return (
+      target.constructor === FunctionType &&
+      this.returnType.isAssignableTo(target.returnType) &&
+      this.parameterTypes.length === target.parameterTypes.length &&
+      this.parameterTypes.every((t, i) =>
+        target.parameterTypes[i].isAssignableTo(t)
+      )
+    )
+  },
+})
 
 class Context {
   constructor(parent = null, configuration = {}) {

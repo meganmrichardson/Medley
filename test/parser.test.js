@@ -2,7 +2,7 @@ import assert from "assert"
 import util from "util"
 import parse from "../src/parser.js"
 
-const source = `blend toCelsius(floatberry fahrenheit) ->
+const source = `floatberry blend toCelsius(floatberry fahrenheit) ->
 squeeze (5 divby 9) times (fahrenheit minus 32) |
 <-`
 
@@ -60,7 +60,7 @@ const goodPrograms = [
   whilemelon i less 10 ->
     juice " " plus i |
     i++ |
-  <-`
+  <-`,
 ]
 
 const badPrograms = [
@@ -75,7 +75,7 @@ const badPrograms = [
   `intberry i = 32 |`,
   `blend toCelsius floatberry fahrenheit  ->
    squeeze 5 |
- <-`
+ <-`,
 ]
 
 describe("The parser", () => {

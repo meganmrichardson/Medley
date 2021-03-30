@@ -27,7 +27,7 @@ export class Reassignment {
   }
 }
 
-export class ArrayType {
+export class ArrayDecl {
   constructor(type, baseType) {
     Object.assign(this, { type, baseType })
   }
@@ -200,6 +200,7 @@ export class Type {
   static INT = new Type("int")
   static FLOAT = new Type("float")
   static STRING = new Type("string")
+  static VOID = new Type("void")
   static TYPE = new Type("type")
   static ANY = new Type("any")
 }

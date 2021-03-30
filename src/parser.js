@@ -4,7 +4,7 @@ import * as ast from "./ast.js"
 const medleyGrammar = ohm.grammar(String.raw`
 Medley {
   Program     = Statement*
-  Statement   = Function
+  Statement   = FuncDecl
               | Assignment "|"                        --assign
               | Reassignment
               | Declaration
@@ -19,14 +19,14 @@ Medley {
   Assignment  = Type id is Exp
   Declaration = Type id "|"
   Reassignment= id is Exp "|"
-  ArrayType   = berrybasket "~"Type"~"
+  ArrayDecl   = berrybasket "~"Type"~"
   DictType    = fruitbasket "~"Type"," Type"~"
   Conditional = ifmelon Exp Block (elifmelon Exp Block)*
                 (elsemelon Block)?
   WLoop       = whilemelon Exp Block
   FLoop       = formelon (Assignment "|" | Reassignment "") Exp "|" Increment Block
   Block       = "->"Statement*"<-"
-  Function    = blend id "(" Params ")" Block
+  FuncDecl    = Type blend id "(" Params ")" Block
   Print       = juice Exp "|"
   Return      = squeeze Exp "|"
   Break       = split "|"
@@ -58,10 +58,10 @@ Medley {
               | "(" Exp ")"                              --parens
   Increment   = id ("++" | "--")
   Literal     = strLit
-              | floatLit
-              | intLit
+              | floatLit                                 --float
+              | intLit                                   --int
               | boolLit
-  Type        = SimpleType | ArrayType | DictType
+  Type        = SimpleType | ArrayDecl | DictType
   SimpleType  = stringberry | intberry | boolberry | floatberry
   strLit      = "\"" char* "\"" | "\'" char* "\'"
   char        = ~"\\" ~"\"" ~"\n" any
@@ -128,8 +128,9 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   Declaration(type, identifier, _bar) {
     return new ast.Declaration(type.ast(), identifier.sourceString)
   },
-  FuncDecl(_blend, identifier, _left, parameters, _right, block) {
+  FuncDecl(type, _blend, identifier, _left, parameters, _right, block) {
     return new ast.FuncDecl(
+      type.ast(),
       identifier.sourceString,
       parameters.ast(),
       block.ast()
@@ -153,8 +154,8 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   Block(_left, statements, _right) {
     return new ast.Block(statements.ast())
   },
-  ArrayType(_berrybasket, _tilde1, type, _tilde2) {
-    return new ast.ArrayType(type.ast())
+  ArrayDecl(_berrybasket, _tilde1, type, _tilde2) {
+    return new ast.ArrayDecl(type.ast())
   },
   DictType(_fruitbasket, _tilde1, keytype, _comma, valuetype, _tilde4) {
     return new ast.Dictionary(keytype.ast(), valuetype.ast())
@@ -226,10 +227,10 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   strLit(_open, chars, _close) {
     return chars.sourceString
   },
-  intLit(_digits) {
+  intLit(_negative, _digits) {
     return Number(this.sourceString)
   },
-  floatLit(_whole, _point, _fraction) {
+  floatLit(_negative, _whole, _point, _fraction) {
     return Number(this.sourceString)
   },
   Exp_binary(expression1, _orange, expression2) {
@@ -258,7 +259,7 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   },
   _terminal() {
     this.sourceString
-  }
+  },
 })
 
 export default function parse(source) {
