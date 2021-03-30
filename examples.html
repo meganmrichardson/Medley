@@ -86,6 +86,25 @@ blend firstFactorial(intberry num) ->
   squeeze num times firstFactorial(num minus 1) |
 <-
         </code></pre>
+
+        <h3>Primes</h3>
+        <pre><code>
+:: outputs all prime numbers between 0 and 100
+intberry lowestNumber is 0 |
+intberry highestNumber is 100|
+formelon intberry i is lowestNumber | i more equals highestNumber | i++ ->
+  intberry flag is 0 |
+  formelon intberry j is 2 | j less i | j++ ->
+    ifmelon i mod j equals 0 ->
+      flag is 1 |
+      split |
+    <-  
+  <-
+  ifmelon i more 1 apple flag equals 0 ->
+    juice i |
+  <-
+<-
+        </code></pre>
       </section>
       <footer>
         <p>
