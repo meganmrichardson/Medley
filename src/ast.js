@@ -75,7 +75,7 @@ export class Block {
   }
 }
 
-export class Function {
+export class FuncDecl {
   constructor(type, parameters, block) {
     Object.assign(this, { type, parameters, block })
   }
@@ -182,6 +182,56 @@ export class Exp8 {
     this.expression = expression
   }
 }
+
+// FOR SEMANTIC ANALYSIS
+
+// Complete Type objects are not created during the parsing; instead, we
+// only know identifiers for the base types. During semantic analysis the
+// type identifiers will be replaced with real type objects.
+export class Type {
+  constructor(name) {
+    this.name = name
+  }
+  static BOOLEAN = new Type("boolean")
+  static INT = new Type("int")
+  static FLOAT = new Type("float")
+  static STRING = new Type("string")
+  static TYPE = new Type("type")
+  static ANY = new Type("any")
+}
+
+export class ArrayType extends Type {
+  // Example: [int]
+  constructor(baseType) {
+    super(`[${baseType.name}]`)
+    this.baseType = baseType
+  }
+}
+
+export class FunctionType extends Type {
+  // Example: (boolean,[string]?)->float
+  constructor(parameterTypes, returnType) {
+    super(`(${parameterTypes.map(t => t.name).join(",")})->${returnType.name}`)
+    Object.assign(this, { parameterTypes, returnType })
+  }
+}
+
+// Created during semantic analysis only!
+export class Variable {
+  constructor(name, readOnly) {
+    Object.assign(this, { name, readOnly })
+  }
+}
+
+// Created during semantic analysis only!
+export class Function {
+  constructor(name) {
+    this.name = name
+    // Other properties set after construction
+  }
+}
+
+// END OF SEMANTIC ANALYSIS PART
 
 function prettied(node) {
   // Return a compact and pretty string representation of the node graph,

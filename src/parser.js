@@ -4,7 +4,7 @@ import * as ast from "./ast.js"
 const medleyGrammar = ohm.grammar(String.raw`
 Medley {
   Program     = Statement*
-  Statement   = Function
+  Statement   = FuncDecl
               | Assignment "|"                        --assign
               | Reassignment
               | Declaration
@@ -12,7 +12,6 @@ Medley {
               | WLoop
               | FLoop
               | Print
-              | Break
               | Return
               | Call "|"                              --call
               | Increment "|"                         --increment
@@ -26,11 +25,10 @@ Medley {
   WLoop       = whilemelon Exp Block
   FLoop       = formelon (Assignment "|" | Reassignment "") Exp "|" Increment Block
   Block       = "->"Statement*"<-"
-  Function    = blend id "(" Params ")" Block
+  FuncDecl    = blend id "(" Params ")" Block
   Print       = juice Exp "|"
   Return      = squeeze Exp "|"
   Call        = id "(" Args ")"
-  Break       = split "|"
   Args        = ListOf<Exp, ",">                        
   Params      = Type id ("," Type id)*
   LitList     = "~" ListOf<Literal, ";"> "~"
@@ -48,12 +46,68 @@ Medley {
               | Exp6
   Exp6        = Exp7 power Exp6                          --binary
               | Exp7
-  Exp7        = Exp7 "?" BasicCond                       --binary
+  Exp7        = prefix Exp8                              --unary
               | Exp8
-  Exp8        = prefix Exp9                              --unary
-              | Exp9
-  Exp9        = Call
- `)
+  Exp8        = Call
+              | Literal
+              | DictObj
+              | LitList
+              | id
+              | "(" Exp ")"                              --parens
+  Increment   = id ("++" | "--")
+  Literal     = strLit
+              | floatLit
+              | intLit
+              | boolLit
+  Type        = SimpleType | ArrayType | DictType
+  SimpleType  = stringberry | intberry | boolberry | floatberry
+  strLit      = "\"" char* "\"" | "\'" char* "\'"
+  char        = ~"\\" ~"\"" ~"\n" any
+  intLit      = ("-")? digit+
+  floatLit    = ("-")? digit+ "." digit+
+  boolLit     = "organic" | "gmo"
+  noneLit     = "none"
+  blend       = "blend" ~alnum
+  juice       = "juice" ~alnum
+  stringberry = "stringberry" ~alnum
+  intberry    = "intberry" ~alnum
+  floatberry  = "floatberry" ~alnum
+  boolberry   = "boolberry" ~alnum
+  orange      = "orange" ~alnum
+  apple       = "apple" ~alnum
+  lesseq      = "less equals" ~alnum
+  moreeq      = "more equals" ~alnum
+  less        = "less" ~alnum
+  more        = "more" ~alnum
+  equals      = "equals" ~alnum
+  times       = "times" ~alnum
+  divby       = "divby" ~alnum
+  mod         = "mod" ~alnum
+  plus        = "plus" ~alnum
+  minus       = "minus" ~alnum
+  power       = "to the power of" ~alnum
+  is          = "is" ~alnum
+  berrybasket = "berrybasket" ~alnum
+  fruitbasket = "fruitbasket" ~alnum
+  ifmelon     = "ifmelon" ~alnum
+  elifmelon   = "elifmelon" ~alnum
+  elsemelon   = "elsemelon" ~alnum
+  whilemelon  = "whilemelon" ~alnum
+  formelon    = "formelon" ~alnum
+  squeeze     = "squeeze" ~alnum
+  relop       = "less equals" | "more equals" | "less" | "more" | "equals"
+  mulop       = "times" | "divby" | "mod"
+  addop       = "plus" | "minus"
+  prefix      = "-" | "not"
+  keyword     = juice | blend | orange | apple | less | more
+              | lesseq | moreeq | equals | times | divby | mod
+              | plus | minus | power | is | berrybasket | fruitbasket
+              | ifmelon | elifmelon | elsemelon | whilemelon | elsemelon
+              | squeeze | intberry | stringberry | floatberry | boolberry
+  id          = ~keyword letter alnum*
+  comment     = "::" (~"\n" any)* ("\n" | end)           --singleLine
+  space      += comment
+ }`)
 
 const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   Program(statements) {
@@ -71,8 +125,8 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   Declaration(type, identifier, _bar) {
     return new ast.Declaration(type.ast(), identifier.sourceString)
   },
-  Function(_blend, identifier, _left, parameters, _right, block) {
-    return new ast.Function(
+  FuncDecl(_blend, identifier, _left, parameters, _right, block) {
+    return new ast.FuncDecl(
       identifier.sourceString,
       parameters.ast(),
       block.ast()

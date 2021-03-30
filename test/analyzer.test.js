@@ -13,8 +13,17 @@ const semanticChecks = [
     "variable declarations",
     'intberry x is 4 |; stringberry y is "Hello, World!" |'
   ],
-  ["increment", "intberry x is 10 | x++ |"],
+  ["negative", "intberry x is -10"][
+    ("negation", "boolberry a is true | boolberry b is nut a")
+  ][("increment", "intberry x is 10 | x++ |")],
   ["decrement", "intberry x is 10 | x-- |"],
+  ["times", "intberry x is 10 times 3"],
+  ["divby", "intberry x is 10 divby 3"],
+  ["mod", "intberry x is 10 mod 3"],
+  ["plus", "intberry x is 10 plus 3"],
+  ["minus", "intberry x is 10 minus 3"],
+  ["power", "intberry x is 10 power 3"],
+
   ["initialize with empty array", "berrybasket~intberry~ toppings is ~~ |"],
   // ["struct declaration", "struct S {f: (int)->boolean? g: string}"],
   // ["assign arrays", "let a = [](of int);let b=[1];a=b;b=a;"],
@@ -45,7 +54,6 @@ const semanticChecks = [
   // ["shifts", "print(1<<3<<5<<8>>2>>0);"],
   // ["arithmetic", "let x=1;print(2*3+5**-3/2-5%8);"],
   // ["array length", "print(#[1,2,3]);"],
-  // ["optional types", "let x = no int; x = some 100;"],
   // ["variables", "let x=[[[[1]]]]; print(x[0][0][0][0]+2);"],
   // ["member exp", "struct S {x: int} let y = S(1);print(y.x);"],
   // ["subscript exp", "let a=[1,2];print(a[0]);"],
@@ -88,11 +96,12 @@ const semanticErrors = [
     "incorrect typing",
     "intberry x is organic |",
     /Typing must match with declared typing/
-  ][
+  ],
+  [
     // ["non-distinct fields", "struct S {x: boolean x: int}", /Fields must be distinct/],
-    ("non-int increment",
+    "non-int increment",
     "boolberry x is gmo | x++ |",
-    /an integer, found boolean/)
+    /an integer, found boolean/
   ],
   [
     "non-int decrement",
