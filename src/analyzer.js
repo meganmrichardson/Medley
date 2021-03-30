@@ -44,6 +44,113 @@ Object.assign(FunctionType.prototype, {
   },
 })
 
+const check = self => ({
+  isNumeric() {
+    must(
+      [Type.INT, Type.FLOAT].includes(self.type),
+      `Expected a number, found ${self.type.name}`
+    )
+  },
+  isNumericOrString() {
+    must(
+      [Type.INT, Type.FLOAT, Type.STRING].includes(self.type),
+      `Expected a number or string, found ${self.type.name}`
+    )
+  },
+  isBoolean() {
+    must(
+      self.type === Type.BOOLEAN,
+      `Expected a boolean, found ${self.type.name}`
+    )
+  },
+  isInteger() {
+    must(self.type === Type.INT, `Expected an integer, found ${self.type.name}`)
+  },
+  isAType() {
+    must(self instanceof Type, "Type expected")
+  },
+  isAnOptional() {
+    must(self.type.constructor === OptionalType, "Optional expected")
+  },
+  isAnArray() {
+    must(self.type.constructor === ArrayType, "Array expected")
+  },
+  hasSameTypeAs(other) {
+    must(
+      self.type.isEquivalentTo(other.type),
+      "Operands do not have the same type"
+    )
+  },
+  allHaveSameType() {
+    must(
+      self.slice(1).every(e => e.type.isEquivalentTo(self[0].type)),
+      "Not all elements have the same type"
+    )
+  },
+  isNotRecursive() {
+    must(
+      !self.fields.map(f => f.type).includes(self),
+      "Struct type must not be recursive"
+    )
+  },
+  isAssignableTo(type) {
+    must(
+      type === Type.ANY || self.type.isAssignableTo(type),
+      `Cannot assign a ${self.type.name} to a ${type.name}`
+    )
+  },
+  isNotReadOnly() {
+    must(!self.readOnly, `Cannot assign to constant ${self.name}`)
+  },
+  areAllDistinct() {
+    must(
+      new Set(self.map(f => f.name)).size === self.length,
+      "Fields must be distinct"
+    )
+  },
+  isInTheObject(object) {
+    must(object.type.fields.map(f => f.name).includes(self), "No such field")
+  },
+  isInsideALoop() {
+    must(self.inLoop, "Break can only appear in a loop")
+  },
+  isInsideAFunction(context) {
+    must(self.function, "Return can only appear in a function")
+  },
+  isCallable() {
+    must(
+      self.constructor === StructType || self.type.constructor == FunctionType,
+      "Call of non-function or non-constructor"
+    )
+  },
+  returnsNothing() {
+    must(
+      self.type.returnType === Type.VOID,
+      "Something should be returned here"
+    )
+  },
+  returnsSomething() {
+    must(self.type.returnType !== Type.VOID, "Cannot return a value here")
+  },
+  isReturnableFrom(f) {
+    check(self).isAssignableTo(f.type.returnType)
+  },
+  match(targetTypes) {
+    // self is the array of arguments
+    must(
+      targetTypes.length === self.length,
+      `${targetTypes.length} argument(s) required but ${self.length} passed`
+    )
+    targetTypes.forEach((type, i) => check(self[i]).isAssignableTo(type))
+  },
+  matchParametersOf(calleeType) {
+    check(self).match(calleeType.parameterTypes)
+  },
+  matchFieldsOf(structType) {
+    check(self).match(structType.fields.map(f => f.type))
+  },
+})
+
 class Context {
   constructor(parent = null, configuration = {}) {
     this.parent = parent
@@ -75,19 +182,19 @@ class Context {
   analyze(node) {
     return this[node.constructor.name](node)
   }
-  Program(node) {
+  Program(p) {
     p.statements = this.analyze(p.statements)
     return p
   }
   // Work on assignment node:
-  // Assignments(d) {
-  //   // Declarations generate brand new variable objects
-  //   d.type = this.analyze(d.type)
-  //   d.variable = new Variable(d.target, d.readOnly)
-  //   d.variable.type = d.initializer.type
-  //   this.add(d.variable.name, d.variable)
-  //   return d
-  // }
+  Assignment(d) {
+    // Declarations generate brand new variable objects
+    d.type = this.analyze(d.type)
+    d.variable = new Variable(d.name)
+    d.variable.type = d.type
+    this.add(d.variable.name, d.variable)
+    return d
+  }
   // FunctionDeclaration(d) {
   // }
   Parameter(p) {
@@ -120,7 +227,7 @@ class Context {
     check(s.targets).isNotReadOnly()
     return s
   }
-  BreakStatement(s) {
+  Break(s) {
     check(this).isInsideALoop()
     return s
   }
@@ -131,8 +238,12 @@ class Context {
     check(s.returnValue).isReturnableFrom(this.function)
     return s
   }
+  Print(s) {
+    s.argument = this.analyze(s.argument)
+    return s
+  }
   // ADD IF STATEMENT
-  WhileStatement(s) {
+  WLoop(s) {
     s.test = this.analyze(s.test)
     check(s.test).isBoolean()
     s.body = this.newChild({ inLoop: true }).analyze(s.body)
@@ -152,8 +263,8 @@ class Context {
     return s
   }
   BinaryExpression(e) {
-    e.left = this.analyze(e.left)
-    e.right = this.analyze(e.right)
+    e.expression1 = this.analyze(e.expression1)
+    e.expression2 = this.analyze(e.expression2)
     if (["apple", "orange"].includes(e.op)) {
       check(e.left).isInteger()
       check(e.right).isInteger()

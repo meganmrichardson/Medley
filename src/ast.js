@@ -10,8 +10,8 @@ export class Program {
 }
 
 export class Assignment {
-  constructor(type, target, source) {
-    Object.assign(this, { type, target, source })
+  constructor(type, name, source) {
+    Object.assign(this, { type, name, source })
   }
 }
 
@@ -55,6 +55,10 @@ export class Conditional {
   constructor(sources, blocks) {
     Object.assign(this, { sources, blocks })
   }
+}
+
+export class Break {
+  constructor() {}
 }
 
 export class WLoop {
@@ -183,6 +187,12 @@ export class Exp8 {
   }
 }
 
+export class BinaryExpression {
+  constructor(operator, expression1, expression2) {
+    Object.assign(this, { operator, expression1, expression2 })
+  }
+}
+
 export class BreakStatement {
   // Intentionally empty
 }
@@ -223,8 +233,8 @@ export class FunctionType extends Type {
 
 // Created during semantic analysis only!
 export class Variable {
-  constructor(name, readOnly) {
-    Object.assign(this, { name, readOnly })
+  constructor(name) {
+    this.name = name
   }
 }
 

@@ -5,7 +5,7 @@ const medleyGrammar = ohm.grammar(String.raw`
 Medley {
   Program     = Statement*
   Statement   = FuncDecl
-              | Assignment "|"                        --assign
+              | Assignment                            --assign
               | Reassignment
               | Declaration
               | Conditional
@@ -16,7 +16,7 @@ Medley {
               | Return
               | Call "|"                              --call
               | Increment "|"                         --increment
-  Assignment  = Type id is Exp
+  Assignment  = Type id is Exp "|"?
   Declaration = Type id "|"
   Reassignment= id is Exp "|"
   ArrayDecl   = berrybasket "~"Type"~"
@@ -24,7 +24,7 @@ Medley {
   Conditional = ifmelon Exp Block (elifmelon Exp Block)*
                 (elsemelon Block)?
   WLoop       = whilemelon Exp Block
-  FLoop       = formelon (Assignment "|" | Reassignment "") Exp "|" Increment Block
+  FLoop       = formelon (Assignment "|"? | Reassignment "") Exp "|" Increment Block
   Block       = "->"Statement*"<-"
   FuncDecl    = Type blend id "(" Params ")" Block
   Print       = juice Exp "|"
@@ -116,9 +116,9 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   Program(statements) {
     return new ast.Program(statements.ast())
   },
-  Statement_assign(assignment, _bar) {
-    return assignment.ast()
-  },
+  // Statement_assign(assignment, _bar) {
+  //   return assignment.ast()
+  // },
   Statement_call(call, _bar) {
     return call.ast()
   },
@@ -136,8 +136,8 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
       block.ast()
     )
   },
-  Assignment(type, target, _is, source) {
-    return new ast.Assignment(type.ast(), target.sourceString, source.ast())
+  Assignment(type, name, _is, source, _bar) {
+    return new ast.Assignment(type.ast(), name.sourceString, source.ast())
   },
   Reassignment(target, _is, source, _bar) {
     return new ast.Reassignment(target.ast(), source.ast())
@@ -209,6 +209,9 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   Call(id, _left, args, _right) {
     return new ast.Call(id.ast(), args.ast())
   },
+  Break(_split, _bar) {
+    return new ast.Break()
+  },
   Args(expressions) {
     return new ast.Arguments(expressions.asIteration().ast())
   },
@@ -232,6 +235,9 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   },
   floatLit(_negative, _whole, _point, _fraction) {
     return Number(this.sourceString)
+  },
+  boolLit(truthiness) {
+    return Boolean(truthiness.sourceString === "gmo" ? false : true)
   },
   Exp_binary(expression1, _orange, expression2) {
     return new ast.Exp(expression1.ast(), expression2.ast())

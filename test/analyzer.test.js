@@ -13,13 +13,12 @@ const semanticChecks = [
   ["negation", "boolberry a is organic | boolberry b is nut |"],
   ["increment", "intberry x is 10 | x++ |"],
   ["decrement", "intberry x is 10 | x-- |"],
-  ["decrement", "intberry x is 10 | x-- |"],
   ["times", "intberry x is 10 times 3 |"],
   ["divby", "intberry x is 10 divby 3 |"],
   ["mod", "intberry x is 10 mod 3 |"],
   ["plus", "intberry x is 10 plus 3 |"],
   ["minus", "intberry x is 10 minus 3 |"],
-  ["power", "intberry x is 10 power 3 |"],
+  ["power", "intberry x is 10 to the power of 3 |"],
 
   ["initialize with empty array", "berrybasket~intberry~ toppings is ~~ |"],
   [
@@ -38,7 +37,7 @@ const semanticChecks = [
   ["int declaration", "intberry x is 4 |"],
   ["boolean declaration", "boolberry x is organic |"],
   ["float declaration", "intberry x is 4 |"],
-  ["string declaration", 'stringberry x is "Hello World |"'],
+  ["string declaration", 'stringberry x is "Hello World" |'],
   ["console output", 'juice "Hello World" |'],
   ["boolean type true", "boolberry x is organic |"],
   ["boolean type false", "boolberry x is gmo |"],
@@ -48,7 +47,7 @@ const semanticChecks = [
     "return in nested if",
     'stringberry blend f() -> ifmelon organic -> squeeze "" | <- <-',
   ],
-  ["break in nested if", "whilemelon gmo -> ifmelon organic -> break | <- <-"],
+  ["break in nested if", "whilemelon gmo -> ifmelon organic -> split | <- <-"],
   ["long if", "ifmelon organic -> juice 1 | <- elsemelon -> juice 3 | <-"],
   [
     "else if",
@@ -58,15 +57,15 @@ const semanticChecks = [
     "for with conditions",
     'formelon intberry i is 5 | i less 10 | i++ -> squeeze "hi" | <-',
   ],
-  ["or", "squeeze gmo orange organic |"],
-  ["and", "squeeze gmo apple not organic |"],
+  ["or", "juice gmo orange organic |"],
+  ["and", "juice gmo apple not organic |"],
   [
     "arithmetic",
     "intberry x is 1 | juice 2 times 3 plus 5 divby 2 minus 5 mod 8 |",
   ],
   [
     "assigned functions",
-    "blend fn (intberry five) -> intberry seven is 2 plus five | <-",
+    "intberry blend fn (intberry five) -> intberry seven is 2 plus five | <-",
   ],
   ["call of assigned functions", "intberry num is f (4, 3, 2) |"],
 ]
