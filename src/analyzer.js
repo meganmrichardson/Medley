@@ -55,20 +55,59 @@ class Context {
     p.statements = this.analyze(p.statements)
     return p
   }
-
-  Conditional(s) {
-    s.test = this.analyze(s.test)
-    check(s.test).isBoolean()
-    s.consequent = this.newChild().analyze(s.consequent)
-    if (s.alternate.constructor === Array) {
-      // It's a block of statements, make a new context
-      s.alternate = this.newChild().analyze(s.alternate)
-    } else if (s.alternate) {
-      // It's a trailing if-statement, so same context
-      s.alternate = this.analyze(s.alternate)
-    }
+  // Work on assignment node:
+  // Assignments(d) {
+  //   // Declarations generate brand new variable objects
+  //   d.type = this.analyze(d.type)
+  //   d.variable = new Variable(d.target, d.readOnly)
+  //   d.variable.type = d.initializer.type
+  //   this.add(d.variable.name, d.variable)
+  //   return d
+  // }
+  // FunctionDeclaration(d) {
+  // }
+  Parameter(p) {
+    p.type1 = this.analyze(p.type1)
+    check(p.type1).isAType()
+    this.add(p.id1, p)
+    p.type2 = this.analyze(p.type2)
+    check(p.type2).isAType()
+    this.add(p.id2, p)
+    return p
+  }
+  ArrayType(t) {
+    t.baseType = this.analyze(t.baseType)
+    return t
+  }
+  FunctionType(t) {
+    t.parameterTypes = this.analyze(t.parameterTypes)
+    t.returnType = this.analyze(t.returnType)
+    return t
+  }
+  Increment(s) {
+    s.identifier = this.analyze(s.identifier)
+    check(s.identifier).isInteger()
     return s
   }
+  Reassignment(s) {
+    s.source = this.analyze(s.source)
+    s.targets = this.analyze(s.targets)
+    check(s.source).isAssignableTo(s.targets.type)
+    check(s.targets).isNotReadOnly()
+    return s
+  }
+  BreakStatement(s) {
+    check(this).isInsideALoop()
+    return s
+  }
+  Return(s) {
+    check(this).isInsideAFunction()
+    check(this.function).returnsSomething()
+    s.returnValue = this.analyze(s.returnValue)
+    check(s.returnValue).isReturnableFrom(this.function)
+    return s
+  }
+  // ADD IF STATEMENT
   WhileStatement(s) {
     s.test = this.analyze(s.test)
     check(s.test).isBoolean()
@@ -88,7 +127,40 @@ class Context {
     s.body = this.newChild({ inLoop: true }).analyze(s.body)
     return s
   }
-  // ADD ALL THE EXPRESSIONS
+  BinaryExpression(e) {
+    e.left = this.analyze(e.left)
+    e.right = this.analyze(e.right)
+    if (["apple", "orange"].includes(e.op)) {
+      check(e.left).isInteger()
+      check(e.right).isInteger()
+      e.type = Type.INT
+    } else if (
+      ["plus", "minus", "times", "divby", "mod", "to the power of"].includes(
+        e.op
+      )
+    ) {
+      check(e.left).isNumeric()
+      check(e.left).hasSameTypeAs(e.right)
+      e.type = e.left.type
+    } else if (["less", "less equals", "more", "more equals"].includes(e.op)) {
+      check(e.left).isNumericOrString()
+      check(e.left).hasSameTypeAs(e.right)
+      e.type = Type.BOOLEAN
+    } else if (["equals", "not equals"].includes(e.op)) {
+      check(e.left).hasSameTypeAs(e.right)
+      e.type = Type.BOOLEAN
+    }
+    return e
+  }
+  UnaryExpression(e) {
+    e.operand = this.analyze(e.operand)
+    if (e.op === "not") {
+      check(e.operand).isBoolean()
+      e.type = Type.BOOLEAN
+    }
+    return e
+  }
+  // Ask Dr. Toal how to add the remaining expression types
   Call(c) {
     c.callee = this.analyze(c.callee)
     check(c.callee).isCallable()

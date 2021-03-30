@@ -183,6 +183,10 @@ export class Exp8 {
   }
 }
 
+export class BreakStatement {
+  // Intentionally empty
+}
+
 // FOR SEMANTIC ANALYSIS
 
 // Complete Type objects are not created during the parsing; instead, we

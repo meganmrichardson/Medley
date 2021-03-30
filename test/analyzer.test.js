@@ -9,22 +9,40 @@ import analyze from "../src/analyzer.js"
 
 // Programs that are semantically correct
 const semanticChecks = [
-  [
-    "variable declarations",
-    'intberry x is 4 |; stringberry y is "Hello, World!" |'
-  ],
-  ["negative", "intberry x is -10"][
-    ("negation", "boolberry a is true | boolberry b is nut a")
-  ][("increment", "intberry x is 10 | x++ |")],
+  ["negative", "intberry x is -10"],
+  ["negation", "boolberry a is organic | boolberry b is nut "],
+  ["increment", "intberry x is 10 | x++ |"],
   ["decrement", "intberry x is 10 | x-- |"],
-  ["times", "intberry x is 10 times 3"],
-  ["divby", "intberry x is 10 divby 3"],
-  ["mod", "intberry x is 10 mod 3"],
-  ["plus", "intberry x is 10 plus 3"],
-  ["minus", "intberry x is 10 minus 3"],
-  ["power", "intberry x is 10 power 3"],
+  ["decrement", "intberry x is 10 | x-- |"],
+  ["times", "intberry x is 10 times 3 |"],
+  ["divby", "intberry x is 10 divby 3 |"],
+  ["mod", "intberry x is 10 mod 3 |"],
+  ["plus", "intberry x is 10 plus 3 |"],
+  ["minus", "intberry x is 10 minus 3 |"],
+  ["power", "intberry x is 10 power 3 |"],
 
   ["initialize with empty array", "berrybasket~intberry~ toppings is ~~ |"],
+  [
+    "initialize with empty dictionary",
+    "berrybasket~intberry, intberry~ x is ~~ |"
+  ],
+
+  [
+    "array declaration",
+    'berrybasket~stringberry~ toppings is ~"strawberry" ; "blueberry"~ |'
+  ],
+  [
+    "dictonary declaration",
+    'fruitbasket~stringberry, stringberry~ flavors is ~"lemon","tart" ; "starfruit","sweet"~ |'
+  ],
+  ["int declaration", "intberry x is 4 |"],
+  ["boolean declaration", "boolberry x is organic |"],
+  ["float declaration", "intberry x is 4 |"],
+  ["string declaration", 'stringberry x is "Hello World |"'],
+  ["console output", 'juice "Hello World" |'],
+  ["boolean type true", "boolberry x is organic |"],
+  ["boolean type false", "boolberry x is gmo |"],
+
   // ["struct declaration", "struct S {f: (int)->boolean? g: string}"],
   // ["assign arrays", "let a = [](of int);let b=[1];a=b;b=a;"],
   // ["initialize with empty optional", "let a = no int;"],
@@ -43,16 +61,16 @@ const semanticChecks = [
     "formelon intberry i is 5 | i less 10 | i++ -> squeeze `hi` | <-"
   ],
   // ["repeat", "repeat 3 {let a = 1; print(a);}"],
-  ["conditionals with ints", "squeeze organic ? 4 then 3 |"],
-  ["conditionals with floats", "squeeze gmo ? 5.00 then -3.15 |"],
-  ["conditionals with strings", 'squeeze organic ? "hi" then "bye" |'],
   ["or", "squeeze gmo orange organic |"],
   ["and", "squeeze gmo apple not organic |"],
   // ["relations", 'print(1<=2 && "x">"y" && 3.5<1.2);'],
   // ["ok to == arrays", "print([1]==[5,8]);"],
   // ["ok to != arrays", "print([1]!=[5,8]);"],
   // ["shifts", "print(1<<3<<5<<8>>2>>0);"],
-  // ["arithmetic", "let x=1;print(2*3+5**-3/2-5%8);"],
+  [
+    "arithmetic",
+    "intberry x is 1 | juice 2 times 3 plus 5 divby 2 minus 5 mod 8 |"
+  ],
   // ["array length", "print(#[1,2,3]);"],
   // ["variables", "let x=[[[[1]]]]; print(x[0][0][0][0]+2);"],
   // ["member exp", "struct S {x: int} let y = S(1);print(y.x);"],
@@ -92,11 +110,7 @@ const semanticChecks = [
 
 // Programs that are syntactically correct but have semantic errors
 const semanticErrors = [
-  [
-    "incorrect typing",
-    "intberry x is organic |",
-    /Typing must match with declared typing/
-  ],
+  ["incorrect typing", "intberry x is organic |", /a boolean, found integer/],
   [
     // ["non-distinct fields", "struct S {x: boolean x: int}", /Fields must be distinct/],
     "non-int increment",
@@ -191,19 +205,20 @@ const semanticErrors = [
   ["bad types for negation", "juice nut organic |", /a number, found boolean/],
   // ["bad types for length", "print(#false);", /Array expected/],
   ["bad types for not", 'juice nut "hello" |', /a boolean, found string/],
+  ["bad types for -", 'juice - "hello" |', /a Number, found string/],
   // ["non-integer index", "let a=[1];print(a[false]);", /integer, found boolean/],
   // ["no such field", "struct S{} let x=S(); print(x.y);", /No such field/],
   // ["diff type array elements", "print([3,3.0]);", /Not all elements have the same type/],
   // ["shadowing", "let x = 1;\nwhile true {let x = 1;}", /Identifier x already declared/],
   // ["call of uncallable", "let x = 1;\nprint(x());", /Call of non-function/],
-  // [
-  //   "Too many args",
-  //   "function f(x: int) {}\nf(1,2);",
-  //   /1 argument\(s\) required but 2 passed/,
-  // ],
+  [
+    "Too many args",
+    "blend f(intberry x) -><-\nf(1,2) |",
+    /1 argument\(s\) required but 2 passed/
+  ],
   // [
   //   "Too few args",
-  //   "function f(x: int) {}\nf();",
+  //   "blend f(intberry x) {}\nf();",
   //   /1 argument\(s\) required but 0 passed/,
   // ],
   [

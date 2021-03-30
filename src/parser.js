@@ -4,7 +4,7 @@ import * as ast from "./ast.js"
 const medleyGrammar = ohm.grammar(String.raw`
 Medley {
   Program     = Statement*
-  Statement   = FuncDecl
+  Statement   = Function
               | Assignment "|"                        --assign
               | Reassignment
               | Declaration
@@ -25,7 +25,7 @@ Medley {
   WLoop       = whilemelon Exp Block
   FLoop       = formelon (Assignment "|" | Reassignment "") Exp "|" Increment Block
   Block       = "->"Statement*"<-"
-  FuncDecl    = blend id "(" Params ")" Block
+  Function    = blend id "(" Params ")" Block
   Print       = juice Exp "|"
   Return      = squeeze Exp "|"
   Call        = id "(" Args ")"
@@ -98,7 +98,7 @@ Medley {
   relop       = "less equals" | "more equals" | "less" | "more" | "equals"
   mulop       = "times" | "divby" | "mod"
   addop       = "plus" | "minus"
-  prefix      = "-" | "not"
+  prefix      = "not"
   keyword     = juice | blend | orange | apple | less | more
               | lesseq | moreeq | equals | times | divby | mod
               | plus | minus | power | is | berrybasket | fruitbasket
