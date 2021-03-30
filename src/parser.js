@@ -12,6 +12,7 @@ Medley {
               | WLoop
               | FLoop
               | Print
+              | Break
               | Return
               | Call "|"                              --call
               | Increment "|"                         --increment
@@ -28,6 +29,7 @@ Medley {
   Function    = blend id "(" Params ")" Block
   Print       = juice Exp "|"
   Return      = squeeze Exp "|"
+  Break       = split "|"
   Call        = id "(" Args ")"
   Args        = ListOf<Exp, ",">                        
   Params      = Type id ("," Type id)*
@@ -94,12 +96,13 @@ Medley {
   elsemelon   = "elsemelon" ~alnum
   whilemelon  = "whilemelon" ~alnum
   formelon    = "formelon" ~alnum
+  split       = "split" ~alnum
   squeeze     = "squeeze" ~alnum
   relop       = "less equals" | "more equals" | "less" | "more" | "equals"
   mulop       = "times" | "divby" | "mod"
   addop       = "plus" | "minus"
   prefix      = "not"
-  keyword     = juice | blend | orange | apple | less | more
+  keyword     = juice | blend | orange | apple | less | more | split
               | lesseq | moreeq | equals | times | divby | mod
               | plus | minus | power | is | berrybasket | fruitbasket
               | ifmelon | elifmelon | elsemelon | whilemelon | elsemelon
