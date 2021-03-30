@@ -7,7 +7,7 @@ squeeze (5 divby 9) times (fahrenheit minus 32) |
 <-`
 
 const expectedAst = `   1 | Program statements=[#2]
-   2 | FuncDecl type='floatberry' name='toCelsius' parameters=#3 block=#5
+   2 | FuncDecl type='floatberry' name='toCelsius' parameters=[#3] block=#5
    3 | Params type1='floatberry' id1=#4 type2=[] id2=[]
    4 | IdentifierExpression name='fahrenheit'
    5 | Block statement=[#6]

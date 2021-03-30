@@ -69,9 +69,6 @@ const check = self => ({
   isAType() {
     must(self instanceof Type, "Type expected")
   },
-  isAnOptional() {
-    must(self.type.constructor === OptionalType, "Optional expected")
-  },
   isAnArray() {
     must(self.type.constructor === ArrayType, "Array expected")
   },
@@ -85,12 +82,6 @@ const check = self => ({
     must(
       self.slice(1).every(e => e.type.isEquivalentTo(self[0].type)),
       "Not all elements have the same type"
-    )
-  },
-  isNotRecursive() {
-    must(
-      !self.fields.map(f => f.type).includes(self),
-      "Struct type must not be recursive"
     )
   },
   isAssignableTo(type) {
@@ -189,14 +180,36 @@ class Context {
   // Work on assignment node:
   Assignment(d) {
     // Declarations generate brand new variable objects
+    // d.source = this.analyze(d.source)
+    // d.variable = new Variable(d.name)
+    // d.variable.type = d.source.type
+    // this.add(d.variable.name, d.variable)
+    // return d
+
     d.type = this.analyze(d.type)
     d.variable = new Variable(d.name)
     d.variable.type = d.type
     this.add(d.variable.name, d.variable)
     return d
   }
-  // FunctionDeclaration(d) {
-  // }
+  FuncDecl(d) {
+    d.returnType = d.returnType ? this.analyze(d.returnType) : Type.VOID
+    check(d.returnType).isAType()
+    // Declarations generate brand new function objects
+    const f = (d.function = new Function(d.name))
+    // When entering a function body, we must reset the inLoop setting,
+    // because it is possible to declare a function inside a loop!
+    const childContext = this.newChild({ inLoop: false, forFunction: f })
+    d.parameters = childContext.analyze(d.parameters)
+    f.type = new FunctionType(
+      d.parameters.map(p => p.type),
+      d.returnType
+    )
+    // Add before analyzing the body to allow recursion
+    this.add(f.name, f)
+    d.block = childContext.analyze(d.block)
+    return d
+  }
   Parameter(p) {
     p.type1 = this.analyze(p.type1)
     check(p.type1).isAType()
@@ -266,29 +279,29 @@ class Context {
     e.expression1 = this.analyze(e.expression1)
     e.expression2 = this.analyze(e.expression2)
     if (["apple", "orange"].includes(e.op)) {
-      check(e.left).isInteger()
-      check(e.right).isInteger()
-      e.type = Type.INT
+      check(e.expression1).isBoolean()
+      check(e.expression2).isBoolean()
+      e.type = Type.BOOLEAN
     } else if (
       ["plus", "minus", "times", "divby", "mod", "to the power of"].includes(
         e.op
       )
     ) {
-      check(e.left).isNumeric()
-      check(e.left).hasSameTypeAs(e.right)
-      e.type = e.left.type
+      check(e.expression1).isNumeric()
+      check(e.expression1).hasSameTypeAs(e.expression2)
+      e.type = e.expression1.type
     } else if (["less", "less equals", "more", "more equals"].includes(e.op)) {
-      check(e.left).isNumericOrString()
-      check(e.left).hasSameTypeAs(e.right)
+      check(e.expression1).isNumeric()
+      check(e.expression1).hasSameTypeAs(e.expression2)
       e.type = Type.BOOLEAN
     } else if (["equals", "not equals"].includes(e.op)) {
-      check(e.left).hasSameTypeAs(e.right)
+      check(e.expression1).hasSameTypeAs(e.expression2)
       e.type = Type.BOOLEAN
     }
     return e
   }
   UnaryExpression(e) {
-    e.operand = this.analyze(e.operand)
+    e.op = this.analyze(e.op)
     if (e.op === "not") {
       check(e.operand).isBoolean()
       e.type = Type.BOOLEAN

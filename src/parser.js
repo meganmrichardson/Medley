@@ -31,8 +31,9 @@ Medley {
   Return      = squeeze Exp "|"
   Break       = split "|"
   Call        = id "(" Args ")"
-  Args        = ListOf<Exp, ",">                        
-  Params      = Type id ("," Type id)*
+  Args        = ListOf<Exp, ",">
+  Param       = Type id                        
+  Params      = ListOf<Param, ","> 
   LitList     = "~" ListOf<Literal, ";"> "~"
   DictObj     = "~" ListOf<DictContent, ";"> "~"
   DictContent = Literal "," Exp
@@ -128,9 +129,9 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   Declaration(type, identifier, _bar) {
     return new ast.Declaration(type.ast(), identifier.sourceString)
   },
-  FuncDecl(type, _blend, identifier, _left, parameters, _right, block) {
+  FuncDecl(returnType, _blend, identifier, _left, parameters, _right, block) {
     return new ast.FuncDecl(
-      type.ast(),
+      returnType.ast(),
       identifier.sourceString,
       parameters.ast(),
       block.ast()
@@ -215,8 +216,12 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   Args(expressions) {
     return new ast.Arguments(expressions.asIteration().ast())
   },
-  Params(type1, id1, _comma, type2, id2) {
-    return new ast.Params(type1.ast(), id1.ast(), type2.ast(), id2.ast())
+  // take in array / more than 2 params
+  Params(params) {
+    return params.asIteration().ast()
+  },
+  Param(type, id) {
+    return new ast.Param(id.ast(), type.ast())
   },
   Increment(id, sign) {
     return new ast.Increment(id.ast(), sign.ast())
@@ -240,28 +245,40 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
     return Boolean(truthiness.sourceString === "gmo" ? false : true)
   },
   Exp_binary(expression1, _orange, expression2) {
-    return new ast.Exp(expression1.ast(), expression2.ast())
+    return new ast.BinaryExpression(
+      "orange",
+      expression1.ast(),
+      expression2.ast()
+    )
   },
   Exp2_binary(expression1, _apple, expression2) {
-    return new ast.Exp2(expression1.ast(), expression2.ast())
+    return new ast.BinaryExpression(
+      "apple",
+      expression1.ast(),
+      expression2.ast()
+    )
   },
-  Exp3_binary(expression1, _relop, expression2) {
-    return new ast.Exp3(expression1.ast(), expression2.ast())
+  Exp3_binary(expression1, relop, expression2) {
+    return new ast.BinaryExpression(relop, expression1.ast(), expression2.ast())
   },
-  Exp4_binary(expression1, _addop, expression2) {
-    return new ast.Exp4(expression1.ast(), expression2.ast())
+  Exp4_binary(expression1, addop, expression2) {
+    return new ast.BinaryExpression(addop, expression1.ast(), expression2.ast())
   },
-  Exp5_binary(expression1, _mulop, expression2) {
-    return new ast.Exp5(expression1.ast(), expression2.ast())
+  Exp5_binary(expression1, mulop, expression2) {
+    return new ast.BinaryExpression(mulop, expression1.ast(), expression2.ast())
   },
   Exp6_binary(expression1, _power, expression2) {
-    return new ast.Exp6(expression1.ast(), expression2.ast())
+    return new ast.BinaryExpression(
+      "to the power of",
+      expression1.ast(),
+      expression2.ast()
+    )
   },
-  Exp7_unary(_prefix, expression) {
-    return new ast.Exp7(expression.ast())
+  Exp7_unary(prefix, expression) {
+    return new ast.UnaryExpression(prefix, expression.ast())
   },
   Exp8_parens(_open, expression, _close) {
-    return new ast.Exp8(expression.ast())
+    return expression.ast()
   },
   _terminal() {
     this.sourceString

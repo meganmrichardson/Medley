@@ -80,8 +80,8 @@ export class Block {
 }
 
 export class FuncDecl {
-  constructor(type, name, parameters, block) {
-    Object.assign(this, { type, name, parameters, block })
+  constructor(returnType, name, parameters, block) {
+    Object.assign(this, { returnType, name, parameters, block })
   }
 }
 
@@ -110,8 +110,14 @@ export class Arguments {
 }
 
 export class Params {
-  constructor(type1, id1, type2, id2) {
-    Object.assign(this, { type1, id1, type2, id2 })
+  constructor(params) {
+    this.params = params
+  }
+}
+
+export class Param {
+  constructor(type, id) {
+    Object.assign(this, { type, id })
   }
 }
 
@@ -139,47 +145,47 @@ export class Literal {
   }
 }
 
-export class Exp {
-  constructor(expression1, expression2) {
-    Object.assign(this, { expression1, expression2 })
-  }
-}
+// export class Exp {
+//   constructor(expression1, expression2) {
+//     Object.assign(this, { expression1, expression2 })
+//   }
+// }
 
-export class Exp2 {
-  constructor(expression1, expression2) {
-    Object.assign(this, { expression1, expression2 })
-  }
-}
+// export class Exp2 {
+//   constructor(expression1, expression2) {
+//     Object.assign(this, { expression1, expression2 })
+//   }
+// }
 
-export class Exp3 {
-  constructor(expression1, expression2) {
-    Object.assign(this, { expression1, expression2 })
-  }
-}
+// export class Exp3 {
+//   constructor(expression1, expression2) {
+//     Object.assign(this, { expression1, expression2 })
+//   }
+// }
 
-export class Exp4 {
-  constructor(expression1, expression2) {
-    Object.assign(this, { expression1, expression2 })
-  }
-}
+// export class Exp4 {
+//   constructor(expression1, expression2) {
+//     Object.assign(this, { expression1, expression2 })
+//   }
+// }
 
-export class Exp5 {
-  constructor(expression1, expression2) {
-    Object.assign(this, { expression1, expression2 })
-  }
-}
+// export class Exp5 {
+//   constructor(expression1, expression2) {
+//     Object.assign(this, { expression1, expression2 })
+//   }
+// }
 
-export class Exp6 {
-  constructor(expression1, expression2) {
-    Object.assign(this, { expression1, expression2 })
-  }
-}
+// export class Exp6 {
+//   constructor(expression1, expression2) {
+//     Object.assign(this, { expression1, expression2 })
+//   }
+// }
 
-export class Exp7 {
-  constructor(expression) {
-    this.expression = expression
-  }
-}
+// export class Exp7 {
+//   constructor(expression) {
+//     this.expression = expression
+//   }
+// }
 
 export class Exp8 {
   constructor(expression) {
@@ -188,8 +194,14 @@ export class Exp8 {
 }
 
 export class BinaryExpression {
-  constructor(operator, expression1, expression2) {
-    Object.assign(this, { operator, expression1, expression2 })
+  constructor(op, expression1, expression2) {
+    Object.assign(this, { op, expression1, expression2 })
+  }
+}
+
+export class UnaryExpression {
+  constructor(op, expression) {
+    Object.assign(this, { op, expression })
   }
 }
 

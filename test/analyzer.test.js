@@ -10,7 +10,7 @@ import analyze from "../src/analyzer.js"
 // Programs that are semantically correct
 const semanticChecks = [
   ["negative", "intberry x is -10 | "],
-  ["negation", "boolberry a is organic | boolberry b is nut |"],
+  ["negation", "boolberry a is organic | boolberry b is not |"],
   ["increment", "intberry x is 10 | x++ |"],
   ["decrement", "intberry x is 10 | x-- |"],
   ["times", "intberry x is 10 times 3 |"],
@@ -23,7 +23,7 @@ const semanticChecks = [
   ["initialize with empty array", "berrybasket~intberry~ toppings is ~~ |"],
   [
     "initialize with empty dictionary",
-    "berrybasket~intberry, intberry~ x is ~~ |",
+    "fruitbasket~intberry, intberry~ x is ~~ |",
   ],
 
   [
@@ -80,7 +80,7 @@ const semanticErrors = [
   ],
   [
     "non-int decrement",
-    'strinberry x is "" | x-- |',
+    'stringberry x is "" | x-- |',
     /an integer, found [string]?/,
   ],
   ["undeclared id", "juice x |", /Identifier x not declared/],
@@ -126,8 +126,8 @@ const semanticErrors = [
   ["non-boolean while test", "whilemelon 1 -><-", /a boolean, found int/],
   // ["non-array in for", "for i in 100 {}", /Array expected/],
   // ["non-boolean conditional test", "print(1?2:3);", /a boolean, found int/],
-  ["bad types for ||", "juice gmo or 1 |", /a boolean, found int/],
-  ["bad types for &&", "juice gmo and 1 |", /a boolean, found int/],
+  ["bad types for ||", "juice gmo orange 1 |", /a boolean, found int/],
+  ["bad types for &&", "juice gmo apple 1 |", /a boolean, found int/],
   [
     "bad types for ==",
     "juice gmo equals 1 |",
@@ -135,7 +135,7 @@ const semanticErrors = [
   ],
   [
     "bad types for !=",
-    "juice gmo nut equals 1 |",
+    "juice gmo not equals 1 |",
     /Operands do not have the same type/,
   ],
   ["bad types for +", "juice gmo plus 1 |", /number or string, found boolean/],
@@ -156,9 +156,9 @@ const semanticErrors = [
     /number or string, found bool/,
   ],
   ["bad types for ==", "juice 2 equals 2.0 |", /not have the same type/],
-  ["bad types for negation", "juice nut organic |", /a number, found boolean/],
+  ["bad types for negation", "juice not organic |", /a number, found boolean/],
   // ["bad types for length", "print(#false);", /Array expected/],
-  ["bad types for not", 'juice nut "hello" |', /a boolean, found string/],
+  ["bad types for not", 'juice not "hello" |', /a boolean, found string/],
   ["bad types for -", 'juice - "hello" |', /a Number, found string/],
   // ["non-integer index", "let a=[1];print(a[false]);", /integer, found boolean/],
   // ["no such field", "struct S{} let x=S(); print(x.y);", /No such field/],
@@ -167,7 +167,7 @@ const semanticErrors = [
   // ["call of uncallable", "let x = 1;\nprint(x());", /Call of non-function/],
   [
     "Too many args",
-    "blend f(intberry x) -><-\nf(1,2) |",
+    'stringberry blend f(intberry x) ->squeeze "" | <- f(1,2) |',
     /1 argument\(s\) required but 2 passed/,
   ],
   // [
@@ -177,7 +177,7 @@ const semanticErrors = [
   // ],
   [
     "Parameter type mismatch",
-    "blend f(intberry x) -><-\nf(gmo) |",
+    'stringberry blend f(intberry x) ->squeeze "" | <- f(gmo) |',
     /Cannot assign a boolean to a int/,
   ],
   // [
@@ -187,10 +187,8 @@ const semanticErrors = [
   //    f(2, g);`,
   //   /Cannot assign a \(boolean\)->int to a \(boolean\)->void/,
   // ],
-  // ["bad call to stdlib sin()", "print(sin(true));", /Cannot assign a boolean to a float/],
   // ["Non-type in param", "let x=1;function f(y:x){}", /Type expected/],
   // ["Non-type in return type", "let x=1;function f():x{return 1;}", /Type expected/],
-  // ["Non-type in field type", "let x=1;struct S {y:x}", /Type expected/],
 ]
 
 // Test cases for expected semantic graphs after processing the AST. In general
