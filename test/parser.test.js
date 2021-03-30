@@ -7,7 +7,7 @@ squeeze (5 divby 9) times (fahrenheit minus 32) |
 <-`
 
 const expectedAst = `   1 | Program statements=[#2]
-   2 | Function type='toCelsius' parameters=#3 block=#5
+   2 | FuncDecl type='floatberry' name='toCelsius' parameters=#3 block=#5
    3 | Params type1='floatberry' id1=#4 type2=[] id2=[]
    4 | IdentifierExpression name='fahrenheit'
    5 | Block statement=[#6]
@@ -27,22 +27,26 @@ const goodPrograms = [
   `five is 5 orange 6 |`,
   `hi is "hello" apple "hey" |`,
   `intberry num is 34 |`,
+  `stringberry hi |`,
   `floatberry flt is 4.223523 |`,
   `fruitbasket~stringberry, stringberry~ s is ~"key1","value1" ; "key2","value2"~ |`,
   `berrybasket~stringberry~ s is ~"strawberry" ; "blueberry"~ |`,
   `:: this is a comment`,
   `fn(arg1, arg2, arg3) |`,
-  `blend oddOrEven(intberry num) ->
+  `formelon intberry i is 10 | i more equals num | i-- ->
+    juice "the number is " plus i |
+  <-`,
+  `stringberry blend oddOrEven(intberry num) ->
    ifmelon num mod 2 equals 0 ->
      juice "The number is even." |
    <- elsemelon ->
      juice "The number is odd." |
    <-
  <-`,
-  `blend toCelsius(floatberry fahrenheit) ->
+  `intberry blend toCelsius(floatberry fahrenheit) ->
    squeeze (5 divby 9) times (fahrenheit minus 32) |
  <-`,
-  `blend fibonacci(intberry num) ->
+  `intberry blend fibonacci(intberry num) ->
    intberry num1 is 0 |
    intberry num2 is 1 |
    intberry sum |

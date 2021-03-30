@@ -76,8 +76,8 @@ export class Block {
 }
 
 export class FuncDecl {
-  constructor(type, parameters, block) {
-    Object.assign(this, { type, parameters, block })
+  constructor(type, name, parameters, block) {
+    Object.assign(this, { type, name, parameters, block })
   }
 }
 
