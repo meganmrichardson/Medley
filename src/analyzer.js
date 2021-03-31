@@ -1,3 +1,4 @@
+import util from "util"
 import { Variable, Type, FunctionType, Function, ArrayType } from "./ast.js"
 import * as stdlib from "./stdlib.js"
 
@@ -46,28 +47,26 @@ Object.assign(FunctionType.prototype, {
 
 const check = self => ({
   isNumeric() {
-    must(
-      [Type.INT, Type.FLOAT].includes(self.type),
-      `Expected a number, found ${self.type.name}`
-    )
+    must(["intberry", "floatberry"].includes(self.type), `Expected a number`)
   },
   isNumericOrString() {
     must(
-      [Type.INT, Type.FLOAT, Type.STRING].includes(self.type),
-      `Expected a number or string, found ${self.type.name}`
+      ["stringberry", "intberry", "floatberry"].includes(self.type),
+      `Expected a number or string`
     )
   },
   isBoolean() {
-    must(
-      self.type === Type.BOOLEAN,
-      `Expected a boolean, found ${self.type.name}`
-    )
+    must(self.type === "boolberry", `Expected a boolean`)
   },
   isInteger() {
-    must(self.type === Type.INT, `Expected an integer, found ${self.type.name}`)
+    must(self.type === "intberry", `Expected an integer`)
   },
   isAType() {
-    must(self instanceof Type, "Type expected")
+    must(
+      ["stringberry", "intberry", "floatberry", "boolberry"].includes(self) ||
+        self.constructor === ArrayType ||
+        self.constructor === DictType
+    )
   },
   isAnArray() {
     must(self.type.constructor === ArrayType, "Array expected")
@@ -230,6 +229,7 @@ class Context {
   }
   Increment(s) {
     s.identifier = this.analyze(s.identifier)
+    console.log(util.inspect(s.identifier))
     check(s.identifier).isInteger()
     return s
   }
@@ -239,6 +239,10 @@ class Context {
     check(s.source).isAssignableTo(s.targets.type)
     check(s.targets).isNotReadOnly()
     return s
+  }
+  Block(b) {
+    b.statements = this.analyze(b.statements)
+    return b
   }
   Break(s) {
     check(this).isInsideALoop()
@@ -255,7 +259,13 @@ class Context {
     s.argument = this.analyze(s.argument)
     return s
   }
-  // ADD IF STATEMENT
+  Conditional(s) {
+    s.tests = this.analyze(s.tests)
+    s.tests.forEach(s => check(s).isBoolean())
+    s.consequents = s.consequents.map(b => this.newChild().analyze(b))
+    s.alternates = s.alternates.map(b => this.newChild().analyze(b))
+    return s
+  }
   WLoop(s) {
     s.test = this.analyze(s.test)
     check(s.test).isBoolean()
@@ -281,7 +291,7 @@ class Context {
     if (["apple", "orange"].includes(e.op)) {
       check(e.expression1).isBoolean()
       check(e.expression2).isBoolean()
-      e.type = Type.BOOLEAN
+      e.type = "boolberry"
     } else if (
       ["plus", "minus", "times", "divby", "mod", "to the power of"].includes(
         e.op
@@ -293,18 +303,18 @@ class Context {
     } else if (["less", "less equals", "more", "more equals"].includes(e.op)) {
       check(e.expression1).isNumeric()
       check(e.expression1).hasSameTypeAs(e.expression2)
-      e.type = Type.BOOLEAN
+      e.type = "boolberry"
     } else if (["equals", "not equals"].includes(e.op)) {
       check(e.expression1).hasSameTypeAs(e.expression2)
-      e.type = Type.BOOLEAN
+      e.type = "boolberry"
     }
     return e
   }
   UnaryExpression(e) {
-    e.op = this.analyze(e.op)
+    e.expression = this.analyze(e.expression)
     if (e.op === "not") {
-      check(e.op).isBoolean()
-      e.type = Type.BOOLEAN
+      check(e.expression).isBoolean()
+      e.type = "boolberry"
     }
     return e
   }
@@ -320,6 +330,9 @@ class Context {
   IdentifierExpression(e) {
     // Id expressions get "replaced" with the entities they refer to.
     return this.lookup(e.name)
+  }
+  Literal(e) {
+    return e.value
   }
   Number(e) {
     return e
@@ -340,11 +353,11 @@ class Context {
 
 export default function analyze(node) {
   // Allow primitives to be automatically typed
-  Number.prototype.type = Type.FLOAT
-  BigInt.prototype.type = Type.INT
-  Boolean.prototype.type = Type.BOOLEAN
-  String.prototype.type = Type.STRING
-  Type.prototype.type = Type.TYPE
+  Number.prototype.type = "floatberry"
+  BigInt.prototype.type = "intberry"
+  Boolean.prototype.type = "boolberry"
+  String.prototype.type = "stringberry"
+  Type.prototype.type = "typeberry"
   const initialContext = new Context()
 
   // Add in all the predefined identifiers from the stdlib module

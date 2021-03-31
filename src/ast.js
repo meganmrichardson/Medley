@@ -27,9 +27,9 @@ export class Reassignment {
   }
 }
 
-export class ArrayDecl {
-  constructor(type, baseType) {
-    Object.assign(this, { type, baseType })
+export class ArrayType {
+  constructor(baseType) {
+    Object.assign(this, { baseType })
   }
 }
 
@@ -52,8 +52,8 @@ export class DictionaryList {
 }
 
 export class Conditional {
-  constructor(sources, blocks) {
-    Object.assign(this, { sources, blocks })
+  constructor(tests, consequents, alternates) {
+    Object.assign(this, { tests, consequents, alternates })
   }
 }
 
@@ -75,7 +75,7 @@ export class FLoop {
 
 export class Block {
   constructor(statements) {
-    this.statement = statements
+    this.statements = statements
   }
 }
 
@@ -140,8 +140,8 @@ export class Increment {
 }
 
 export class Literal {
-  constructor(type) {
-    this.type = type
+  constructor(value) {
+    this.value = value
   }
 }
 
@@ -227,13 +227,13 @@ export class Type {
   static ANY = new Type("any")
 }
 
-export class ArrayType extends Type {
-  // Example: [int]
-  constructor(baseType) {
-    super(`[${baseType.name}]`)
-    this.baseType = baseType
-  }
-}
+// export class ArrayType extends Type {
+//   // Example: [int]
+//   constructor(baseType) {
+//     super(`[${baseType.name}]`)
+//     this.baseType = baseType
+//   }
+// }
 
 export class FunctionType extends Type {
   // Example: (boolean,[string]?)->float

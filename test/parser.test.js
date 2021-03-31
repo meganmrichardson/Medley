@@ -10,15 +10,15 @@ const expectedAst = `   1 | Program statements=[#2]
    2 | FuncDecl returnType='floatberry' name='toCelsius' parameters=[#3] block=#5
    3 | Param type=#4 id='floatberry'
    4 | IdentifierExpression name='fahrenheit'
-   5 | Block statement=[#6]
+   5 | Block statements=[#6]
    6 | Return returnValue=#7
    7 | BinaryExpression op='times' expression1=#8 expression2=#11
    8 | BinaryExpression op='divby' expression1=#9 expression2=#10
-   9 | Literal type=5
-  10 | Literal type=9
+   9 | Literal value=5
+  10 | Literal value=9
   11 | BinaryExpression op='minus' expression1=#12 expression2=#13
   12 | IdentifierExpression name='fahrenheit'
-  13 | Literal type=32`
+  13 | Literal value=32`
 
 const goodPrograms = [
   `stringberry medley is "hi" |`,

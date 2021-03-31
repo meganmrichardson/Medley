@@ -19,7 +19,7 @@ Medley {
   Assignment  = Type id is Exp "|"?
   Declaration = Type id "|"
   Reassignment= id is Exp "|"
-  ArrayDecl   = berrybasket "~"Type"~"
+  ArrayType   = berrybasket "~"Type"~"
   DictType    = fruitbasket "~"Type"," Type"~"
   Conditional = ifmelon Exp Block (elifmelon Exp Block)*
                 (elsemelon Block)?
@@ -62,7 +62,7 @@ Medley {
               | floatLit                                 --float
               | intLit                                   --int
               | boolLit
-  Type        = SimpleType | ArrayDecl | DictType
+  Type        = SimpleType | ArrayType | DictType
   SimpleType  = stringberry | intberry | boolberry | floatberry
   strLit      = "\"" char* "\"" | "\'" char* "\'"
   char        = ~"\\" ~"\"" ~"\n" any
@@ -155,8 +155,8 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   Block(_left, statements, _right) {
     return new ast.Block(statements.ast())
   },
-  ArrayDecl(_berrybasket, _tilde1, type, _tilde2) {
-    return new ast.ArrayDecl(type.ast())
+  ArrayType(_berrybasket, _tilde1, type, _tilde2) {
+    return new ast.ArrayType(type.ast())
   },
   DictType(_fruitbasket, _tilde1, keytype, _comma, valuetype, _tilde4) {
     return new ast.Dictionary(keytype.ast(), valuetype.ast())
@@ -200,11 +200,9 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
     block3
   ) {
     return new ast.Conditional(
-      expression1.ast(),
-      block1.ast(),
-      expression2.ast(),
-      block2.ast(),
-      block3.ast()
+      [expression1.ast(), ...expression2.ast()],
+      [block1.ast(), ...block2.ast()],
+      [...block3.ast()]
     )
   },
   Call(id, _left, args, _right) {
@@ -225,8 +223,8 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   Increment(id, sign) {
     return new ast.Increment(id.ast(), sign.ast())
   },
-  Literal(type) {
-    return new ast.Literal(type.ast())
+  Literal(value) {
+    return new ast.Literal(value.ast())
   },
   SimpleType(typename) {
     return typename.sourceString
