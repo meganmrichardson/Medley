@@ -36,7 +36,7 @@ Medley {
   Params      = ListOf<Param, ",">
   LitList     = "~" ListOf<Literal, ";"> "~"
   DictObj     = "~" ListOf<DictContent, ";"> "~"
-  DictContent = Literal "," Exp
+  DictContent = Literal "," Literal
   Exp         = Exp orange Exp2                          --binary
               | Exp2
   Exp2        = Exp2 apple Exp3                          --binary
@@ -167,8 +167,8 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   DictObj(_tilde1, content, _tilde2) {
     return new ast.DictionaryList(content.asIteration().ast())
   },
-  DictContent(literal, _comma, expression) {
-    return new ast.DictContent(literal.sourceString, expression.ast())
+  DictContent(literal1, _comma, literal2) {
+    return new ast.DictContent(literal1.ast(), literal2.ast())
   },
   WLoop(_whilemelon, expression, block) {
     return new ast.WLoop(expression.ast(), block.ast())
@@ -291,7 +291,7 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   },
   _terminal() {
     this.sourceString
-  },
+  }
 })
 
 export default function parse(source) {

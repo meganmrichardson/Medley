@@ -23,16 +23,16 @@ const semanticChecks = [
   ["initialize with empty array", "berrybasket~intberry~ toppings is ~~ |"],
   [
     "initialize with empty dictionary",
-    "fruitbasket~intberry, intberry~ x is ~~ |",
+    "fruitbasket~intberry, intberry~ x is ~~ |"
   ],
 
   [
     "array declaration",
-    'berrybasket~stringberry~ toppings is ~"strawberry" ; "blueberry"~ |',
+    'berrybasket~stringberry~ toppings is ~"strawberry" ; "blueberry"~ |'
   ],
   [
     "dictonary declaration",
-    'fruitbasket~stringberry, stringberry~ flavors is ~"lemon","tart" ; "starfruit","sweet"~ |',
+    'fruitbasket~stringberry, stringberry~ flavors is ~"lemon","tart" ; "starfruit","sweet"~ |'
   ],
   ["int declaration", "intberry x is 4 |"],
   ["boolean declaration", "boolberry x is organic |"],
@@ -44,29 +44,29 @@ const semanticChecks = [
   ["basic return", 'stringberry blend f() -> squeeze "" | <-'],
   [
     "return in nested if",
-    'stringberry blend f() -> ifmelon organic -> squeeze "" | <- <-',
+    'stringberry blend f() -> ifmelon organic -> squeeze "" | <- <-'
   ],
   ["break in nested if", "whilemelon gmo -> ifmelon organic -> split | <- <-"],
   ["long if", "ifmelon organic -> juice 1 | <- elsemelon -> juice 3 | <-"],
-  [
-    "else if",
-    "ifmelon organic -> squeeze 1 | <- elifmelon organic -> squeeze 0 |<- elsemelon -> squeeze 2 | <-",
-  ],
+  // [
+  //   "else if",
+  //   "ifmelon organic -> squeeze 1 | <- elifmelon organic -> squeeze 0 |<- elsemelon -> squeeze 2 | <-",
+  // ],
   [
     "for with conditions",
-    'formelon intberry i is 5 | i less 10 | i++ -> squeeze "hi" | <-',
+    'formelon intberry i is 5 | i less 10 | i++ -> squeeze "hi" | <-'
   ],
   ["or", "juice gmo orange organic |"],
   ["and", "juice gmo apple not organic |"],
   [
     "arithmetic",
-    "intberry x is 1 | juice 2 times 3 plus 5 divby 2 minus 5 mod 8 |",
+    "intberry x is 1 | juice 2 times 3 plus 5 divby 2 minus 5 mod 8 |"
   ],
   [
     "assigned functions",
-    "intberry blend fn (intberry five) -> intberry seven is 2 plus five | <-",
+    "intberry blend fn (intberry five) -> intberry seven is 2 plus five | <-"
   ],
-  ["call of assigned functions", "intberry num is f (4, 3, 2) |"],
+  ["call of assigned functions", "intberry num is f (4, 3, 2) |"]
 ]
 
 // Programs that are syntactically correct but have semantic errors
@@ -79,22 +79,22 @@ const semanticErrors = [
   [
     "assign bad type",
     "intberry x is 1 | x is organic |",
-    /Cannot assign a boolean to a int/,
+    /Cannot assign a boolean to a int/
   ],
   [
     "assign bad array type",
     "berrybasket~intberry~ toppings is ~3;organic~ |",
-    /Cannot assign a \[boolean\] to a int/,
+    /Cannot assign a \[boolean\] to a int/
   ],
   [
     "Break outside loop but inside function",
     "stringberry blend f() -> split | <-",
-    /Break can only appear in a loop/,
+    /Break can only appear in a loop/
   ],
   [
     "break outside loop at top level",
     "split |",
-    /Break can only appear in a loop/,
+    /Break can only appear in a loop/
   ],
   // [
   //   "break inside function",
@@ -104,7 +104,7 @@ const semanticErrors = [
   [
     "return outside function",
     "squeeze 2 |",
-    /Return can only appear in a function/,
+    /Return can only appear in a function/
   ],
   // [
   //   "return value from void function",
@@ -127,7 +127,7 @@ const semanticErrors = [
   [
     "bad types for ==",
     "juice gmo equals 1 |",
-    /Operands do not have the same type/,
+    /Operands do not have the same type/
   ],
   // [
   //   "bad types for !=",
@@ -155,7 +155,7 @@ const semanticErrors = [
   [
     "Too many args",
     'stringberry blend f(intberry x) ->squeeze "" | <- f(1,2) |',
-    /1 argument\(s\) required but 2 passed/,
+    /1 argument\(s\) required but 2 passed/
   ],
   // [
   //   "Too few args",
@@ -165,8 +165,8 @@ const semanticErrors = [
   [
     "Parameter type mismatch",
     'stringberry blend f(intberry x) ->squeeze "" | <- f(gmo) |',
-    /Cannot assign a boolean to a int/,
-  ],
+    /Cannot assign a boolean to a int/
+  ]
   // [
   //   "function type mismatch",
   //   `function f(x: int, y: (boolean)->void): int { return 1; }

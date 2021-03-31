@@ -34,14 +34,14 @@ export class ArrayType {
 }
 
 export class Dictionary {
-  constructor(type, targets, sources) {
-    Object.assign(this, { type, targets, sources })
+  constructor(keyType, valueType) {
+    Object.assign(this, { keyType, valueType })
   }
 }
 
 export class DictContent {
-  constructor(literal, expression) {
-    Object.assign(this, { literal, expression })
+  constructor(literal1, literal2) {
+    Object.assign(this, { literal1, literal2 })
   }
 }
 

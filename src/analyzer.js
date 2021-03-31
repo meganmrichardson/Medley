@@ -18,7 +18,7 @@ Object.assign(ArrayType.prototype, {
   },
   isAssignableTo(target) {
     return this.isEquivalentTo(target)
-  },
+  }
 })
 
 Object.assign(FunctionType.prototype, {
@@ -42,7 +42,7 @@ Object.assign(FunctionType.prototype, {
         target.parameterTypes[i].isAssignableTo(t)
       )
     )
-  },
+  }
 })
 
 const check = self => ({
@@ -70,6 +70,9 @@ const check = self => ({
   },
   isAnArray() {
     must(self.type.constructor === ArrayType, "Array expected")
+  },
+  isADict() {
+    must(self.type.constructor === DictType, "Dict expected")
   },
   hasSameTypeAs(other) {
     // self is an exp, does it have the same type as other
@@ -156,7 +159,7 @@ const check = self => ({
   },
   matchFieldsOf(structType) {
     check(self).match(structType.fields.map(f => f.type))
-  },
+  }
 })
 
 class Context {
@@ -238,6 +241,17 @@ class Context {
   }
   ArrayType(t) {
     t.baseType = this.analyze(t.baseType)
+    return t
+  }
+  DictType(t) {
+    t.keyType = this.analyze(t.keyType)
+    t.valueType = this.analyze(t.valueType)
+    return t
+  }
+  DictContent(t) {
+    t.literal1 = this.analyze(t.literal1)
+    t.literal2 = this.analyze(t.literal2)
+    check
     return t
   }
   FunctionType(t) {
