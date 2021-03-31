@@ -4,13 +4,15 @@
 
 ## Introduction
 
-#### [Welcome to Medley!](https://meganmrichardson.github.io/Medley/)
+#### Welcome to Medley!
 
-Medley is a fruitful take on a programming language, with strengths in both enjoyability and ease of use. Medley employs a more natural language approach to programming, all while having a unique theme that makes it both easy and fun to use. The target is for either younger or newer beginning programmers, where a lot of the more complex concepts of programming is simplified by making it similar to English. 
+Medley is a fruitful take on a programming language, with strengths in both enjoyability and ease of use. Medley employs a more natural language approach to programming, all while having a unique theme that makes it both easy and fun to use. The target is for either younger or newer beginning programmers, where a lot of the more complex concepts of programming is simplified by making it similar to English.
 
 We hope you enjoy!
 
 Medley is created by [@Henno Kublin](https://github.com/hjkublin), [@Amanda Marques](https://github.com/amandacmarques), [@Nick Morgan](https://github.com/nmorgan8), [@Megan Richardson](https://github.com/meganmrichardson), [@Josh Seaman](https://github.com/jseaman1), and [@Tigerlilly Zietz](https://github.com/tigerlillyz).
+
+Visit our [website](https://meganmrichardson.github.io/Medley/) to learn more!
 
 ## Contents
 
@@ -40,7 +42,7 @@ Medley is created by [@Henno Kublin](https://github.com/hjkublin), [@Amanda Marq
     - [ Medley ](#medley-2)
   - [ Fahrenheit to Celsius ](#fahrenheit-to-celsius)
     - [ Javascript ](#javascript-3)
-    - [ Medley ](#medley-3) 
+    - [ Medley ](#medley-3)
   - [ First Factorial ](#first-factorial)
     - [ Javascript ](#javascript-4)
     - [ Medley ](#medley-4)
@@ -74,33 +76,31 @@ Medley is created by [@Henno Kublin](https://github.com/hjkublin), [@Amanda Marq
 
 ## Primitive Types
 
-| Types in JavaScript | Types in Medley | Variable Declarations Example        |
-| ------------------- | --------------- | ------------------------------------ |
-| string              | `stringberry`   | `stringberry title is "medley" \|`   |
-| boolean             | `boolberry`     | `boolberry bestLanguagee is gmo \|`  |
-| int                 | `intberry`      | `intberry teamSize is 6 \|`          |
-| float               | `floatberry`    | `floatberry ourIQ is 156.7 \|`       |
+| Types in JavaScript | Types in Medley | Variable Declarations Example       |
+| ------------------- | --------------- | ----------------------------------- |
+| string              | `stringberry`   | `stringberry title is "medley" \|`  |
+| boolean             | `boolberry`     | `boolberry bestLanguagee is gmo \|` |
+| int                 | `intberry`      | `intberry teamSize is 6 \|`         |
+| float               | `floatberry`    | `floatberry ourIQ is 156.7 \|`      |
 
-| Boolean Types In Javascript    | Boolean Types In Medley |
-| ------------------------------ | ----------------------- |
-| `true`                         | `organic`               |
-| `false`                        | `gmo`                   |
+| Boolean Types In Javascript | Boolean Types In Medley |
+| --------------------------- | ----------------------- |
+| `true`                      | `organic`               |
+| `false`                     | `gmo`                   |
 
 ## Data Types
 
-| Types in Javascript | Types in Medley | 
-| ------------------- | --------------- | 
+| Types in Javascript | Types in Medley |
+| ------------------- | --------------- |
 | Array               | `berrybasket`   |
-| Dictionary          | `fruitbasket`   | 
+| Dictionary          | `fruitbasket`   |
 
+| Variable Declaration Example in Javascript         | Variable Declaration Example in Medley                                                       |
+| -------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| let toppings = ["strawberry", "blueberry"];        | `berrybasket~stringberry~ toppings is ~"strawberry" ; "blueberry"~ \|`                       |
+| let flavors = {lemon: "tart", starfruit: "sweet"}; | `fruitbasket~stringberry, stringberry~ flavors is ~"lemon","tart" ; "starfruit","sweet"~ \|` |
 
-| Variable Declaration Example in Javascript    | Variable Declaration Example in Medley                                               |
-| ----------------------------------------------| -------------------------------------------------------------------------------------|
-| let toppings = ["strawberry", "blueberry"];    | `berrybasket~stringberry~ toppings is ~"strawberry" ; "blueberry"~ \|`                      |
-| let flavors = {lemon: "tart", starfruit: "sweet"};  | `fruitbasket~stringberry, stringberry~ flavors is ~"lemon","tart" ; "starfruit","sweet"~ \|`  |
-
-
-## Operators 
+## Operators
 
 ### Binary Operators
 
@@ -153,7 +153,7 @@ formelon intberry i is 10 | i more equals num | i-- ->
 ### While Loops
 
 ```
-intberry i is 2 | 
+intberry i is 2 |
 whilemelon i less 10 ->
   juice " " plus i |
   i++ |
@@ -280,17 +280,19 @@ blend firstFactorial(intberry num) ->
 ### Types of Static Semantic Errors
 
 - Incompatible types
+- Type mismatch in declaration
+- Types are not compatible
 - Variable has already been declared
 - Use of a non-initialized variable
 - Invalid variable type
-- Invalid types used with add, sub, mult, div, or mod 
+- Invalid types used with add, sub, mult, div, or mod
 - Incorrect use of unary operator
+- Incorrect types of binary operators
 - Index out of range
-- Type mismatch in declaration
 - Function missing return statement
 - Mismatched function return type
 - Incorrect number of function parameters
+- Incorrect type in function call
 - Function call does not exist
 - Break outside of loops or task
 - Unreachable statement
-- Types are not compatible

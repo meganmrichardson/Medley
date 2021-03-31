@@ -103,7 +103,7 @@ const semanticErrors = [
   // ],
   [
     "return outside function",
-    "squeeze |",
+    "squeeze 2 |",
     /Return can only appear in a function/,
   ],
   // [

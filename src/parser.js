@@ -216,7 +216,6 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   Args(expressions) {
     return new ast.Arguments(expressions.asIteration().ast())
   },
-  // take in array / more than 2 params
   Params(params) {
     return params.asIteration().ast()
   },

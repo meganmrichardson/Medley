@@ -303,7 +303,7 @@ class Context {
   UnaryExpression(e) {
     e.op = this.analyze(e.op)
     if (e.op === "not") {
-      check(e.operand).isBoolean()
+      check(e.op).isBoolean()
       e.type = Type.BOOLEAN
     }
     return e
