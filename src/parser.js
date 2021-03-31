@@ -32,8 +32,8 @@ Medley {
   Break       = split "|"
   Call        = id "(" Args ")"
   Args        = ListOf<Exp, ",">
-  Param       = Type id                        
-  Params      = ListOf<Param, ","> 
+  Param       = Type id
+  Params      = ListOf<Param, ",">
   LitList     = "~" ListOf<Literal, ";"> "~"
   DictObj     = "~" ListOf<DictContent, ";"> "~"
   DictContent = Literal "," Exp
@@ -258,13 +258,25 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
     )
   },
   Exp3_binary(expression1, relop, expression2) {
-    return new ast.BinaryExpression(relop, expression1.ast(), expression2.ast())
+    return new ast.BinaryExpression(
+      relop.sourceString,
+      expression1.ast(),
+      expression2.ast()
+    )
   },
   Exp4_binary(expression1, addop, expression2) {
-    return new ast.BinaryExpression(addop, expression1.ast(), expression2.ast())
+    return new ast.BinaryExpression(
+      addop.sourceString,
+      expression1.ast(),
+      expression2.ast()
+    )
   },
   Exp5_binary(expression1, mulop, expression2) {
-    return new ast.BinaryExpression(mulop, expression1.ast(), expression2.ast())
+    return new ast.BinaryExpression(
+      mulop.sourceString,
+      expression1.ast(),
+      expression2.ast()
+    )
   },
   Exp6_binary(expression1, _power, expression2) {
     return new ast.BinaryExpression(
@@ -274,7 +286,7 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
     )
   },
   Exp7_unary(prefix, expression) {
-    return new ast.UnaryExpression(prefix, expression.ast())
+    return new ast.UnaryExpression(prefix.sourceString, expression.ast())
   },
   Exp8_parens(_open, expression, _close) {
     return expression.ast()

@@ -7,20 +7,18 @@ squeeze (5 divby 9) times (fahrenheit minus 32) |
 <-`
 
 const expectedAst = `   1 | Program statements=[#2]
-   2 | FuncDecl type='floatberry' name='toCelsius' parameters=[#3] block=#5
-   3 | Params type1='floatberry' id1=#4 type2=[] id2=[]
+   2 | FuncDecl returnType='floatberry' name='toCelsius' parameters=[#3] block=#5
+   3 | Param type=#4 id='floatberry'
    4 | IdentifierExpression name='fahrenheit'
    5 | Block statement=[#6]
    6 | Return returnValue=#7
-   7 | Exp5 expression1=#8 expression2=#12
-   8 | Exp8 expression=#9
-   9 | Exp5 expression1=#10 expression2=#11
-  10 | Literal type=5
-  11 | Literal type=9
-  12 | Exp8 expression=#13
-  13 | Exp4 expression1=#14 expression2=#15
-  14 | IdentifierExpression name='fahrenheit'
-  15 | Literal type=32`
+   7 | BinaryExpression op='times' expression1=#8 expression2=#11
+   8 | BinaryExpression op='divby' expression1=#9 expression2=#10
+   9 | Literal type=5
+  10 | Literal type=9
+  11 | BinaryExpression op='minus' expression1=#12 expression2=#13
+  12 | IdentifierExpression name='fahrenheit'
+  13 | Literal type=32`
 
 const goodPrograms = [
   `stringberry medley is "hi" |`,
@@ -60,7 +58,7 @@ const goodPrograms = [
  <-`,
   `juice 2 to the power of -6 |`,
   `intberry i is none |`,
-  `intberry i is 2 | 
+  `intberry i is 2 |
   whilemelon i less 10 ->
     juice " " plus i |
     i++ |

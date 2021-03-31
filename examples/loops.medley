@@ -1,10 +1,10 @@
-intberry i is 2 | 
+intberry i is 2 |
 whilemelon i less 10 ->
   juice " " plus i |
   i++ |
 <-
 
-blend fibonacci(intberry num) ->
+intberry blend fibonacci(intberry num) ->
   intberry num1 is 0 |
   intberry num2 is 1 |
   intberry sum |

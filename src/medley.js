@@ -1,5 +1,6 @@
 #! /usr/bin/env node
 
+import util from "util"
 import fs from "fs/promises"
 import process from "process"
 import compile from "./compiler.js"
@@ -18,7 +19,11 @@ Prints to stdout according to <outputType>, which must be one of:
 async function compileFromFile(filename, outputType) {
   try {
     const buffer = await fs.readFile(filename)
-    console.log(compile(buffer.toString(), outputType))
+    console.log(
+      util.inspect(compile(buffer.toString(), outputType), {
+        depth: null,
+      })
+    )
   } catch (e) {
     console.trace(e)
     process.exitCode = 1
