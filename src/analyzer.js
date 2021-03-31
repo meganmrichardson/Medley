@@ -72,10 +72,17 @@ const check = self => ({
     must(self.type.constructor === ArrayType, "Array expected")
   },
   hasSameTypeAs(other) {
-    must(
-      self.type.isEquivalentTo(other.type),
-      "Operands do not have the same type"
-    )
+    // self is an exp, does it have the same type as other
+    if (
+      ["intberry", "floatberry", "stringberry", "boolberry"].includes(self.type)
+    ) {
+      must(self.type === other.type, "Operands do not have the same type")
+    } else {
+      must(
+        self.type.isEquivalentTo(other.type),
+        "Operands do not have the same type"
+      )
+    }
   },
   allHaveSameType() {
     must(
@@ -84,8 +91,14 @@ const check = self => ({
     )
   },
   isAssignableTo(type) {
+    // self is a type, can objects of self be assigned to vars of type
     must(
-      type === Type.ANY || self.type.isAssignableTo(type),
+      type === Type.ANY ||
+        (self === "intberry" && type === "intberry") ||
+        (self === "floatberry" && type === "floatberry") ||
+        (self === "stringberry" && type === "stringberry") ||
+        (self === "boolberry" && type === "boolberry") ||
+        self.type.isAssignableTo(type),
       `Cannot assign a ${self.type.name} to a ${type.name}`
     )
   },
@@ -123,7 +136,12 @@ const check = self => ({
     must(self.type.returnType !== Type.VOID, "Cannot return a value here")
   },
   isReturnableFrom(f) {
-    check(self).isAssignableTo(f.type.returnType)
+    console.log(
+      `CHECKING ${util.inspect(self)} ASSIGNABLE TO ${util.inspect(
+        f.type.returnType
+      )}`
+    )
+    check(self.type).isAssignableTo(f.type.returnType)
   },
   match(targetTypes) {
     // self is the array of arguments
