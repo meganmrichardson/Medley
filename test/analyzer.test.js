@@ -54,7 +54,7 @@ const semanticChecks = [
   // ],
   [
     "for with conditions",
-    'formelon intberry i is 5 | i less 10 | i++ -> squeeze "hi" | <-'
+    'formelon intberry i is 5 | i less 10 | i++ -> juice "hi" | <-'
   ],
   ["or", "juice gmo orange organic |"],
   ["and", "juice gmo apple not organic |"],

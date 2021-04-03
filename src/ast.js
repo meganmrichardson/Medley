@@ -109,11 +109,11 @@ export class Arguments {
   }
 }
 
-export class Params {
-  constructor(params) {
-    this.params = params
-  }
-}
+// export class Params {
+//   constructor(params) {
+//     this.params = params
+//   }
+// }
 
 export class Param {
   constructor(type, id) {
@@ -187,11 +187,11 @@ export class Literal {
 //   }
 // }
 
-export class Exp8 {
-  constructor(expression) {
-    this.expression = expression
-  }
-}
+// export class Exp8 {
+//   constructor(expression) {
+//     this.expression = expression
+//   }
+// }
 
 export class BinaryExpression {
   constructor(op, expression1, expression2) {
