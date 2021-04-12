@@ -69,7 +69,6 @@ const check = self => ({
     must(self.type === "intberry", `Expected an integer`)
   },
   isAType() {
-    console.log(self)
     must(
       ["stringberry", "intberry", "floatberry", "boolberry"].includes(self) ||
         self.constructor === ArrayType ||
@@ -133,7 +132,7 @@ const check = self => ({
   },
   isCallable() {
     must(
-      self.type.constructor == FunctionType,
+      self.func.type.constructor == FunctionType,
       "Call of non-function or non-constructor"
     )
   },
@@ -147,11 +146,11 @@ const check = self => ({
     must(self.type.returnType !== Type.VOID, "Cannot return a value here")
   },
   isReturnableFrom(f) {
-    console.log(
-      `CHECKING ${util.inspect(self)} ASSIGNABLE TO ${util.inspect(
-        f.type.returnType
-      )}`
-    )
+    // console.log(
+    //   `CHECKING ${util.inspect(self)} ASSIGNABLE TO ${util.inspect(
+    //     f.type.returnType
+    //   )}`
+    // )
     check(self.type).isAssignableTo(f.type.returnType)
   },
   match(targetTypes) {
@@ -227,7 +226,6 @@ class Context {
     const childContext = this.newChild({ inLoop: false, forFunction: d.func })
     d.func.parameters = childContext.analyze(d.func.parameters)
 
-    console.log(d)
     d.func.type = new FunctionType(
       d.func.parameters.map(p => p.type),
       d.func.returnType
@@ -236,25 +234,6 @@ class Context {
     d.block = childContext.analyze(d.block)
     return d
   }
-
-  // const childContext = this.newChild({ inLoop: false, forFunction: d.fun })
-  // d.fun.parameters = childContext.analyze(d.fun.parameters)
-  // d.fun.type = new FunctionType(
-  //   d.fun.parameters.map(p => p.type),
-  //   d.fun.returnType
-  // )
-  // // Add before analyzing the body to allow recursion
-  // this.add(d.fun.name, d.fun)
-
-  // Parameter(p) {
-  //   p.type1 = this.analyze(p.type1)
-  //   check(p.type1).isAType()
-  //   this.add(p.id1, p)
-  //   p.type2 = this.analyze(p.type2)
-  //   check(p.type2).isAType()
-  //   this.add(p.id2, p)
-  //   return p
-  // }
 
   Parameter(p) {
     p.type = this.analyze(p.type)
@@ -285,9 +264,12 @@ class Context {
   }
   Increment(s) {
     s.identifier = this.analyze(s.identifier)
-    console.log(util.inspect(s.identifier))
+    // console.log(util.inspect(s.identifier))
     check(s.identifier).isInteger()
     return s
+  }
+  LiteralList(l) {
+    
   }
   Reassignment(s) {
     s.source = this.analyze(s.source)
@@ -305,7 +287,6 @@ class Context {
     return s
   }
   Return(s) {
-    console.log(" ------ ------ hello -----")
     check(this).isInsideAFunction()
     check(this.function).returnsSomething()
     s.returnValue = this.analyze(s.returnValue)
