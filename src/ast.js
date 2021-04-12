@@ -33,7 +33,7 @@ export class ArrayType {
   }
 }
 
-export class Dictionary {
+export class DictType {
   constructor(keyType, valueType) {
     Object.assign(this, { keyType, valueType })
   }
@@ -80,8 +80,11 @@ export class Block {
 }
 
 export class FuncDecl {
-  constructor(returnType, name, parameters, block) {
-    Object.assign(this, { returnType, name, parameters, block })
+  // constructor(returnType, name, parameters, block) {
+  //   Object.assign(this, { returnType, name, parameters, block })
+  // }
+  constructor(func, block) {
+    Object.assign(this, { func, block })
   }
 }
 
@@ -115,7 +118,7 @@ export class Arguments {
 //   }
 // }
 
-export class Param {
+export class Parameter {
   constructor(type, id) {
     Object.assign(this, { type, id })
   }
@@ -252,10 +255,14 @@ export class Variable {
 
 // Created during semantic analysis only!
 export class Function {
-  constructor(name) {
-    this.name = name
-    // Other properties set after construction
+  constructor(name, parameters, returnType) {
+    console.log(returnType)
+    Object.assign(this, { name, parameters, returnType })
   }
+  // constructor(name) {
+  //   this.name = name
+  //   // Other properties set after construction
+  // }
 }
 
 // END OF SEMANTIC ANALYSIS PART

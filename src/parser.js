@@ -26,14 +26,14 @@ Medley {
   WLoop       = whilemelon Exp Block
   FLoop       = formelon (Assignment "|"? | Reassignment "") Exp "|" Increment Block
   Block       = "->"Statement*"<-"
-  FuncDecl    = Type blend id "(" Params ")" Block
+  FuncDecl    = Type blend id "(" Parameters ")" Block
   Print       = juice Exp "|"
   Return      = squeeze Exp "|"
   Break       = split "|"
   Call        = id "(" Args ")"
   Args        = ListOf<Exp, ",">
-  Param       = Type id
-  Params      = ListOf<Param, ",">
+  Parameter   = Type id
+  Parameters  = ListOf<Parameter, ",">
   LitList     = "~" ListOf<Literal, ";"> "~"
   DictObj     = "~" ListOf<DictContent, ";"> "~"
   DictContent = Literal "," Literal
@@ -131,9 +131,15 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   },
   FuncDecl(returnType, _blend, identifier, _left, parameters, _right, block) {
     return new ast.FuncDecl(
-      returnType.ast(),
-      identifier.sourceString,
-      parameters.ast(),
+      new ast.Function(
+        identifier.sourceString,
+        parameters.asIteration().ast(),
+        returnType.ast()
+      ),
+      // [0] ?? null
+      // returnType.ast(),
+      // identifier.sourceString,
+      // parameters.ast(),
       block.ast()
     )
   },
@@ -159,7 +165,7 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
     return new ast.ArrayType(type.ast())
   },
   DictType(_fruitbasket, _tilde1, keytype, _comma, valuetype, _tilde4) {
-    return new ast.Dictionary(keytype.ast(), valuetype.ast())
+    return new ast.DictType(keytype.ast(), valuetype.ast())
   },
   LitList(_tilde1, content, _tilde2) {
     return new ast.LiteralList(content.asIteration().ast())
@@ -214,11 +220,11 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   Args(expressions) {
     return new ast.Arguments(expressions.asIteration().ast())
   },
-  Params(params) {
+  Parameters(params) {
     return params.asIteration().ast()
   },
-  Param(type, id) {
-    return new ast.Param(id.ast(), type.ast())
+  Parameter(type, id) {
+    return new ast.Parameter(type.ast(), id.ast())
   },
   Increment(id, sign) {
     return new ast.Increment(id.ast(), sign.ast())

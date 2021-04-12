@@ -7,18 +7,19 @@ squeeze (5 divby 9) times (fahrenheit minus 32) |
 <-`
 
 const expectedAst = `   1 | Program statements=[#2]
-   2 | FuncDecl returnType='floatberry' name='toCelsius' parameters=[#3] block=#5
-   3 | Param type=#4 id='floatberry'
-   4 | IdentifierExpression name='fahrenheit'
-   5 | Block statements=[#6]
-   6 | Return returnValue=#7
-   7 | BinaryExpression op='times' expression1=#8 expression2=#11
-   8 | BinaryExpression op='divby' expression1=#9 expression2=#10
-   9 | Literal value=5
-  10 | Literal value=9
-  11 | BinaryExpression op='minus' expression1=#12 expression2=#13
-  12 | IdentifierExpression name='fahrenheit'
-  13 | Literal value=32`
+   2 | FuncDecl func=#3 block=#6
+   3 | Function name='toCelsius' parameters=[#4] returnType='f'
+   4 | Parameter type='floatberry' id=#5
+   5 | IdentifierExpression name='fahrenheit'
+   6 | Block statements=[#7]
+   7 | Return returnValue=#8
+   8 | BinaryExpression op='times' expression1=#9 expression2=#12
+   9 | BinaryExpression op='divby' expression1=#10 expression2=#11
+  10 | Literal value=5
+  11 | Literal value=9
+  12 | BinaryExpression op='minus' expression1=#13 expression2=#14
+  13 | IdentifierExpression name='fahrenheit'
+  14 | Literal value=32`
 
 const goodPrograms = [
   `stringberry medley is "hi" |`,
@@ -62,7 +63,7 @@ const goodPrograms = [
   whilemelon i less 10 ->
     juice " " plus i |
     i++ |
-  <-`,
+  <-`
 ]
 
 const badPrograms = [
@@ -77,7 +78,7 @@ const badPrograms = [
   `intberry i = 32 |`,
   `blend toCelsius floatberry fahrenheit  ->
    squeeze 5 |
- <-`,
+ <-`
 ]
 
 describe("The parser", () => {

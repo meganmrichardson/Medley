@@ -1,5 +1,12 @@
 import util from "util"
-import { Variable, Type, FunctionType, Function, ArrayType } from "./ast.js"
+import {
+  Variable,
+  Type,
+  FunctionType,
+  Function,
+  ArrayType,
+  DictType
+} from "./ast.js"
 import * as stdlib from "./stdlib.js"
 
 function must(condition, errorMessage) {
@@ -62,6 +69,7 @@ const check = self => ({
     must(self.type === "intberry", `Expected an integer`)
   },
   isAType() {
+    console.log(self)
     must(
       ["stringberry", "intberry", "floatberry", "boolberry"].includes(self) ||
         self.constructor === ArrayType ||
@@ -125,7 +133,7 @@ const check = self => ({
   },
   isCallable() {
     must(
-      self.constructor === StructType || self.type.constructor == FunctionType,
+      self.type.constructor == FunctionType,
       "Call of non-function or non-constructor"
     )
   },
@@ -156,10 +164,10 @@ const check = self => ({
   },
   matchParametersOf(calleeType) {
     check(self).match(calleeType.parameterTypes)
-  },
-  matchFieldsOf(structType) {
-    check(self).match(structType.fields.map(f => f.type))
   }
+  // matchFieldsOf(structType) {
+  //   check(self).match(structType.fields.map(f => f.type))
+  // }
 })
 
 class Context {
@@ -213,7 +221,9 @@ class Context {
     return d
   }
   FuncDecl(d) {
+    console.log("------- Function Decl -------")
     d.returnType = d.returnType ? this.analyze(d.returnType) : Type.VOID
+    console.log(d.returnType)
     check(d.returnType).isAType()
     // Declarations generate brand new function objects
     const f = (d.function = new Function(d.name))
@@ -225,20 +235,34 @@ class Context {
       d.parameters.map(p => p.type),
       d.returnType
     )
+    // console.log(f.type)
+
     // Add before analyzing the body to allow recursion
     this.add(f.name, f)
+    f.type.name = f.name
+    console.log(f.type)
+
+    console.log(d)
     d.block = childContext.analyze(d.block)
     return d
   }
+  // Parameter(p) {
+  //   p.type1 = this.analyze(p.type1)
+  //   check(p.type1).isAType()
+  //   this.add(p.id1, p)
+  //   p.type2 = this.analyze(p.type2)
+  //   check(p.type2).isAType()
+  //   this.add(p.id2, p)
+  //   return p
+  // }
+
   Parameter(p) {
-    p.type1 = this.analyze(p.type1)
-    check(p.type1).isAType()
-    this.add(p.id1, p)
-    p.type2 = this.analyze(p.type2)
-    check(p.type2).isAType()
-    this.add(p.id2, p)
+    p.type = this.analyze(p.type)
+    check(p.type).isAType()
+    this.add(p.name, p)
     return p
   }
+
   ArrayType(t) {
     t.baseType = this.analyze(t.baseType)
     return t
@@ -281,6 +305,7 @@ class Context {
     return s
   }
   Return(s) {
+    console.log(" ------ ------ hello -----")
     check(this).isInsideAFunction()
     check(this.function).returnsSomething()
     s.returnValue = this.analyze(s.returnValue)

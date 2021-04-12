@@ -124,17 +124,13 @@ const semanticErrors = [
   // ["non-boolean conditional test", "print(1?2:3);", /a boolean/],
   ["bad types for ||", "juice gmo orange 1 |", /a boolean/],
   ["bad types for &&", "juice gmo apple 1 |", /a boolean/],
-  [
-    "bad types for ==",
-    "juice gmo equals 1 |",
-    /Operands do not have the same type/
-  ],
+  ["bad types for ==", "juice gmo equals 1 |", /not have the same type/],
   // [
   //   "bad types for !=",
   //   "juice gmo not equals 1 |",
   //   /Operands do not have the same type/,
   // ],
-  ["bad types for +", "juice gmo plus 1 |", /number/],
+  ["bad types for +", "juice gmo plus 1 |", /a number/],
   ["bad types for -", "juice gmo minus 1 |", /a number/],
   ["bad types for *", "juice gmo times 1 |", /a number/],
   ["bad types for /", "juice gmo divby 1 |", /a number/],
@@ -143,7 +139,7 @@ const semanticErrors = [
   ["bad types for <=", "juice gmo less equals 1 |", /Expected a number/],
   ["bad types for >", "juice gmo more 1 |", /Expected a number/],
   ["bad types for >=", "juice gmo more equals 1 |", /Expected a number/],
-  ["bad types for ==", "juice 2 equals 2.0 |", /not have the same type/],
+  ["bad types for ==", `juice 2 equals "hi" |`, /not have the same type/],
   ["bad types for negation", "juice not organic |", /a boolean/],
   // ["bad types for length", "print(#false);", /Array expected/],
   ["bad types for not", 'juice not "hello" |', /a boolean/],
