@@ -221,31 +221,31 @@ class Context {
     return d
   }
   FuncDecl(d) {
-    console.log("------- Function Decl -------")
-    d.returnType = d.returnType ? this.analyze(d.returnType) : Type.VOID
-    console.log(d.returnType)
-    check(d.returnType).isAType()
-    // Declarations generate brand new function objects
-    const f = (d.function = new Function(d.name))
-    // When entering a function body, we must reset the inLoop setting,
-    // because it is possible to declare a function inside a loop!
-    const childContext = this.newChild({ inLoop: false, forFunction: f })
-    d.parameters = childContext.analyze(d.parameters)
-    f.type = new FunctionType(
-      d.parameters.map(p => p.type),
-      d.returnType
-    )
-    // console.log(f.type)
+    // d.func.returnType = this.analyze(d.func.returnType)
 
-    // Add before analyzing the body to allow recursion
-    this.add(f.name, f)
-    f.type.name = f.name
-    console.log(f.type)
+    check(d.func.returnType).isAType()
+    const childContext = this.newChild({ inLoop: false, forFunction: d.func })
+    d.func.parameters = childContext.analyze(d.func.parameters)
 
     console.log(d)
+    d.func.type = new FunctionType(
+      d.func.parameters.map(p => p.type),
+      d.func.returnType
+    )
+    this.add(d.func.name, d)
     d.block = childContext.analyze(d.block)
     return d
   }
+
+  // const childContext = this.newChild({ inLoop: false, forFunction: d.fun })
+  // d.fun.parameters = childContext.analyze(d.fun.parameters)
+  // d.fun.type = new FunctionType(
+  //   d.fun.parameters.map(p => p.type),
+  //   d.fun.returnType
+  // )
+  // // Add before analyzing the body to allow recursion
+  // this.add(d.fun.name, d.fun)
+
   // Parameter(p) {
   //   p.type1 = this.analyze(p.type1)
   //   check(p.type1).isAType()
