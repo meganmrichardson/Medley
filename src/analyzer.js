@@ -14,6 +14,20 @@ function must(condition, errorMessage) {
     throw new Error(errorMessage)
   }
 }
+Object.assign(Type.prototype, {
+  // Equivalence: when are two types the same
+  isEquivalentTo(target) {
+    return this == target
+  },
+  // T1 assignable to T2 is when x:T1 can be assigned to y:T2. By default
+  // this is only when two types are equivalent; however, for other kinds
+  // of types there may be special rules. For example, in a language with
+  // supertypes and subtypes, an object of a subtype would be assignable
+  // to a variable constrained to a supertype.
+  isAssignableTo(target) {
+    return this.isEquivalentTo(target)
+  }
+})
 
 Object.assign(ArrayType.prototype, {
   isEquivalentTo(target) {
@@ -101,16 +115,21 @@ const check = self => ({
     )
   },
   isAssignableTo(type) {
-    // self is a type, can objects of self be assigned to vars of type
+    console.log(self.type)
     must(
-      type === Type.ANY ||
-        (self === "intberry" && type === "intberry") ||
-        (self === "floatberry" && type === "floatberry") ||
-        (self === "stringberry" && type === "stringberry") ||
-        (self === "boolberry" && type === "boolberry") ||
-        self.type.isAssignableTo(type),
-      `Cannot assign a ${self.type.name} to a ${type.name}`
+      type === Type.ANY || self.type.isAssignableTo(type),
+      `Cannot assign a ${self.type.description} to a ${type.description}`
     )
+    // self is a type, can objects of self be assigned to vars of type
+    // must(
+    //   type === Type.ANY ||
+    //     (self === "intberry" && type === "intberry") ||
+    //     (self === "floatberry" && type === "floatberry") ||
+    //     (self === "stringberry" && type === "stringberry") ||
+    //     (self === "boolberry" && type === "boolberry") ||
+    //     self.type.isAssignableTo(type),
+    //   `Cannot assign a ${self.type.name} to a ${type.name}`
+    // )
   },
   isNotReadOnly() {
     must(!self.readOnly, `Cannot assign to constant ${self.name}`)
@@ -151,7 +170,7 @@ const check = self => ({
     //     f.type.returnType
     //   )}`
     // )
-    check(self.type).isAssignableTo(f.type.returnType)
+    check(self).isAssignableTo(f.type.returnType)
   },
   match(targetTypes) {
     // self is the array of arguments
@@ -206,14 +225,16 @@ class Context {
   }
   // Work on assignment node:
   Assignment(d) {
-    // Declarations generate brand new variable objects
-    // d.source = this.analyze(d.source)
-    // d.variable = new Variable(d.name)
-    // d.variable.type = d.source.type
-    // this.add(d.variable.name, d.variable)
-    // return d
-
+    // console.log(d.source)
     d.type = this.analyze(d.type)
+    d.variable = new Variable(d.name)
+    // d.source = this.analyze(d.source)
+    d.variable.type = d.type
+    this.add(d.variable.name, d.variable)
+    return d
+  }
+  Declaration(d) {
+    d.name = this.analyze(d.name)
     d.variable = new Variable(d.name)
     d.variable.type = d.type
     this.add(d.variable.name, d.variable)
@@ -257,6 +278,7 @@ class Context {
     check
     return t
   }
+  // FunctionType not used
   FunctionType(t) {
     t.parameterTypes = this.analyze(t.parameterTypes)
     t.returnType = this.analyze(t.returnType)
@@ -268,14 +290,16 @@ class Context {
     check(s.identifier).isInteger()
     return s
   }
-  LiteralList(l) {
-    
-  }
+  // LiteralList not used
+  LiteralList(l) {}
   Reassignment(s) {
-    s.source = this.analyze(s.source)
-    s.targets = this.analyze(s.targets)
-    check(s.source).isAssignableTo(s.targets.type)
+    s.targets.name = this.lookup(s.targets.name)
+    s.sources = this.analyze(s.sources)
+    console.log(s)
+
+    check(s.sources).isAssignableTo(s.targets.type)
     check(s.targets).isNotReadOnly()
+    // add(s.targets.name, s.sources)
     return s
   }
   Block(b) {
@@ -313,12 +337,15 @@ class Context {
   // Ask Dr. Toal
   FLoop(s) {
     s.initializer = new Variable(s.initializer, true)
+    // console.log(s)
+
+    this.add(s.initializer.name.name, s.initializer.name.source.value)
+
     s.test = this.analyze(s.test)
-    // ??
-    s.initializer.type = s.initializer.type.baseType
+    s.initializer.type = s.initializer.name.type
+    // console.log(this.locals)
+
     s.increment = this.analyze(s.increment)
-    // ??
-    s.initializer.type = s.initializer.type.baseType
 
     s.body = this.newChild({ inLoop: true }).analyze(s.body)
     return s

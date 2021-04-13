@@ -16,8 +16,8 @@ export class Assignment {
 }
 
 export class Declaration {
-  constructor(type, targets) {
-    Object.assign(this, { type, targets })
+  constructor(type, name) {
+    Object.assign(this, { type, name })
   }
 }
 
@@ -221,10 +221,10 @@ export class Type {
   constructor(name) {
     this.name = name
   }
-  static BOOLEAN = new Type("boolean")
-  static INT = new Type("int")
-  static FLOAT = new Type("float")
-  static STRING = new Type("string")
+  static BOOLEAN = new Type("boolberry")
+  static INT = new Type("intberry")
+  static FLOAT = new Type("floatberry")
+  static STRING = new Type("stringberry")
   static VOID = new Type("void")
   static TYPE = new Type("type")
   static ANY = new Type("any")
@@ -259,10 +259,6 @@ export class Function {
     console.log(returnType)
     Object.assign(this, { name, parameters, returnType })
   }
-  // constructor(name) {
-  //   this.name = name
-  //   // Other properties set after construction
-  // }
 }
 
 // END OF SEMANTIC ANALYSIS PART
