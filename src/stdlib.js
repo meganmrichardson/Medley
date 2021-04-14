@@ -10,10 +10,10 @@ function makeFunction(name, type) {
 // const stringToIntsType = new FunctionType([Type.STRING], floatsType)
 
 export const types = {
-  int: Type.INT,
-  float: Type.FLOAT,
-  boolean: Type.BOOLEAN,
-  string: Type.STRING,
+  intberry: Type.INT,
+  floatberry: Type.FLOAT,
+  boolberry: Type.BOOLEAN,
+  stringberry: Type.STRING,
   void: Type.VOID,
 }
 
