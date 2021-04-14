@@ -397,6 +397,8 @@ class Context {
     return this.lookup(e.name)
   }
   Literal(e) {
+    if (e.value)
+    e.type = 
     return e.value
   }
   Number(e) {
