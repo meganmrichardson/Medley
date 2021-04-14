@@ -22,8 +22,8 @@ export class Declaration {
 }
 
 export class Reassignment {
-  constructor(targets, sources) {
-    Object.assign(this, { targets, sources })
+  constructor(targets, source) {
+    Object.assign(this, { targets, source })
   }
 }
 

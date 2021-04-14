@@ -294,10 +294,10 @@ class Context {
   LiteralList(l) {}
   Reassignment(s) {
     s.targets.name = this.lookup(s.targets.name)
-    s.sources = this.analyze(s.sources)
+    s.source = this.analyze(s.source)
     console.log(s)
 
-    check(s.sources).isAssignableTo(s.targets.type)
+    check(s.source).isAssignableTo(s.targets.type)
     check(s.targets).isNotReadOnly()
     // add(s.targets.name, s.sources)
     return s
