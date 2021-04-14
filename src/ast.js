@@ -256,7 +256,6 @@ export class Variable {
 // Created during semantic analysis only!
 export class Function {
   constructor(name, parameters, returnType) {
-    console.log(returnType)
     Object.assign(this, { name, parameters, returnType })
   }
 }

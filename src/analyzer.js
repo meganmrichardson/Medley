@@ -1,3 +1,4 @@
+import { type } from "os"
 import util from "util"
 import {
   Variable,
@@ -68,23 +69,23 @@ Object.assign(FunctionType.prototype, {
 
 const check = self => ({
   isNumeric() {
-    must(["intberry", "floatberry"].includes(self.type), `Expected a number`)
+    must([Type.INT, Type.FLOAT].includes(self.type), `Expected a number`)
   },
   isNumericOrString() {
     must(
-      ["stringberry", "intberry", "floatberry"].includes(self.type),
+      [Type.STRING, Type.INT, Type.FLOAT].includes(self.type),
       `Expected a number or string`
     )
   },
   isBoolean() {
-    must(self.type === "boolberry", `Expected a boolean`)
+    must(self.type === Type.BOOLEAN, `Expected a boolean`)
   },
   isInteger() {
-    must(self.type === "intberry", `Expected an integer`)
+    must(self.type === Type.INT, `Expected an integer`)
   },
   isAType() {
     must(
-      ["stringberry", "intberry", "floatberry", "boolberry"].includes(self) ||
+      [Type.STRING, Type.INT, Type.BOOLEAN, Type.FLOAT].includes(self) ||
         self.constructor === ArrayType ||
         self.constructor === DictType
     )
@@ -97,9 +98,7 @@ const check = self => ({
   },
   hasSameTypeAs(other) {
     // self is an exp, does it have the same type as other
-    if (
-      ["intberry", "floatberry", "stringberry", "boolberry"].includes(self.type)
-    ) {
+    if ([Type.FLOAT, Type.INT, Type.BOOLEAN, Type.STRING].includes(self.type)) {
       must(self.type === other.type, "Operands do not have the same type")
     } else {
       must(
@@ -115,10 +114,9 @@ const check = self => ({
     )
   },
   isAssignableTo(type) {
-    console.log(self.type)
     must(
       type === Type.ANY || self.type.isAssignableTo(type),
-      `Cannot assign a ${self.type.description} to a ${type.description}`
+      `Cannot assign a ${self.type.name} to a ${type.name}`
     )
     // self is a type, can objects of self be assigned to vars of type
     // must(
@@ -219,6 +217,22 @@ class Context {
   analyze(node) {
     return this[node.constructor.name](node)
   }
+  analyzeType(type) {
+    if (typeof type === "string") {
+      if (type === "boolberry") return Type.BOOLEAN
+      if (type === "intberry") return Type.INT
+      if (type === "stringberry") return Type.STRING
+      if (type === "floatberry") return Type.FLOAT
+      throw new Error("ROTTEN TYPE")
+    } else if (type.constructor === ArrayType) {
+      type.baseType = this.analyzeType(type.baseType)
+      return type
+    } else {
+      type.keyType = this.analyzeType(type.keyType)
+      type.valueType = this.analyzeType(type.valueType)
+      return type
+    }
+  }
   Program(p) {
     p.statements = this.analyze(p.statements)
     return p
@@ -226,7 +240,7 @@ class Context {
   // Work on assignment node:
   Assignment(d) {
     // console.log(d.source)
-    d.type = this.analyze(d.type)
+    d.type = this.analyzeType(d.type)
     d.variable = new Variable(d.name)
     // d.source = this.analyze(d.source)
     d.variable.type = d.type
@@ -236,13 +250,13 @@ class Context {
   Declaration(d) {
     d.name = this.analyze(d.name)
     d.variable = new Variable(d.name)
+    d.type = this.analyzeType(d.type)
     d.variable.type = d.type
     this.add(d.variable.name, d.variable)
     return d
   }
   FuncDecl(d) {
-    // d.func.returnType = this.analyze(d.func.returnType)
-
+    d.func.returnType = this.analyzeType(d.func.returnType)
     check(d.func.returnType).isAType()
     const childContext = this.newChild({ inLoop: false, forFunction: d.func })
     d.func.parameters = childContext.analyze(d.func.parameters)
@@ -257,7 +271,7 @@ class Context {
   }
 
   Parameter(p) {
-    p.type = this.analyze(p.type)
+    p.type = this.analyzeType(p.type)
     check(p.type).isAType()
     this.add(p.name, p)
     return p
@@ -286,17 +300,14 @@ class Context {
   }
   Increment(s) {
     s.identifier = this.analyze(s.identifier)
-    // console.log(util.inspect(s.identifier))
     check(s.identifier).isInteger()
     return s
   }
   // LiteralList not used
   LiteralList(l) {}
   Reassignment(s) {
-    s.targets.name = this.lookup(s.targets.name)
+    s.targets = this.lookup(s.targets.name)
     s.source = this.analyze(s.source)
-    console.log(s)
-
     check(s.source).isAssignableTo(s.targets.type)
     check(s.targets).isNotReadOnly()
     // add(s.targets.name, s.sources)
@@ -336,13 +347,11 @@ class Context {
   }
   // Ask Dr. Toal
   FLoop(s) {
-    s.initializer = new Variable(s.initializer, true)
-    // console.log(s)
-
-    this.add(s.initializer.name.name, s.initializer.name.source.value)
+    s.initializer = new Variable(s.initializer.name, true)
+    s.initializer.type = Type.INT
+    this.add(s.initializer.name, s.initializer)
 
     s.test = this.analyze(s.test)
-    s.initializer.type = s.initializer.name.type
     // console.log(this.locals)
 
     s.increment = this.analyze(s.increment)
@@ -356,7 +365,7 @@ class Context {
     if (["apple", "orange"].includes(e.op)) {
       check(e.expression1).isBoolean()
       check(e.expression2).isBoolean()
-      e.type = "boolberry"
+      e.type = Type.BOOLEAN
     } else if (
       ["plus", "minus", "times", "divby", "mod", "to the power of"].includes(
         e.op
@@ -368,10 +377,10 @@ class Context {
     } else if (["less", "less equals", "more", "more equals"].includes(e.op)) {
       check(e.expression1).isNumeric()
       check(e.expression1).hasSameTypeAs(e.expression2)
-      e.type = "boolberry"
+      e.type = Type.BOOLEAN
     } else if (["equals", "not equals"].includes(e.op)) {
       check(e.expression1).hasSameTypeAs(e.expression2)
-      e.type = "boolberry"
+      e.type = Type.BOOLEAN
     }
     return e
   }
@@ -379,7 +388,7 @@ class Context {
     e.expression = this.analyze(e.expression)
     if (e.op === "not") {
       check(e.expression).isBoolean()
-      e.type = "boolberry"
+      e.type = Type.BOOLEAN
     }
     return e
   }
@@ -394,12 +403,23 @@ class Context {
   }
   IdentifierExpression(e) {
     // Id expressions get "replaced" with the entities they refer to.
-    return this.lookup(e.name)
+    console.log(
+      `e.name is ${e.name} from context of ${util.inspect(this.locals)}`
+    )
+    const variable = this.lookup(e.name)
+    return variable
   }
   Literal(e) {
-    if (e.value)
-    e.type = 
-    return e.value
+    if (Number.isInteger(e.value)) {
+      e.type = Type.INT
+    } else if (typeof e.value === "number") {
+      e.type = Type.FLOAT
+    } else if (typeof e.value === "string") {
+      e.type = Type.STRING
+    } else if (typeof e.value === "boolean") {
+      e.type = Type.BOOLEAN
+    }
+    return e
   }
   Number(e) {
     return e
