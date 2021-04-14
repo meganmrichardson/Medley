@@ -245,6 +245,7 @@ class Context {
     // d.source = this.analyze(d.source)
     d.variable.type = d.type
     this.add(d.variable.name, d.variable)
+    console.log(d)
     return d
   }
   Declaration(d) {
