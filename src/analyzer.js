@@ -240,7 +240,7 @@ class Context {
   // Work on assignment node:
   Assignment(d) {
     // console.log(d.source)
-    d.type = this.analyze(d.type)
+    d.type = this.analyzeType(d.type)
     d.variable = new Variable(d.name)
     // d.source = this.analyze(d.source)
     d.variable.type = d.type
@@ -347,12 +347,11 @@ class Context {
   }
   // Ask Dr. Toal
   FLoop(s) {
-    s.initializer = new Variable(s.initializer, true)
-
-    this.add(s.initializer.name.name, s.initializer.name.source.value)
+    s.initializer = new Variable(s.initializer.name, true)
+    s.initializer.type = Type.INT
+    this.add(s.initializer.name, s.initializer)
 
     s.test = this.analyze(s.test)
-    s.initializer.type = s.initializer.name.type
     // console.log(this.locals)
 
     s.increment = this.analyze(s.increment)
@@ -404,8 +403,10 @@ class Context {
   }
   IdentifierExpression(e) {
     // Id expressions get "replaced" with the entities they refer to.
+    console.log(
+      `e.name is ${e.name} from context of ${util.inspect(this.locals)}`
+    )
     const variable = this.lookup(e.name)
-    variable.type = this.analyzeType(variable.type)
     return variable
   }
   Literal(e) {
