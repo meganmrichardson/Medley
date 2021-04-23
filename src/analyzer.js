@@ -6,7 +6,7 @@ import {
   FunctionType,
   Function,
   ArrayType,
-  DictType
+  DictType,
 } from "./ast.js"
 import * as stdlib from "./stdlib.js"
 
@@ -27,7 +27,7 @@ Object.assign(Type.prototype, {
   // to a variable constrained to a supertype.
   isAssignableTo(target) {
     return this.isEquivalentTo(target)
-  }
+  },
 })
 
 Object.assign(ArrayType.prototype, {
@@ -40,7 +40,7 @@ Object.assign(ArrayType.prototype, {
   },
   isAssignableTo(target) {
     return this.isEquivalentTo(target)
-  }
+  },
 })
 
 Object.assign(FunctionType.prototype, {
@@ -64,7 +64,7 @@ Object.assign(FunctionType.prototype, {
         target.parameterTypes[i].isAssignableTo(t)
       )
     )
-  }
+  },
 })
 
 const check = self => ({
@@ -180,7 +180,7 @@ const check = self => ({
   },
   matchParametersOf(calleeType) {
     check(self).match(calleeType.parameterTypes)
-  }
+  },
   // matchFieldsOf(structType) {
   //   check(self).match(structType.fields.map(f => f.type))
   // }
@@ -242,7 +242,7 @@ class Context {
     // console.log(d.source)
     d.type = this.analyzeType(d.type)
     d.variable = new Variable(d.name)
-    // d.source = this.analyze(d.source)
+    // d.source = this.analyze(d.source) LOOK AT THIS AGAIN!!!!!!!!!!!!!!!!!!!!!!!!!!
     d.variable.type = d.type
     this.add(d.variable.name, d.variable)
     console.log(d)
