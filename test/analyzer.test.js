@@ -10,7 +10,7 @@ import analyze from "../src/analyzer.js"
 // Programs that are semantically correct
 const semanticChecks = [
   ["negative", "intberry x is -10 | "],
-  ["negation", "boolberry a is organic | boolberry b is not |"],
+  ["negation", "boolberry a is organic | boolberry b is not organic |"],
   ["increment", "intberry x is 10 | x++ |"],
   ["decrement", "intberry x is 10 | x-- |"],
   ["times", "intberry x is 10 times 3 |"],

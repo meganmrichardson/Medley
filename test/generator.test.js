@@ -15,7 +15,13 @@ const fixtures = [
     `,
     expected: dedent`
     let x_1 = 3;
-    `,
+    `
+  },
+  {
+    name: "declaration",
+    source: `floatberry x |`,
+    expected: dedent`let x_1;
+    `
   },
   {
     name: "increment",
@@ -26,7 +32,7 @@ const fixtures = [
     expected: dedent`
     let x_1 = 10;
     x_1++;
-    `,
+    `
   },
   {
     name: "binary expression in while",
@@ -41,7 +47,7 @@ const fixtures = [
     while (i < 10) {
       i++;
     }
-    `,
+    `
   },
   {
     name: "binary expression in while",
@@ -56,7 +62,7 @@ const fixtures = [
     while (i < 10) {
       i++;
     }
-    `,
+    `
   },
   {
     name: "for loop",
@@ -67,8 +73,8 @@ const fixtures = [
     expected: dedent`
     for (let i = 0; i <= 10; i++) {
     }
-    `,
-  },
+    `
+  }
 ]
 
 describe("The code generator", () => {

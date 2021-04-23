@@ -6,7 +6,7 @@ import {
   FunctionType,
   Function,
   ArrayType,
-  DictType,
+  DictType
 } from "./ast.js"
 import * as stdlib from "./stdlib.js"
 
@@ -27,7 +27,7 @@ Object.assign(Type.prototype, {
   // to a variable constrained to a supertype.
   isAssignableTo(target) {
     return this.isEquivalentTo(target)
-  },
+  }
 })
 
 Object.assign(ArrayType.prototype, {
@@ -40,7 +40,7 @@ Object.assign(ArrayType.prototype, {
   },
   isAssignableTo(target) {
     return this.isEquivalentTo(target)
-  },
+  }
 })
 
 Object.assign(FunctionType.prototype, {
@@ -64,7 +64,7 @@ Object.assign(FunctionType.prototype, {
         target.parameterTypes[i].isAssignableTo(t)
       )
     )
-  },
+  }
 })
 
 const check = self => ({
@@ -163,11 +163,6 @@ const check = self => ({
     must(self.type.returnType !== Type.VOID, "Cannot return a value here")
   },
   isReturnableFrom(f) {
-    // console.log(
-    //   `CHECKING ${util.inspect(self)} ASSIGNABLE TO ${util.inspect(
-    //     f.type.returnType
-    //   )}`
-    // )
     check(self).isAssignableTo(f.type.returnType)
   },
   match(targetTypes) {
@@ -180,7 +175,7 @@ const check = self => ({
   },
   matchParametersOf(calleeType) {
     check(self).match(calleeType.parameterTypes)
-  },
+  }
   // matchFieldsOf(structType) {
   //   check(self).match(structType.fields.map(f => f.type))
   // }
@@ -239,13 +234,12 @@ class Context {
   }
   // Work on assignment node:
   Assignment(d) {
-    // console.log(d.source)
     d.type = this.analyzeType(d.type)
     d.variable = new Variable(d.name)
-    // d.source = this.analyze(d.source) LOOK AT THIS AGAIN!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // line below!!
+    d.source = this.analyze(d.source)
     d.variable.type = d.type
     this.add(d.variable.name, d.variable)
-    console.log(d)
     return d
   }
   Declaration(d) {
@@ -353,7 +347,6 @@ class Context {
     this.add(s.initializer.name, s.initializer)
 
     s.test = this.analyze(s.test)
-    // console.log(this.locals)
 
     s.increment = this.analyze(s.increment)
 
@@ -404,9 +397,7 @@ class Context {
   }
   IdentifierExpression(e) {
     // Id expressions get "replaced" with the entities they refer to.
-    console.log(
-      `e.name is ${e.name} from context of ${util.inspect(this.locals)}`
-    )
+
     const variable = this.lookup(e.name)
     return variable
   }
