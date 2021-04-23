@@ -50,11 +50,9 @@ const fixtures = [
     `
   },
   {
-    name: "binary expression in while",
+    name: "for loop",
     source: `
-    intberry i is 2 |
-    whilemelon i less 10 ->
-      i++ |
+    formelon intberry i is 0 | i less equals 10 | i++ ->
     <-
     `,
     expected: dedent`
@@ -65,14 +63,23 @@ const fixtures = [
     `
   },
   {
-    name: "for loop",
+    name: "negation",
     source: `
-    formelon intberry i is 0 | i more equals 10 | i++ ->
-    <-
+    boolberry b is not organic |
     `,
     expected: dedent`
-    for (let i_1 = 0; i_1 <= 10; i_1++) {
-    }
+    let b = !true;
+    `
+  },
+  {
+    name: "reassignment",
+    source: `
+    boolberry b is not organic |
+    b is organic |
+    `,
+    expected: dedent`
+    let b_1 = !true;
+    b_1 = true;
     `
   }
 ]
