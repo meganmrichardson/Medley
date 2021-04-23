@@ -10,7 +10,7 @@ export default function generate(program) {
   const output = []
 
   const standardFunctions = new Map([
-    [stdlib.functions.print, x => `console.log(${x})`],
+    [stdlib.functions.print, x => `console.log(${x})`]
   ])
 
   // Variable and function names in JS will be suffixed with _1, _2, _3,
@@ -181,7 +181,7 @@ export default function generate(program) {
     },
     Array(a) {
       return a.map(gen)
-    },
+    }
   }
 
   gen(program)

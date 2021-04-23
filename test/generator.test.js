@@ -56,9 +56,7 @@ const fixtures = [
     <-
     `,
     expected: dedent`
-    let i_1 = 2;
-    while ((i_1 < 10)) {
-      i_1++;
+    for (let i_1 = 0; i_1 <= 10; i_1++) {
     }
     `
   },
@@ -68,7 +66,7 @@ const fixtures = [
     boolberry b is not organic |
     `,
     expected: dedent`
-    let b = !true;
+    let b_1 = !true;
     `
   },
   {
