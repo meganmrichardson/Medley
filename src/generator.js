@@ -33,10 +33,10 @@ export default function generate(program) {
       gen(p.statements)
     },
     Assignment(d) {
-      output.push(`let ${gen(d.name)} = ${gen(d.source)};`)
+      output.push(`let ${gen(d.variable)} = ${gen(d.source)};`)
     },
     Declaration(d) {
-      output.push(`let ${gen(d.name)};`)
+      output.push(`let ${gen(d.variable)};`)
     },
     Block(p) {
       gen(p.statements)

@@ -44,8 +44,8 @@ const fixtures = [
     `,
     expected: dedent`
     let i_1 = 2;
-    while (i < 10) {
-      i++;
+    while ((i_1 < 10)) {
+      i_1++;
     }
     `
   },
@@ -59,8 +59,8 @@ const fixtures = [
     `,
     expected: dedent`
     let i_1 = 2;
-    while (i < 10) {
-      i++;
+    while ((i_1 < 10)) {
+      i_1++;
     }
     `
   },
@@ -71,7 +71,7 @@ const fixtures = [
     <-
     `,
     expected: dedent`
-    for (let i = 0; i <= 10; i++) {
+    for (let i_1 = 0; i_1 <= 10; i_1++) {
     }
     `
   }
