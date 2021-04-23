@@ -10,7 +10,7 @@ export default function generate(program) {
   const output = []
 
   const standardFunctions = new Map([
-    [stdlib.functions.print, x => `console.log(${x})`]
+    [stdlib.functions.print, x => `console.log(${x})`],
   ])
 
   // Variable and function names in JS will be suffixed with _1, _2, _3,
@@ -72,9 +72,9 @@ export default function generate(program) {
     Increment(s) {
       output.push(`${gen(s.identifier)}++;`)
     },
-    // Reassignment(s) {
-    //   output.push(`${gen(s.target)} = ${gen(s.source)};`)
-    // },
+    Reassignment(s) {
+      output.push(`${gen(s.targets)} = ${gen(s.source)};`)
+    },
     BreakStatement(s) {
       output.push("break;")
     },
@@ -104,15 +104,30 @@ export default function generate(program) {
       output.push("}")
     },
     FLoop(s) {
-      const i = targetName(s.increment)
-      let initializer = s.initializer.split(" ")
-      let initialValue = initializer[initializer.length - 1]
-      let test = s.test.split(" ")
-      let op = test.length === 3 ? test[1] : test[1] + test[2]
+      const i = targetName(s.initializer.name)
+      console.log("test:", s.test)
+      console.log("initializer:", s.initializer.name)
+      let high = s.test.expression2["value"]
+      let op
+      switch (s.test.op) {
+        case "more equals":
+          op = ">="
+          break
+        case "less equals":
+          op = "<="
+          break
+        case "more":
+          op = ">"
+          break
+        default:
+          op = "<"
+          break
+      }
+      // figure out whats happening and change back to i
       output.push(
-        `for (let ${i} = ${gen(initialValue)}; ${i} ${op} ${gen(
-          test[test.length - 1]
-        )}; ${i}++) {`
+        `for (let ${s.initializer.name} = ${gen(high)}; ${
+          s.initializer.name
+        } ${op} ${gen(high)}; ${s.initializer.name}++) {`
       )
       gen(s.body)
       output.push("}")
@@ -128,9 +143,9 @@ export default function generate(program) {
       }
       return `(${gen(e.expression1)} ${op} ${gen(e.expression2)})`
     },
-    // UnaryExpression(e) {
-    //   return `${e.op}(${gen(e.operand)})`
-    // },
+    UnaryExpression(e) {
+      return `!${gen(e.expression)}`
+    },
     // ArrayExpression(e) {
     //   return `[${gen(e.elements).join(",")}]`
     // },
@@ -162,12 +177,11 @@ export default function generate(program) {
       return e
     },
     String(e) {
-      // This ensures in JavaScript they get quotes!
       return JSON.stringify(e)
     },
     Array(a) {
       return a.map(gen)
-    }
+    },
   }
 
   gen(program)

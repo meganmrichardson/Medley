@@ -15,13 +15,13 @@ const fixtures = [
     `,
     expected: dedent`
     let x_1 = 3;
-    `
+    `,
   },
   {
     name: "declaration",
     source: `floatberry x |`,
     expected: dedent`let x_1;
-    `
+    `,
   },
   {
     name: "increment",
@@ -32,7 +32,7 @@ const fixtures = [
     expected: dedent`
     let x_1 = 10;
     x_1++;
-    `
+    `,
   },
   {
     name: "binary expression in while",
@@ -44,37 +44,42 @@ const fixtures = [
     `,
     expected: dedent`
     let i_1 = 2;
-    while (i < 10) {
-      i++;
+    while (i_1 < 10) {
+      i_1++;
     }
-    `
-  },
-  {
-    name: "binary expression in while",
-    source: `
-    intberry i is 2 |
-    whilemelon i less 10 ->
-      i++ |
-    <-
     `,
-    expected: dedent`
-    let i_1 = 2;
-    while (i < 10) {
-      i++;
-    }
-    `
   },
   {
     name: "for loop",
     source: `
-    formelon intberry i is 0 | i more equals 10 | i++ ->
+    formelon intberry i is 0 | i less equals 10 | i++ ->
     <-
     `,
     expected: dedent`
-    for (let i = 0; i <= 10; i++) {
+    for (let i_1 = 0; i_1 <= 10; i_1++) {
     }
-    `
-  }
+    `,
+  },
+  {
+    name: "negation",
+    source: `
+    boolberry b is not organic |
+    `,
+    expected: dedent`
+    let b = !true;
+    `,
+  },
+  {
+    name: "reassignment",
+    source: `
+    boolberry b is not organic |
+    b is organic |
+    `,
+    expected: dedent`
+    let b_1 = !true;
+    b_1 = true;
+    `,
+  },
 ]
 
 describe("The code generator", () => {
