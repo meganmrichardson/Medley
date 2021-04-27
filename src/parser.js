@@ -97,9 +97,7 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
     block3
   ) {
     return new ast.Conditional(
-      [expression1.ast(), ...expression2.ast()],
-      [block1.ast(), ...block2.ast()],
-      [...block3.ast()]
+      s
     )
   },
   Call(id, _left, args, _right) {
