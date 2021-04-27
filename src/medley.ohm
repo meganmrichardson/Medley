@@ -31,7 +31,7 @@ Medley {
   Parameter   = Type id
   Parameters  = ListOf<Parameter, ",">
   LitList     = "~" ListOf<Literal, ";"> "~"
-  DictObj     = "~" ListOf<DictContent, ";"> "~"
+  DictObj     = "~~" ListOf<DictContent, ";"> "~~"
   DictContent = Literal "," Literal
   Exp         = Exp orange Exp2                          --binary
               | Exp2
@@ -50,7 +50,7 @@ Medley {
   Exp8        = Call
               | Literal
               | DictObj
-              | LitList
+        	  | LitList
               | id
               | "(" Exp ")"                              --parens
   Increment   = id ("++" | "--")
@@ -107,4 +107,4 @@ Medley {
   id          = ~keyword letter alnum*
   comment     = "::" (~"\n" any)* ("\n" | end)           --singleLine
   space      += comment
- }
+}

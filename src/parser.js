@@ -61,7 +61,7 @@ const astBuilder = medleyGrammar.createSemantics().addOperation("ast", {
   LitList(_tilde1, content, _tilde2) {
     return new ast.LiteralList(content.asIteration().ast())
   },
-  DictObj(_tilde1, content, _tilde2) {
+  DictObj(_tildes1, content, _tildes2) {
     return new ast.DictionaryList(content.asIteration().ast())
   },
   DictContent(literal1, _comma, literal2) {
