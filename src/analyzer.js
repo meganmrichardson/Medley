@@ -69,6 +69,7 @@ Object.assign(FunctionType.prototype, {
 
 const check = self => ({
   isNumeric() {
+    console.log(self.type)
     must([Type.INT, Type.FLOAT].includes(self.type), `Expected a number`)
   },
   isNumericOrString() {
@@ -266,9 +267,11 @@ class Context {
   }
 
   Parameter(p) {
-    p.type = this.analyzeType(p.type)
-    check(p.type).isAType()
-    this.add(p.name, p)
+    p.id.name = this.analyze(p.id.name)
+    p.variable = new Variable(p.id.name)
+    p.variable.type = p.type
+    this.add(p.variable.name, p.variable)
+    console.log(p)
     return p
   }
 
@@ -287,10 +290,11 @@ class Context {
     check
     return t
   }
-  // FunctionType not used
+  // DictionaryList used and fixes errors but empty (???)
+  DictionaryList(t) {}
   FunctionType(t) {
-    t.parameterTypes = this.analyze(t.parameterTypes)
-    t.returnType = this.analyze(t.returnType)
+    t.parameterTypes = this.analyzeType(t.parameterTypes)
+    t.returnType = this.analyzeType(t.returnType)
     return t
   }
   Increment(s) {
@@ -298,7 +302,7 @@ class Context {
     check(s.identifier).isInteger()
     return s
   }
-  // LiteralList not used
+  // LiteralList used and fixes errors but empty (???)
   LiteralList(l) {}
   Reassignment(s) {
     s.targets = this.lookup(s.targets.name)
@@ -356,6 +360,7 @@ class Context {
   BinaryExpression(e) {
     e.expression1 = this.analyze(e.expression1)
     e.expression2 = this.analyze(e.expression2)
+
     if (["apple", "orange"].includes(e.op)) {
       check(e.expression1).isBoolean()
       check(e.expression2).isBoolean()
@@ -402,6 +407,7 @@ class Context {
     return variable
   }
   Literal(e) {
+    console.log(e)
     if (Number.isInteger(e.value)) {
       e.type = Type.INT
     } else if (typeof e.value === "number") {

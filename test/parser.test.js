@@ -28,7 +28,7 @@ const goodPrograms = [
   `intberry num is 34 |`,
   `stringberry hi |`,
   `floatberry flt is 4.223523 |`,
-  `fruitbasket~stringberry, stringberry~ s is ~"key1","value1" ; "key2","value2"~ |`,
+  `fruitbasket~stringberry, stringberry~ s is ~~"key1","value1" ; "key2","value2"~~ |`,
   `berrybasket~stringberry~ s is ~"strawberry" ; "blueberry"~ |`,
   `:: this is a comment`,
   `fn(arg1, arg2, arg3) |`,
@@ -68,7 +68,7 @@ const goodPrograms = [
 
 const badPrograms = [
   `juice orange s`,
-  `fruitbasket~stringberry, stringberry~ s is ~"key1","value1" : "key2","value2"~ |`,
+  `fruitbasket~stringberry, stringberry~ s is ~~"key1","value1" : "key2","value2"~~ |`,
   `blend (intberry num) ->`,
   `juice`,
   `intberry i is 0 |

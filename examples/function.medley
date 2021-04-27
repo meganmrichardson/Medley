@@ -1,3 +1,3 @@
-floatberry blend toCelsius(floatberry fahrenheit) ->
-   squeeze (5 divby 9) times (fahrenheit minus 32) |
+intberry blend fn (intberry five) -> 
+   intberry seven is 2 plus five | 
 <-

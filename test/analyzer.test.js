@@ -23,7 +23,7 @@ const semanticChecks = [
   ["initialize with empty array", "berrybasket~intberry~ toppings is ~~ |"],
   [
     "initialize with empty dictionary",
-    "fruitbasket~intberry, intberry~ x is ~~ |"
+    "fruitbasket~intberry, intberry~ x is ~~~~ |"
   ],
 
   [
@@ -32,7 +32,7 @@ const semanticChecks = [
   ],
   [
     "dictonary declaration",
-    'fruitbasket~stringberry, stringberry~ flavors is ~"lemon","tart" ; "starfruit","sweet"~ |'
+    'fruitbasket~stringberry, stringberry~ flavors is ~~"lemon","tart" ; "starfruit","sweet"~~ |'
   ],
   ["int declaration", "intberry x | x is 2 |"],
   ["int assignment", "intberry x is 4 |"],
