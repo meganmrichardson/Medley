@@ -1,8 +1,3 @@
-// Code Generator Medley -> JavaScript
-//
-// Invoke generate(program) with the program node to get back the JavaScript
-// translation as a string.
-
 import {} from "./ast.js"
 import * as stdlib from "./stdlib.js"
 
@@ -10,13 +5,9 @@ export default function generate(program) {
   const output = []
 
   const standardFunctions = new Map([
-    [stdlib.functions.print, x => `console.log(${x})`]
+    [stdlib.functions.print, x => `console.log(${x})`],
   ])
 
-  // Variable and function names in JS will be suffixed with _1, _2, _3,
-  // etc. This is because "switch", for example, is a legal name in Carlos,
-  // but not in JS. So, the Carlos variable "switch" must become something
-  // like "switch_1". We handle this by mapping each name to its suffix.
   const targetName = (mapping => {
     return entity => {
       if (!mapping.has(entity)) {
@@ -41,34 +32,26 @@ export default function generate(program) {
     Block(p) {
       gen(p.statements)
     },
-    // TypeDeclaration(d) {
-    //   output.push(`class ${gen(d.type)} {`)
-    //   output.push(`constructor(${gen(d.type.fields).join(",")}) {`)
-    //   for (let field of d.type.fields) {
-    //     output.push(`this[${JSON.stringify(gen(field))}] = ${gen(field)};`)
-    //   }
-    //   output.push("}")
-    //   output.push("}")
-    // },
-    // Field(f) {
-    //   return targetName(f)
-    // },
-    // FunctionDeclaration(d) {
-    //   output.push(
-    //     `function ${gen(d.fun)}(${gen(d.fun.parameters).join(", ")}) {`
-    //   )
-    //   gen(d.body)
-    //   output.push("}")
-    // },
-    // Parameter(p) {
-    //   return targetName(p)
-    // },
+    FuncDecl(d) {
+      //console.log("d.func params:", d.func.parameters[0])
+      //d.func.parameters.id
+      //${gen(d.func.parameters.id.name).join(", ")}
+      output.push(
+        `function ${gen(d.func.name)}(${gen(d.func.parameters[0].id.name)}) {`
+      )
+      // issue with analyzer.js, maybe the identifier expression isn't defined correctly? That or Params is the issue
+      gen(d.block)
+      output.push("}")
+    },
+    Parameter(p) {
+      return targetName(p)
+    },
     Variable(v) {
       return targetName(v)
     },
-    // Function(f) {
-    //   return targetName(f)
-    // },
+    Function(f) {
+      return targetName(f)
+    },
     Increment(s) {
       output.push(`${gen(s.identifier)}++;`)
     },
@@ -81,33 +64,26 @@ export default function generate(program) {
     ReturnStatement(s) {
       output.push(`return ${gen(s.expression)};`)
     },
-    // IfStatement(s) {
-    //   output.push(`if (${gen(s.test)}) {`)
-    //   gen(s.consequent)
-    //   if (s.alternate.constructor === IfStatement) {
-    //     output.push("} else")
-    //     gen(s.alternate)
-    //   } else {
-    //     output.push("} else {")
-    //     gen(s.alternate)
-    //     output.push("}")
-    //   }
-    // },
-    // ShortIfStatement(s) {
-    //   output.push(`if (${gen(s.test)}) {`)
-    //   gen(s.consequent)
-    //   output.push("}")
-    // },
+    Conditional(s) {
+      //console.log("s in conditional", s)
+      //console.log("s.tests[0]:", s.tests[0])
+      output.push(`if (${gen(s.tests[0])}) {`)
+      gen(s.consequents)
+      if (s.tests.length === 1) {
+        output.push(`} else {${gen(s.alternates)}`)
+      } else {
+        // TODO: add for loop for added functionality
+        output.push(`} else if (${gen(s.tests[1])}) {${gen(s.alternates)}`)
+      }
+      output.push(`}`)
+    },
     WLoop(s) {
       output.push(`while (${gen(s.test)}) {`)
       gen(s.body)
       output.push("}")
     },
     FLoop(s) {
-      const i = targetName(s.initializer.name)
-      console.log("test:", s.test)
-      console.log("initializer:", s.initializer.name)
-      let high = s.test.expression2["value"]
+      const i = targetName(s.initializer)
       let op
       switch (s.test.op) {
         case "more equals":
@@ -123,47 +99,68 @@ export default function generate(program) {
           op = "<"
           break
       }
-      // figure out whats happening and change back to i
       output.push(
-        `for (let ${s.initializer.name} = ${gen(high)}; ${
-          s.initializer.name
-        } ${op} ${gen(high)}; ${s.initializer.name}++) {`
+        `for (let ${i} = ${gen(s.low)}; ${i} ${op} ${gen(s.high)}; ${i}++) {`
       )
       gen(s.body)
       output.push("}")
     },
     BinaryExpression(e) {
+      //console.log("binary expression information:", e)
       let op = ""
       if (e.op === "less") {
         op = "<"
       } else if (e.op === "equals") {
-        op = "=="
+        op = "==="
       } else if (e.op === "more") {
         op = ">"
+      } else if (e.op === "minus") {
+        op = "-"
+      } else if (e.op === "plus") {
+        op = "+"
+      } else if (e.op === "times") {
+        op = "*"
+      } else if (e.op === "divby") {
+        op = "/"
+      } else if (e.op === "mod") {
+        op = "%"
+      } else if (e.op === "to the power of") {
+        op = "**"
+      } else if (e.op === "apple") {
+        op = "&&"
+      } else if (e.op === "orange") {
+        op = "||"
       }
       return `(${gen(e.expression1)} ${op} ${gen(e.expression2)})`
     },
     UnaryExpression(e) {
       return `!${gen(e.expression)}`
     },
-    // ArrayExpression(e) {
-    //   return `[${gen(e.elements).join(",")}]`
-    // },
+    ArrayType(e) {
+      return `[${gen(e.elements).join(",")}]`
+    },
     // MemberExpression(e) {
     //   return `(${gen(e.object)}[${JSON.stringify(gen(e.field))}])`
     // },
-    // Call(c) {
-    //   const targetCode = standardFunctions.has(c.callee)
-    //     ? standardFunctions.get(c.callee)(gen(c.args))
-    //     : c.callee.constructor === StructType
-    //     ? `new ${gen(c.callee)}(${gen(c.args).join(", ")})`
-    //     : `${gen(c.callee)}(${gen(c.args).join(", ")})`
-    //   // Calls in expressions vs in statements are handled differently
-    //   if (c.callee instanceof Type || c.callee.type.returnType !== Type.VOID) {
-    //     return targetCode
-    //   }
-    //   output.push(`${targetCode};`)
-    // },
+    Call(c) {
+      const targetCode = `${gen(c.callee)}(${gen(c.args).join(", ")})`
+      // Calls in expressions vs in statements are handled differently
+      // if (c.callee instanceof Type || c.callee.type.returnType !== Type.VOID) {
+      //   return targetCode
+      // }
+      output.push(`${targetCode};`)
+    },
+    Arguments(a) {
+      //gen(a.argumentList)
+      return `${gen(a.argumentList)}`
+    },
+    IdentifierExpression(e) {
+      console.log("IS THIS BEING REFERENCED")
+      return e
+    },
+    LiteralList(l) {
+      console.log("L", l)
+    },
     Literal(e) {
       return e.value
     },
@@ -181,7 +178,7 @@ export default function generate(program) {
     },
     Array(a) {
       return a.map(gen)
-    }
+    },
   }
 
   gen(program)

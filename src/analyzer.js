@@ -6,7 +6,7 @@ import {
   FunctionType,
   Function,
   ArrayType,
-  DictType
+  DictType,
 } from "./ast.js"
 import * as stdlib from "./stdlib.js"
 
@@ -27,7 +27,7 @@ Object.assign(Type.prototype, {
   // to a variable constrained to a supertype.
   isAssignableTo(target) {
     return this.isEquivalentTo(target)
-  }
+  },
 })
 
 Object.assign(ArrayType.prototype, {
@@ -40,7 +40,7 @@ Object.assign(ArrayType.prototype, {
   },
   isAssignableTo(target) {
     return this.isEquivalentTo(target)
-  }
+  },
 })
 
 Object.assign(FunctionType.prototype, {
@@ -64,7 +64,7 @@ Object.assign(FunctionType.prototype, {
         target.parameterTypes[i].isAssignableTo(t)
       )
     )
-  }
+  },
 })
 
 const check = self => ({
@@ -175,7 +175,7 @@ const check = self => ({
   },
   matchParametersOf(calleeType) {
     check(self).match(calleeType.parameterTypes)
-  }
+  },
   // matchFieldsOf(structType) {
   //   check(self).match(structType.fields.map(f => f.type))
   // }
@@ -340,8 +340,10 @@ class Context {
     s.body = this.newChild({ inLoop: true }).analyze(s.body)
     return s
   }
-  // Ask Dr. Toal
   FLoop(s) {
+    console.log("analyzer initializer for for loop:", s.initializer)
+    s.low = s.initializer.source.value
+    s.high = s.test.expression2["value"]
     s.initializer = new Variable(s.initializer.name, true)
     s.initializer.type = Type.INT
     this.add(s.initializer.name, s.initializer)
@@ -396,8 +398,6 @@ class Context {
     return c
   }
   IdentifierExpression(e) {
-    // Id expressions get "replaced" with the entities they refer to.
-
     const variable = this.lookup(e.name)
     return variable
   }
