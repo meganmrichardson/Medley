@@ -6,7 +6,7 @@ import {
   FunctionType,
   Function,
   ArrayType,
-  DictType,
+  DictType
 } from "./ast.js"
 import * as stdlib from "./stdlib.js"
 
@@ -27,7 +27,7 @@ Object.assign(Type.prototype, {
   // to a variable constrained to a supertype.
   isAssignableTo(target) {
     return this.isEquivalentTo(target)
-  },
+  }
 })
 
 Object.assign(ArrayType.prototype, {
@@ -40,7 +40,7 @@ Object.assign(ArrayType.prototype, {
   },
   isAssignableTo(target) {
     return this.isEquivalentTo(target)
-  },
+  }
 })
 
 Object.assign(FunctionType.prototype, {
@@ -64,12 +64,12 @@ Object.assign(FunctionType.prototype, {
         target.parameterTypes[i].isAssignableTo(t)
       )
     )
-  },
+  }
 })
 
 const check = self => ({
   isNumeric() {
-    console.log(self.type)
+    // console.log(self.type)
     must(["intberry", "floatberry"].includes(self.type), `Expected a number`)
   },
   isNumericOrString() {
@@ -85,7 +85,7 @@ const check = self => ({
     must(self.type === "intberry", `Expected an integer`)
   },
   isAType() {
-    console.log(`Checking ${util.inspect(self)}`)
+    // console.log(`Checking ${util.inspect(self)}`)
     must(
       ["intberry", "floatberry", "stringberry", "boolberry"].includes(self) ||
         self.constructor === ArrayType ||
@@ -102,6 +102,8 @@ const check = self => ({
     // self is an exp, does it have the same type as other
     if (typeof self.type === "string") {
       // Basic type check
+      // console.log(self.type)
+      // console.log(other.type)
       must(self.type === other.type, "Not same type")
     } else {
       // Array or dictionary check
@@ -129,13 +131,13 @@ const check = self => ({
   },
   isAssignableTo(type) {
     // Is an expression assignable to a type
-    console.log(
-      `In isAssignableTo, checking self=${util.inspect(
-        self
-      )} and type is ${util.inspect(
-        type
-      )} and self.type has type ${typeof self.type}`
-    )
+    // console.log(
+    //   `In isAssignableTo, checking self=${util.inspect(
+    //     self
+    //   )} and type is ${util.inspect(
+    //     type
+    //   )} and self.type has type ${typeof self.type}`
+    // )
     if (typeof self.type === "string") {
       must(self.type === type, "Not assignable")
     } else {
@@ -193,11 +195,11 @@ const check = self => ({
   },
   match(parameters) {
     // self is the array of arguments
-    console.log(
-      `We are checking self=${util.inspect(
-        self
-      )} against parameters ${util.inspect(parameters)}`
-    )
+    // console.log(
+    //   `We are checking self=${util.inspect(
+    //     self
+    //   )} against parameters ${util.inspect(parameters)}`
+    // )
     must(
       parameters.length === self.length,
       `${parameters.length} argument(s) required but ${self.length} passed`
@@ -205,9 +207,9 @@ const check = self => ({
     parameters.forEach((p, i) => check(self[i]).isAssignableTo(p.type))
   },
   matchParametersOf(callee) {
-    console.log(`The callee is ${util.inspect(callee)}`)
+    // console.log(`The callee is ${util.inspect(callee)}`)
     check(self).match(callee.func.parameters)
-  },
+  }
   // matchFieldsOf(structType) {
   //   check(self).match(structType.fields.map(f => f.type))
   // }
@@ -242,7 +244,7 @@ class Context {
     return new Context(this, configuration)
   }
   analyze(node) {
-    console.log(node.constructor.name)
+    // console.log(node.constructor.name)
     return this[node.constructor.name](node)
   }
   analyzeType(type) {
@@ -274,6 +276,15 @@ class Context {
     d.source = this.analyze(d.source)
     d.variable.type = d.type
     this.add(d.variable.name, d.variable)
+    // console.log(d)
+    // if (
+    //   typeof d.source === "stringberry" ||
+    //   typeof d.source === "boolberry" ||
+    //   typeof d.source === "intberry" ||
+    //   typeof d.source === "floatberry"
+    // ) {
+    //   check(d.source).hasSameTypeAs(d.variable)
+    // }
     return d
   }
   Declaration(d) {
@@ -290,6 +301,8 @@ class Context {
     const childContext = this.newChild({ inLoop: false, forFunction: d.func })
     d.func.parameters = childContext.analyze(d.func.parameters)
 
+    // need to make parameters vars
+
     d.func.type = new FunctionType(
       d.func.parameters.map(p => p.type),
       d.func.returnType
@@ -302,10 +315,9 @@ class Context {
   Parameter(p) {
     p.id.name = this.analyze(p.id.name)
     p.variable = new Variable(p.id.name)
+    p.type = this.analyzeType(p.type)
     p.variable.type = p.type
-    console.log(`${p.type} heres the dang type ${Type.INT}`)
     this.add(p.variable.name, p.variable)
-    console.log(p)
     return p
   }
 
@@ -373,13 +385,18 @@ class Context {
     return s
   }
   WLoop(s) {
+    console.log(s)
     s.test = this.analyze(s.test)
+    // console.log(`s.test is ${util.inspect(s.test)}`)
+
+    // NOTE: need some way to check if test is binary expression
     check(s.test).isBoolean()
+
     s.body = this.newChild({ inLoop: true }).analyze(s.body)
     return s
   }
   FLoop(s) {
-    console.log("analyzer initializer for for loop:", s.initializer)
+    // console.log("analyzer initializer for for loop:", s.initializer)
     s.low = s.initializer.source.value
     s.high = s.test.expression2["value"]
     s.initializer = new Variable(s.initializer.name, true)
@@ -407,8 +424,8 @@ class Context {
       )
     ) {
       check(e.expression1).isNumeric()
-      console.log(`LEFT ${util.inspect(e.expression1)}`)
-      console.log(`RIGHT ${util.inspect(e.expression2)}`)
+      // console.log(`LEFT ${util.inspect(e.expression1)}`)
+      // console.log(`RIGHT ${util.inspect(e.expression2)}`)
       check(e.expression1).hasSameTypeAs(e.expression2)
       e.type = e.expression1.type
     } else if (["less", "less equals", "more", "more equals"].includes(e.op)) {
@@ -443,7 +460,7 @@ class Context {
     return variable
   }
   Literal(e) {
-    console.log(e)
+    // console.log(e)
     if (Number.isInteger(e.value)) {
       e.type = "intberry"
     } else if (typeof e.value === "number") {

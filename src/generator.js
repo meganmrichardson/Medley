@@ -5,7 +5,7 @@ export default function generate(program) {
   const output = []
 
   const standardFunctions = new Map([
-    [stdlib.functions.print, x => `console.log(${x})`],
+    [stdlib.functions.print, x => `console.log(${x})`]
   ])
 
   const targetName = (mapping => {
@@ -33,6 +33,7 @@ export default function generate(program) {
       gen(p.statements)
     },
     FuncDecl(d) {
+      console.log(d)
       //console.log("d.func params:", d.func.parameters[0])
       //d.func.parameters.id
       //${gen(d.func.parameters.id.name).join(", ")}
@@ -65,14 +66,22 @@ export default function generate(program) {
       output.push(`return ${gen(s.expression)};`)
     },
     Conditional(s) {
-      //let talliedUpConsequents = 
+      //let talliedUpConsequents =
       //console.log("s in conditional", s)
       //console.log("s.tests[0]:", s.tests[0])
       console.log(`s tests ${s.tests}`)
       console.log(`s test ${s.consequents[0].statements}`)
-      output.push(`if (${gen(s.tests[0])}) {${s.consequents[0].statements.length > 0 ? gen(s.consequents[0]) : ""}`)
+      output.push(
+        `if (${gen(s.tests[0])}) {${
+          s.consequents[0].statements.length > 0 ? gen(s.consequents[0]) : ""
+        }`
+      )
       for (let i = 1; i < s.tests.length; i++) {
-        output.push(`} else if (${gen(s.tests[i])}) {${s.consequents[i].statements.length > 0 ? gen(s.consequents[i]) : ""}`)
+        output.push(
+          `} else if (${gen(s.tests[i])}) {${
+            s.consequents[i].statements.length > 0 ? gen(s.consequents[i]) : ""
+          }`
+        )
       }
       if (s.alternates.length !== 0) {
         output.push(`} else {${gen(s.alternates)}`)
@@ -185,7 +194,7 @@ export default function generate(program) {
     },
     Array(a) {
       return a.map(gen)
-    },
+    }
   }
 
   gen(program)
