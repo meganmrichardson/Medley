@@ -70,23 +70,24 @@ Object.assign(FunctionType.prototype, {
 const check = self => ({
   isNumeric() {
     console.log(self.type)
-    must([Type.INT, Type.FLOAT].includes(self.type), `Expected a number`)
+    must(["intberry", "floatberry"].includes(self.type), `Expected a number`)
   },
   isNumericOrString() {
     must(
-      [Type.STRING, Type.INT, Type.FLOAT].includes(self.type),
+      ["intberry", "floatberry", "stringberry"].includes(self.type),
       `Expected a number or string`
     )
   },
   isBoolean() {
-    must(self.type === Type.BOOLEAN, `Expected a boolean`)
+    must(self.type === "boolberry", `Expected a boolean`)
   },
   isInteger() {
-    must(self.type === Type.INT, `Expected an integer`)
+    must(self.type === "intberry", `Expected an integer`)
   },
   isAType() {
+    console.log(`Checking ${util.inspect(self)}`)
     must(
-      [Type.STRING, Type.INT, Type.BOOLEAN, Type.FLOAT].includes(self) ||
+      ["intberry", "floatberry", "stringberry", "boolberry"].includes(self) ||
         self.constructor === ArrayType ||
         self.constructor === DictType
     )
@@ -99,10 +100,16 @@ const check = self => ({
   },
   hasSameTypeAs(other) {
     // self is an exp, does it have the same type as other
-    must(
-      self.type.isEquivalentTo(other.type),
-      "Operands do not have the same type"
-    )
+    if (typeof self.type === "string") {
+      // Basic type check
+      must(self.type === other.type, "Not same type")
+    } else {
+      // Array or dictionary check
+      must(
+        self.type.isEquivalentTo(other.type),
+        "Operands do not have the same type"
+      )
+    }
     // if ([Type.FLOAT, Type.INT, Type.BOOLEAN, Type.STRING].includes(self.type)) {
     //   console.log(`self.type ${self.type === Type.INT}`)
     //   console.log(`other.type ${other.type === Type.INT}`)
@@ -121,10 +128,22 @@ const check = self => ({
     )
   },
   isAssignableTo(type) {
-    must(
-      type === Type.ANY || self.type.isAssignableTo(type),
-      `Cannot assign a ${self.type.name} to a ${type.name}`
+    // Is an expression assignable to a type
+    console.log(
+      `In isAssignableTo, checking self=${util.inspect(
+        self
+      )} and type is ${util.inspect(
+        type
+      )} and self.type has type ${typeof self.type}`
     )
+    if (typeof self.type === "string") {
+      must(self.type === type, "Not assignable")
+    } else {
+      must(
+        type === Type.ANY || self.type.isAssignableTo(type),
+        `Cannot assign a ${self.type.name} to a ${type.name}`
+      )
+    }
     // self is a type, can objects of self be assigned to vars of type
     // must(
     //   type === Type.ANY ||
@@ -172,16 +191,22 @@ const check = self => ({
   isReturnableFrom(f) {
     check(self).isAssignableTo(f.type.returnType)
   },
-  match(targetTypes) {
+  match(parameters) {
     // self is the array of arguments
-    must(
-      targetTypes.length === self.length,
-      `${targetTypes.length} argument(s) required but ${self.length} passed`
+    console.log(
+      `We are checking self=${util.inspect(
+        self
+      )} against parameters ${util.inspect(parameters)}`
     )
-    targetTypes.forEach((type, i) => check(self[i]).isAssignableTo(type))
+    must(
+      parameters.length === self.length,
+      `${parameters.length} argument(s) required but ${self.length} passed`
+    )
+    parameters.forEach((p, i) => check(self[i]).isAssignableTo(p.type))
   },
-  matchParametersOf(calleeType) {
-    check(self).match(calleeType.parameterTypes)
+  matchParametersOf(callee) {
+    console.log(`The callee is ${util.inspect(callee)}`)
+    check(self).match(callee.func.parameters)
   },
   // matchFieldsOf(structType) {
   //   check(self).match(structType.fields.map(f => f.type))
@@ -217,14 +242,16 @@ class Context {
     return new Context(this, configuration)
   }
   analyze(node) {
+    console.log(node.constructor.name)
     return this[node.constructor.name](node)
   }
   analyzeType(type) {
     if (typeof type === "string") {
-      if (type === "boolberry") return Type.BOOLEAN
-      if (type === "intberry") return Type.INT
-      if (type === "stringberry") return Type.STRING
-      if (type === "floatberry") return Type.FLOAT
+      if (
+        ["boolberry", "intberry", "stringberry", "floatberry"].includes(type)
+      ) {
+        return type
+      }
       throw new Error("ROTTEN TYPE")
     } else if (type.constructor === ArrayType) {
       type.baseType = this.analyzeType(type.baseType)
@@ -380,6 +407,8 @@ class Context {
       )
     ) {
       check(e.expression1).isNumeric()
+      console.log(`LEFT ${util.inspect(e.expression1)}`)
+      console.log(`RIGHT ${util.inspect(e.expression2)}`)
       check(e.expression1).hasSameTypeAs(e.expression2)
       e.type = e.expression1.type
     } else if (["less", "less equals", "more", "more equals"].includes(e.op)) {
@@ -405,8 +434,8 @@ class Context {
     c.callee = this.analyze(c.callee)
     check(c.callee).isCallable()
     c.args = this.analyze(c.args)
-    check(c.args).matchParametersOf(c.callee.type)
-    c.type = c.callee.type.returnType
+    check(c.args).matchParametersOf(c.callee)
+    c.type = c.callee.returnType
     return c
   }
   IdentifierExpression(e) {
@@ -416,13 +445,13 @@ class Context {
   Literal(e) {
     console.log(e)
     if (Number.isInteger(e.value)) {
-      e.type = Type.INT
+      e.type = "intberry"
     } else if (typeof e.value === "number") {
-      e.type = Type.FLOAT
+      e.type = "floatberry"
     } else if (typeof e.value === "string") {
-      e.type = Type.STRING
+      e.type = "stringberry"
     } else if (typeof e.value === "boolean") {
-      e.type = Type.BOOLEAN
+      e.type = "boolberry"
     }
     return e
   }
@@ -440,6 +469,9 @@ class Context {
   }
   Array(a) {
     return a.map(item => this.analyze(item))
+  }
+  Arguments(a) {
+    return a.argumentList.map(item => this.analyze(item))
   }
 }
 
