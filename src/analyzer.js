@@ -99,14 +99,20 @@ const check = self => ({
   },
   hasSameTypeAs(other) {
     // self is an exp, does it have the same type as other
-    if ([Type.FLOAT, Type.INT, Type.BOOLEAN, Type.STRING].includes(self.type)) {
-      must(self.type === other.type, "Operands do not have the same type")
-    } else {
-      must(
-        self.type.isEquivalentTo(other.type),
-        "Operands do not have the same type"
-      )
-    }
+    must(
+      self.type.isEquivalentTo(other.type),
+      "Operands do not have the same type"
+    )
+    // if ([Type.FLOAT, Type.INT, Type.BOOLEAN, Type.STRING].includes(self.type)) {
+    //   console.log(`self.type ${self.type === Type.INT}`)
+    //   console.log(`other.type ${other.type === Type.INT}`)
+    //   must(self.type === other.type, "Operands do not have the same type")
+    // } else {
+    //   must(
+    //     self.type.isEquivalentTo(other.type),
+    //     "Operands do not have the same type"
+    //   )
+    // }
   },
   allHaveSameType() {
     must(
@@ -270,6 +276,7 @@ class Context {
     p.id.name = this.analyze(p.id.name)
     p.variable = new Variable(p.id.name)
     p.variable.type = p.type
+    console.log(`${p.type} heres the dang type ${Type.INT}`)
     this.add(p.variable.name, p.variable)
     console.log(p)
     return p

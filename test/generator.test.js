@@ -108,6 +108,27 @@ const fixtures = [
     `,
   },
   {
+    name: "multiple if statements",
+    source: `
+    ifmelon 1 minus 2 equals 0 ->
+    <- elifmelon 2 minus 2 equals 1 ->
+    <- elifmelon 3 minus 1 equals 0 ->
+    <- elsemelon ->
+    <-
+    `,
+    expected: dedent`
+    if (((1 - 2) === 0)) {
+
+    } else if (((2 - 2) === 1)) {
+
+    } else if (((3 - 1) === 0)) {
+
+    } else {
+
+    }
+    `,
+  },
+  {
     name: "call",
     source: `
     floatberry blend toCelsius(floatberry fahrenheit) ->

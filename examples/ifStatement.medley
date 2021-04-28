@@ -1,0 +1,5 @@
+ifmelon 1 minus 2 equals 0 ->
+<- elifmelon 2 minus 2 equals 1 ->
+<- elifmelon 3 minus 1 equals 0 ->
+<- elsemelon ->
+<-

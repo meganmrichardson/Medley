@@ -65,17 +65,24 @@ export default function generate(program) {
       output.push(`return ${gen(s.expression)};`)
     },
     Conditional(s) {
+      //let talliedUpConsequents = 
       //console.log("s in conditional", s)
       //console.log("s.tests[0]:", s.tests[0])
-      output.push(`if (${gen(s.tests[0])}) {`)
-      gen(s.consequents)
-      if (s.tests.length === 1) {
+      console.log(`s tests ${s.tests}`)
+      console.log(`s test ${s.consequents[0].statements}`)
+      output.push(`if (${gen(s.tests[0])}) {${s.consequents[0].statements.length > 0 ? gen(s.consequents[0]) : ""}`)
+      for (let i = 1; i < s.tests.length; i++) {
+        output.push(`} else if (${gen(s.tests[i])}) {${s.consequents[i].statements.length > 0 ? gen(s.consequents[i]) : ""}`)
+      }
+      if (s.alternates.length !== 0) {
         output.push(`} else {${gen(s.alternates)}`)
-      } else {
-        // TODO: add for loop for added functionality
-        output.push(`} else if (${gen(s.tests[1])}) {${gen(s.alternates)}`)
       }
       output.push(`}`)
+    },
+    Block(b) {
+      console.log("b", b)
+      console.log("b.statements", b.statements)
+      gen(b.statements)
     },
     WLoop(s) {
       output.push(`while (${gen(s.test)}) {`)
