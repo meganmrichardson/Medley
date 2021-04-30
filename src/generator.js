@@ -33,11 +33,9 @@ export default function generate(program) {
       gen(p.statements)
     },
     FuncDecl(d) {
-      console.log(d)
       //console.log("d.func params:", d.func.parameters[0])
       //d.func.parameters.id
       //${gen(d.func.parameters.id.name).join(", ")}
-      console.log(d.func.parameters)
       output.push(
         `function ${gen(d.func)}(${gen(d.func.parameters[0].variable)}) {`
       )
@@ -70,8 +68,8 @@ export default function generate(program) {
       //let talliedUpConsequents =
       //console.log("s in conditional", s)
       //console.log("s.tests[0]:", s.tests[0])
-      console.log(`s tests ${s.tests}`)
-      console.log(`s test ${s.consequents[0].statements}`)
+      // console.log(`s tests ${s.tests}`)
+      // console.log(`s test ${s.consequents[0].statements}`)
       output.push(
         `if (${gen(s.tests[0])}) {${
           s.consequents[0].statements.length > 0 ? gen(s.consequents[0]) : ""
@@ -90,8 +88,8 @@ export default function generate(program) {
       output.push(`}`)
     },
     Block(b) {
-      console.log("b", b)
-      console.log("b.statements", b.statements)
+      // console.log("b", b)
+      // console.log("b.statements", b.statements)
       gen(b.statements)
     },
     WLoop(s) {
@@ -174,11 +172,10 @@ export default function generate(program) {
       return `${gen(a.argumentList)}`
     },
     IdentifierExpression(e) {
-      console.log("IS THIS BEING REFERENCED")
       return e
     },
     LiteralList(l) {
-      console.log("L", l)
+      // console.log("L", l)
     },
     Literal(e) {
       return e.value

@@ -80,7 +80,7 @@ const semanticChecks = [
 
 // Programs that are syntactically correct but have semantic errors
 const semanticErrors = [
-  ["incorrect typing", "intberry x is organic |", /a boolean/],
+  ["incorrect typing", "intberry x is organic |", /Not same type/],
   ["non-int increment", "boolberry x is gmo | x++ |", /an integer/],
   ["non-int decrement", 'stringberry x is "" | x-- |', /an integer/],
   ["undeclared id", "juice x |", /Identifier x not declared/],
