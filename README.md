@@ -95,10 +95,10 @@ Visit our [website](https://meganmrichardson.github.io/Medley/) to learn more!
 | Array               | `berrybasket`   |
 | Dictionary          | `fruitbasket`   |
 
-| Variable Declaration Example in Javascript         | Variable Declaration Example in Medley                                                       |
-| -------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| let toppings = ["strawberry", "blueberry"];        | `berrybasket~stringberry~ toppings is ~"strawberry" ; "blueberry"~ \|`                       |
-| let flavors = {lemon: "tart", starfruit: "sweet"}; | `fruitbasket~stringberry, stringberry~ flavors is ~"lemon","tart" ; "starfruit","sweet"~ \|` |
+| Variable Declaration Example in Javascript         | Variable Declaration Example in Medley                                                         |
+| -------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| let toppings = ["strawberry", "blueberry"];        | `berrybasket~stringberry~ toppings is ~"strawberry" ; "blueberry"~ \|`                         |
+| let flavors = {lemon: "tart", starfruit: "sweet"}; | `fruitbasket~stringberry, stringberry~ flavors is ~~"lemon","tart" ; "starfruit","sweet"~~ \|` |
 
 ## Operators
 

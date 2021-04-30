@@ -270,21 +270,12 @@ class Context {
   }
   // Work on assignment node:
   Assignment(d) {
-    d.type = this.analyzeType(d.type)
+    d.name = this.analyze(d.name)
     d.variable = new Variable(d.name)
-    // line below!!
+    d.type = this.analyzeType(d.type)
     d.source = this.analyze(d.source)
     d.variable.type = d.type
     this.add(d.variable.name, d.variable)
-    // console.log(d)
-    // if (
-    //   typeof d.source === "stringberry" ||
-    //   typeof d.source === "boolberry" ||
-    //   typeof d.source === "intberry" ||
-    //   typeof d.source === "floatberry"
-    // ) {
-    //   check(d.source).hasSameTypeAs(d.variable)
-    // }
     return d
   }
   Declaration(d) {
@@ -292,7 +283,7 @@ class Context {
     d.variable = new Variable(d.name)
     d.type = this.analyzeType(d.type)
     d.variable.type = d.type
-    this.add(d.variable.name, d.variable)
+    this.add(d.variable.name, d.variable) 
     return d
   }
   FuncDecl(d) {
@@ -307,7 +298,10 @@ class Context {
       d.func.parameters.map(p => p.type),
       d.func.returnType
     )
-    this.add(d.func.name, d)
+    // d.variable = new Variable(d.func.name)
+    // d.variable.type = d.func.type
+    // this.add(d.variable.name, d.variable)
+    this.add(d.func.name, d.func)
     d.block = childContext.analyze(d.block)
     return d
   }
@@ -385,7 +379,6 @@ class Context {
     return s
   }
   WLoop(s) {
-    console.log(s)
     s.test = this.analyze(s.test)
     // console.log(`s.test is ${util.inspect(s.test)}`)
 
@@ -397,10 +390,11 @@ class Context {
   }
   FLoop(s) {
     // console.log("analyzer initializer for for loop:", s.initializer)
+    console.log(s)
     s.low = s.initializer.source.value
     s.high = s.test.expression2["value"]
     s.initializer = new Variable(s.initializer.name, true)
-    s.initializer.type = Type.INT
+    s.initializer.type = 'intberry'
     this.add(s.initializer.name, s.initializer)
 
     s.test = this.analyze(s.test)
@@ -413,11 +407,14 @@ class Context {
   BinaryExpression(e) {
     e.expression1 = this.analyze(e.expression1)
     e.expression2 = this.analyze(e.expression2)
+    console.log(util.inspect(e.expression1))
+    console.log(util.inspect(e.expression2))
+
 
     if (["apple", "orange"].includes(e.op)) {
       check(e.expression1).isBoolean()
       check(e.expression2).isBoolean()
-      e.type = Type.BOOLEAN
+      e.type = 'boolberry'
     } else if (
       ["plus", "minus", "times", "divby", "mod", "to the power of"].includes(
         e.op
@@ -431,10 +428,10 @@ class Context {
     } else if (["less", "less equals", "more", "more equals"].includes(e.op)) {
       check(e.expression1).isNumeric()
       check(e.expression1).hasSameTypeAs(e.expression2)
-      e.type = Type.BOOLEAN
+      e.type = 'boolberry'
     } else if (["equals", "not equals"].includes(e.op)) {
       check(e.expression1).hasSameTypeAs(e.expression2)
-      e.type = Type.BOOLEAN
+      e.type = 'boolberry'
     }
     return e
   }
@@ -442,12 +439,13 @@ class Context {
     e.expression = this.analyze(e.expression)
     if (e.op === "not") {
       check(e.expression).isBoolean()
-      e.type = Type.BOOLEAN
+      e.type = 'boolberry'
     }
     return e
   }
   // Ask Dr. Toal how to add the remaining expression types
   Call(c) {
+    console.log(c)
     c.callee = this.analyze(c.callee)
     check(c.callee).isCallable()
     c.args = this.analyze(c.args)

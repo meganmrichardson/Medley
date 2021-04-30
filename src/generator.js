@@ -37,8 +37,9 @@ export default function generate(program) {
       //console.log("d.func params:", d.func.parameters[0])
       //d.func.parameters.id
       //${gen(d.func.parameters.id.name).join(", ")}
+      console.log(d.func.parameters)
       output.push(
-        `function ${gen(d.func.name)}(${gen(d.func.parameters[0].id.name)}) {`
+        `function ${gen(d.func)}(${gen(d.func.parameters[0].variable)}) {`
       )
       // issue with analyzer.js, maybe the identifier expression isn't defined correctly? That or Params is the issue
       gen(d.block)
@@ -155,6 +156,8 @@ export default function generate(program) {
     ArrayType(e) {
       return `[${gen(e.elements).join(",")}]`
     },
+    // Dictionary type
+    // Print
     // MemberExpression(e) {
     //   return `(${gen(e.object)}[${JSON.stringify(gen(e.field))}])`
     // },

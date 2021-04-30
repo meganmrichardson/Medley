@@ -58,7 +58,7 @@ const semanticChecks = [
     'formelon intberry i is 5 | i less 10 | i++ -> juice "hi" | <-'
   ],
   ["or", "juice gmo orange organic |"],
-  ["and", "juice gmo apple not organic |"],
+  ["and", "juice gmo apple organic |"],
   [
     "arithmetic",
     "intberry x is 1 | juice 2 times 3 plus 5 divby 2 minus 5 mod 8 |"
