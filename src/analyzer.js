@@ -158,6 +158,12 @@ const check = self => ({
       "Call of non-function or non-constructor"
     )
   },
+  isCallableFromCallee() {
+    must(
+      self.callee.type.constructor == FunctionType,
+      "Call of non-function or non-constructor"
+    )
+  },
   returnsNothing() {
     must(
       self.type.returnType === Type.VOID,
@@ -178,7 +184,7 @@ const check = self => ({
     parameters.forEach((p, i) => check(self[i]).isAssignableTo(p.type))
   },
   matchParametersOf(callee) {
-    check(self).match(callee.func.parameters)
+    check(self).match(callee.parameters)
   }
 })
 
@@ -409,11 +415,9 @@ class Context {
     }
     return e
   }
-  // Ask Dr. Toal how to add the remaining expression types
   Call(c) {
-    console.log(c)
     c.callee = this.analyze(c.callee)
-    check(c.callee).isCallable()
+    check(c).isCallableFromCallee()
     c.args = this.analyze(c.args)
     check(c.args).matchParametersOf(c.callee)
     c.type = c.callee.returnType
