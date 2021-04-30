@@ -85,15 +85,11 @@ const semanticErrors = [
   ["non-int decrement", 'stringberry x is "" | x-- |', /an integer/],
   ["undeclared id", "juice x |", /Identifier x not declared/],
   // ["redeclared id", "let x = 1;let x = 1;", /Identifier x already declared/],
-  // [
-  //   "assign bad type",
-  //   "intberry x is 1 | x is organic |",
-  //   /Cannot assign a boolean to a int/
-  // ],
+  ["assign bad type", "intberry x is 1 | x is organic |", /Not assignable/],
   // [
   //   "assign bad array type",
   //   "berrybasket~intberry~ toppings is ~3;organic~ |",
-  //   /Cannot assign a \[boolean\] to a int/
+  //   /Not assignable/
   // ],
   [
     "Break outside loop but inside function",
@@ -105,11 +101,11 @@ const semanticErrors = [
     "split |",
     /Break can only appear in a loop/
   ],
-  // [
-  //   "break inside function",
-  //   "while gmo {function f() {break;}}",
-  //   /Break can only appear in a loop/,
-  // ],
+  [
+    "break inside function",
+    "intberry blend fn (intberry j) -> split | <-",
+    /Break can only appear in a loop/
+  ],
   [
     "return outside function",
     "squeeze 2 |",
@@ -132,7 +128,7 @@ const semanticErrors = [
   ["bad types for >", "juice gmo more 1 |", /Expected a number/],
   ["bad types for >=", "juice gmo more equals 1 |", /Expected a number/],
   ["bad types for ==", `juice 2 equals "hi" |`, /Not same type/],
-  // ["bad types for negation", "juice not organic |", /a boolean/],
+  ["bad types for negation", "juice not 1 |", /a boolean/],
   ["bad types for not", 'juice not "hello" |', /a boolean/]
 
   // [
