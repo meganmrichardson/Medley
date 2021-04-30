@@ -1,2 +1,3 @@
-intberry blend fn (intberry five) -> <- 
-fn(5) |
+floatberry blend toCelsius(floatberry fahrenheit) ->
+<-
+toCelsius(2.3 plus 3.3) |

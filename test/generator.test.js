@@ -133,13 +133,13 @@ const fixtures = [
     source: `
     floatberry blend toCelsius(floatberry fahrenheit) ->
     <-
-    toCelsius(2 plus 3) |
+    toCelsius(2.3 plus 3.5) |
     `,
     expected: dedent`
     function toCelsius_1(fahrenheit_2) {
       
     }
-    toCelsius(2 + 3);
+    toCelsius_1((2.3 + 3.5));
     `
   },
   {

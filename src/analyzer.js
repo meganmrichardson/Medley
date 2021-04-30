@@ -419,6 +419,7 @@ class Context {
     c.callee = this.analyze(c.callee)
     check(c).isCallableFromCallee()
     c.args = this.analyze(c.args)
+    console.log(c)
     check(c.args).matchParametersOf(c.callee)
     c.type = c.callee.returnType
     return c
