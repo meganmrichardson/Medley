@@ -24,7 +24,6 @@ export default function generate(program) {
       gen(p.statements)
     },
     Assignment(d) {
-      console.log(d)
       if (
         d.type === "boolberry" ||
         d.type === "intberry" ||
@@ -32,8 +31,20 @@ export default function generate(program) {
         d.type === "stringberry"
       ) {
         output.push(`let ${gen(d.variable)} = ${gen(d.source)};`)
-      } else {
+      } else if (d.type["baseType"]) {
         output.push(`let ${gen(d.variable)} = [${gen(d.source).join(", ")}];`)
+      } else {
+        let pairs = gen(d.source)
+        let genPairs = []
+        for (let i = 0; i < pairs.length; i++) {
+          let newPair = `${pairs[i].literal1.value}: ${pairs[i].literal2.value}`
+          genPairs.push(newPair)
+        }
+        output.push(
+          `let ${gen(d.variable)} = {${gen(genPairs)
+            .join(", ")
+            .replace(/"/g, "")}};`
+        )
       }
     },
     Declaration(d) {
@@ -162,10 +173,20 @@ export default function generate(program) {
       return `!${gen(e.expression)}`
     },
     ArrayType(e) {
-      console.log(e.elements.join(", "))
+      // console.log(e.elements.join(", "))
       return `[${gen(e.elements).join(", ")}]`
     },
-    // Dictionary type
+    DictType(t) {
+      // console.log(t)
+      return t
+    },
+    DictContent(t) {
+      // console.log(t)
+      return t
+    },
+    DictionaryList(d) {
+      return d
+    },
     // Print
     // MemberExpression(e) {
     //   return `(${gen(e.object)}[${JSON.stringify(gen(e.field))}])`

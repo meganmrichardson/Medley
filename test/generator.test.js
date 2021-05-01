@@ -159,6 +159,15 @@ const fixtures = [
     expected: dedent`
     let s_1 = ["strawberry", "blueberry"];
     `
+  },
+  {
+    name: "dictionary",
+    source: `
+    fruitbasket~intberry, intberry~ toppings is ~~1, 1; 2, 2~~ |
+    `,
+    expected: dedent`
+    let toppings_1 = {1: 1, 2: 2};
+    `
   }
 ]
 

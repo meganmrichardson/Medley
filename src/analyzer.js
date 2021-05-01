@@ -242,7 +242,7 @@ class Context {
   }
   // Work on assignment node:
   Assignment(d) {
-    console.log(d)
+    // console.log(d)
     d.name = this.analyze(d.name)
     d.variable = new Variable(d.name)
     d.type = this.analyzeType(d.type)
@@ -257,8 +257,11 @@ class Context {
     ) {
       d.source = this.analyze(d.source)
       check(d.variable).hasSameTypeAs(d.source)
-    } else {
+    } else if (d.type["baseType"]) {
       d.source = d.source.literals
+    } else {
+      // console.log(d)
+      d.source = d.source.content
     }
     // check for types in array list and dictionary list
     return d
@@ -310,13 +313,17 @@ class Context {
     return t
   }
   DictContent(t) {
+    console.log(t)
     t.literal1 = this.analyze(t.literal1)
     t.literal2 = this.analyze(t.literal2)
     check
     return t
   }
   // DictionaryList used and fixes errors but empty (???)
-  DictionaryList(t) {}
+  DictionaryList(t) {
+    // return t
+    // console.log(t)
+  }
   FunctionType(t) {
     t.parameterTypes = this.analyzeType(t.parameterTypes)
     t.returnType = this.analyzeType(t.returnType)
