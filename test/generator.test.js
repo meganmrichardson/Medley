@@ -18,6 +18,15 @@ const fixtures = [
     `
   },
   {
+    name: "string assignment",
+    source: `
+    stringberry x is "hi" |
+    `,
+    expected: dedent`
+    let x_1 = "hi";
+    `
+  },
+  {
     name: "declaration",
     source: `floatberry x |`,
     expected: dedent`let x_1;
@@ -148,7 +157,7 @@ const fixtures = [
     berrybasket~stringberry~ s is ~"strawberry" ; "blueberry"~ |
     `,
     expected: dedent`
-    let s = ["strawberry", "blueberry"];
+    let s_1 = ["strawberry", "blueberry"];
     `
   }
 ]

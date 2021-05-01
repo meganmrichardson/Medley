@@ -24,7 +24,17 @@ export default function generate(program) {
       gen(p.statements)
     },
     Assignment(d) {
-      output.push(`let ${gen(d.variable)} = ${gen(d.source)};`)
+      console.log(d)
+      if (
+        d.type === "boolberry" ||
+        d.type === "intberry" ||
+        d.type === "floatberry" ||
+        d.type === "stringberry"
+      ) {
+        output.push(`let ${gen(d.variable)} = ${gen(d.source)};`)
+      } else {
+        output.push(`let ${gen(d.variable)} = [${gen(d.source).join(", ")}];`)
+      }
     },
     Declaration(d) {
       output.push(`let ${gen(d.variable)};`)
@@ -152,7 +162,8 @@ export default function generate(program) {
       return `!${gen(e.expression)}`
     },
     ArrayType(e) {
-      return `[${gen(e.elements).join(",")}]`
+      console.log(e.elements.join(", "))
+      return `[${gen(e.elements).join(", ")}]`
     },
     // Dictionary type
     // Print
@@ -178,7 +189,11 @@ export default function generate(program) {
       // console.log("L", l)
     },
     Literal(e) {
-      return e.value
+      if (typeof e.value === "string") {
+        return `"${e.value}"`
+      } else {
+        return e.value
+      }
     },
     Number(e) {
       return e

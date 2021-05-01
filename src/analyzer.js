@@ -242,10 +242,11 @@ class Context {
   }
   // Work on assignment node:
   Assignment(d) {
+    console.log(d)
     d.name = this.analyze(d.name)
     d.variable = new Variable(d.name)
     d.type = this.analyzeType(d.type)
-    d.source = this.analyze(d.source)
+    // d.source = this.analyze(d.source)
     d.variable.type = d.type
     this.add(d.variable.name, d.variable)
     if (
@@ -254,7 +255,10 @@ class Context {
       d.type === "floatberry" ||
       d.type === "stringberry"
     ) {
+      d.source = this.analyze(d.source)
       check(d.variable).hasSameTypeAs(d.source)
+    } else {
+      d.source = d.source.literals
     }
     // check for types in array list and dictionary list
     return d
