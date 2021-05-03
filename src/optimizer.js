@@ -1,6 +1,7 @@
 import * as ast from "./ast.js"
 
 export default function optimize(node) {
+  console.log(node)
   return optimizers[node.constructor.name](node)
 }
 
@@ -9,88 +10,63 @@ const optimizers = {
     p.statements = optimize(p.statements)
     return p
   },
-  //   VariableDeclaration(d) {
-  //     d.initializer = optimize(d.initializer)
-  //     return d
-  //   },
-  //   TypeDeclaration(d) {
-  //     return d
-  //   },
-  //   FunctionDeclaration(d) {
-  //     console.log(d)
-  //     console.log(d.fun)
-  //     d.body = optimize(d.body)
-  //     return d
-  //   },
+  Assignment(d) {
+    d.source = optimize(d.source)
+    return d
+  },
+  Declaration(d) {
+    return d
+  },
+  FuncDecl(d) {
+    d.block = optimize(d.block)
+    return d
+  },
   Variable(v) {
     return v
-  }
-  //   Function(f) {
-  //     // f.body = optimize(f.body)
-  //     return f
-  //   },
-  //   Parameter(p) {
-  //     return p
-  //   },
-  //   Increment(s) {
-  //     return s
-  //   },
-  //   Decrement(s) {
-  //     return s
-  //   },
-  //   Assignment(s) {
-  //     s.source = optimize(s.source)
-  //     s.target = optimize(s.target)
-  //     if (s.source === s.target) {
-  //       return []
-  //     }
-  //     return s
-  //   },
-  //   BreakStatement(s) {
-  //     return s
-  //   },
-  //   ReturnStatement(s) {
-  //     s.expression = optimize(s.expression)
-  //     return s
-  //   },
-  //   ShortReturnStatement(s) {
-  //     return s
-  //   },
-  //   IfStatement(s) {
-  //     s.test = optimize(s.test)
-  //     s.consequent = optimize(s.consequent)
-  //     s.alternate = optimize(s.alternate)
-  //     if (s.test.constructor === Boolean) {
-  //       return s.test ? s.consequent : s.alternate
-  //     }
-  //     return s
-  //   },
-  //   ShortIfStatement(s) {
-  //     s.test = optimize(s.test)
-  //     s.consequent = optimize(s.consequent)
-  //     if (s.test.constructor === Boolean) {
-  //       return s.test ? s.consequent : []
-  //     }
-  //     return s
-  //   },
-  //   WhileStatement(s) {
-  //     s.test = optimize(s.test)
-  //     if (s.test === false) {
-  //       // while false is a no-op
-  //       return []
-  //     }
-  //     s.body = optimize(s.body)
-  //     return s
-  //   },
-  //   RepeatStatement(s) {
-  //     s.count = optimize(s.count)
-  //     if (s.count === 0) {
-  //       // repeat 0 times is a no-op
-  //       return []
-  //     }
-  //     s.body = optimize(s.body)
-  //     return s
-  //   },
+  },
+  Function(f) {
+    return f
+  },
+  Parameter(p) {
+    return p
+  },
+  // Increment includes decrement (should we add decrement?)
+  Increment(s) {
+    return s
+  },
+  Ressignment(s) {
+    s.source = optimize(s.source)
+    s.targets = optimize(s.targets)
+    if (s.source === s.targets) {
+      return []
+    }
+    return s
+  },
+  Break(s) {
+    return s
+  },
+  Return(s) {
+    s.returnValue = optimize(s.returnValue)
+    return s
+  },
+  Conditional(s) {
+    s.tests = optimize(s.tests)
+    s.consequents = optimize(s.consequents)
+    s.alternates = optimize(s.alternates)
+    if (s.tests.constructor === Boolean) {
+      return s.tests ? s.consequents : s.alternates
+    }
+    return s
+  },
+  WLoop(s) {
+    s.test = optimize(s.test)
+    if (s.test === false) {
+      // while false is a no-op
+      return []
+    }
+    s.body = optimize(s.body)
+    return s
+  },
   //   ForRangeStatement(s) {
   //     s.low = optimize(s.low)
   //     s.high = optimize(s.high)
@@ -112,70 +88,60 @@ const optimizers = {
   //     }
   //     return s
   //   },
-  //   Conditional(e) {
-  //     e.test = optimize(e.test)
-  //     e.consequent = optimize(e.consequent)
-  //     e.alternate = optimize(e.alternate)
-  //     if (e.test.constructor === Boolean) {
-  //       return e.test ? e.consequent : e.alternate
-  //     }
-  //     return e
-  //   },
-  //   BinaryExpression(e) {
-  //     e.left = optimize(e.left)
-  //     e.right = optimize(e.right)
-  //     if (e.op === "??") {
-  //       // Coalesce Empty Optional Unwraps
-  //       if (e.left.constructor === ast.EmptyOptional) {
-  //         return e.right
-  //       }
-  //     } else if (e.op === "&&") {
-  //       // Optimize boolean constants in && and ||
-  //       if (e.left === true) return e.right
-  //       else if (e.right === true) return e.left
-  //     } else if (e.op === "||") {
-  //       if (e.left === false) return e.right
-  //       else if (e.right === false) return e.left
-  //     } else if ([Number, BigInt].includes(e.left.constructor)) {
-  //       // Numeric constant folding when left operand is constant
-  //       if ([Number, BigInt].includes(e.right.constructor)) {
-  //         if (e.op === "+") return e.left + e.right
-  //         else if (e.op === "-") return e.left - e.right
-  //         else if (e.op === "*") return e.left * e.right
-  //         else if (e.op === "/") return e.left / e.right
-  //         else if (e.op === "**") return e.left ** e.right
-  //         else if (e.op === "<") return e.left < e.right
-  //         else if (e.op === "<=") return e.left <= e.right
-  //         else if (e.op === "==") return e.left === e.right
-  //         else if (e.op === "!=") return e.left !== e.right
-  //         else if (e.op === ">=") return e.left >= e.right
-  //         else if (e.op === ">") return e.left > e.right
-  //       } else if (e.left === 0 && e.op === "+") return e.right
-  //       else if (e.left === 1 && e.op === "*") return e.right
-  //       else if (e.left === 0 && e.op === "-") return new ast.UnaryExpression("-", e.right)
-  //       else if (e.left === 1 && e.op === "**") return 1
-  //       else if (e.left === 0 && ["*", "/"].includes(e.op)) return 0
-  //     } else if (e.right.constructor === Number) {
-  //       // Numeric constant folding when right operand is constant
-  //       if (["+", "-"].includes(e.op) && e.right === 0) return e.left
-  //       else if (["*", "/"].includes(e.op) && e.right === 1) return e.left
-  //       else if (e.op === "*" && e.right === 0) return 0
-  //       else if (e.op === "**" && e.right === 0) return 1
-  //     }
-  //     return e
-  //   },
-  //   UnaryExpression(e) {
-  //     e.operand = optimize(e.operand)
-  //     if (e.operand.constructor === Number) {
-  //       if (e.op === "-") {
-  //         return -e.operand
-  //       }
-  //     }
-  //     return e
-  //   },
-  //   EmptyOptional(e) {
-  //     return e
-  //   },
+  BinaryExpression(e) {
+    e.expression1 = optimize(e.expression1)
+    e.expression2 = optimize(e.expression2)
+    if (e.op === "apple") {
+      // Optimize boolean constants in && and ||
+      if (e.expression1 === true) return e.expression2
+      else if (e.expression2 === true) return e.expression1
+    } else if (e.op === "orange") {
+      if (e.expression1 === false) return e.expression2
+      else if (e.expression2 === false) return e.expression1
+    } else if ([Number, BigInt].includes(e.expression1.constructor)) {
+      // Numeric constant folding when left operand is constant
+      if ([Number, BigInt].includes(e.expression2.constructor)) {
+        if (e.op === "plus") {
+          return e.expression1 + e.expression2
+        } else if (e.op === "minus") return e.expression1 - e.expression2
+        else if (e.op === "times") return e.expression1 * e.expression2
+        else if (e.op === "divby") return e.expression1 / e.expression2
+        else if (e.op === "mod") return e.expression1 / e.expression2
+        else if (e.op === "to the power of")
+          return e.expression1 ** e.expression2
+        else if (e.op === "less") return e.expression1 < e.expression2
+        else if (e.op === "less equals") return e.expression1 <= e.expression2
+        else if (e.op === "equals") return e.expression1 === e.expression2
+        else if (e.op === "not equals") return e.expression1 !== e.expression2
+        else if (e.op === "more equals") return e.expression1 >= e.expression2
+        else if (e.op === "more") return e.expression1 > e.expression2
+      } else if (e.expression1 === 0 && e.op === "plus") return e.expression2
+      else if (e.expression1 === 1 && e.op === "times") return e.expression2
+      else if (e.expression1 === 0 && e.op === "minus")
+        return new ast.UnaryExpression("minus", e.expression2)
+      else if (e.expression1 === 1 && e.op === "to the power of") return 1
+      else if (e.expression1 === 0 && ["times", "divby"].includes(e.op))
+        return 0
+    } else if (e.expression2.constructor === Number) {
+      // Numeric constant folding when right operand is constant
+      if (["plus", "minus"].includes(e.op) && e.expression2 === 0)
+        return e.expression1
+      else if (["times", "divby"].includes(e.op) && e.expression2 === 1)
+        return e.expression1
+      else if (e.op === "times" && e.expression2 === 0) return 0
+      else if (e.op === "to the power of" && e.expression2 === 0) return 1
+    }
+    return e
+  },
+  UnaryExpression(e) {
+    e.expression = optimize(e.expression)
+    if (e.expression.constructor === Number) {
+      if (e.op === "minus") {
+        return -e.expression
+      }
+    }
+    return e
+  },
   //   SubscriptExpression(e) {
   //     e.array = optimize(e.array)
   //     e.index = optimize(e.index)
@@ -192,20 +158,20 @@ const optimizers = {
   //     e.object = optimize(e.object)
   //     return e
   //   },
-  //   Call(c) {
-  //     c.callee = optimize(c.callee)
-  //     c.args = optimize(c.args)
-  //     return c
-  //   },
-  //   BigInt(e) {
-  //     return e
-  //   },
-  //   Number(e) {
-  //     return e
-  //   },
-  //   Boolean(e) {
-  //     return e
-  //   },
+  Call(c) {
+    c.callee = optimize(c.callee)
+    c.args = optimize(c.args)
+    return c
+  },
+  BigInt(e) {
+    return e
+  },
+  Number(e) {
+    return e
+  },
+  Boolean(e) {
+    return e
+  }
   //   String(e) {
   //     return e
   //   },

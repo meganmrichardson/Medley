@@ -3,22 +3,24 @@ import optimize from "../src/optimizer.js"
 import * as ast from "../src/ast.js"
 
 // Make some test cases easier to read
-// const x = new ast.Variable("x", false)
-// const xpp = new ast.Increment(x)
+const x = new ast.Variable("x")
+const xpp = new ast.Increment(x)
 // const xmm = new ast.Decrement(x)
 // const return1p1 = new ast.ReturnStatement(new ast.BinaryExpression("+", 1, 1))
 // const return2 = new ast.ReturnStatement(2)
 // const returnX = new ast.ReturnStatement(x)
-// const onePlusTwo = new ast.BinaryExpression("+", 1, 2)
+const onePlusTwo = new ast.BinaryExpression("plus", 1, 2)
 // const identity = Object.assign(new ast.Function("id"), { body: returnX })
 // const intFun = body => new ast.FunctionDeclaration("f", [], "int", body)
-// const callIdentity = args => new ast.Call(identity, args)
-// const or = (...d) => d.reduce((x, y) => new ast.BinaryExpression("||", x, y))
-// const and = (...c) => c.reduce((x, y) => new ast.BinaryExpression("&&", x, y))
-// const less = (x, y) => new ast.BinaryExpression("<", x, y)
-// const eq = (x, y) => new ast.BinaryExpression("==", x, y)
-// const times = (x, y) => new ast.BinaryExpression("*", x, y)
-// const neg = x => new ast.UnaryExpression("-", x)
+const callIdentity = args => new ast.Call(identity, args)
+const or = (...d) =>
+  d.reduce((x, y) => new ast.BinaryExpression("orange", x, y))
+const and = (...c) =>
+  c.reduce((x, y) => new ast.BinaryExpression("apple", x, y))
+const less = (x, y) => new ast.BinaryExpression("less", x, y)
+const eq = (x, y) => new ast.BinaryExpression("equals", x, y)
+const times = (x, y) => new ast.BinaryExpression("times", x, y)
+const neg = x => new ast.UnaryExpression("minus", x)
 // const array = (...elements) => new ast.ArrayExpression(elements)
 // const emptyArray = new ast.EmptyArray(ast.Type.INT)
 // const sub = (a, e) => new ast.SubscriptExpression(a, e)
@@ -28,35 +30,39 @@ import * as ast from "../src/ast.js"
 // const some = x => new ast.UnaryExpression("some", x)
 
 const tests = [
-  //   ["folds +", new ast.BinaryExpression("+", 5, 8), 13],
-  //   ["folds -", new ast.BinaryExpression("-", 5n, 8n), -3n],
-  //   ["folds *", new ast.BinaryExpression("*", 5, 8), 40],
-  //   ["folds /", new ast.BinaryExpression("/", 5, 8), 0.625],
-  //   ["folds **", new ast.BinaryExpression("**", 5, 8), 390625],
-  //   ["folds <", new ast.BinaryExpression("<", 5, 8), true],
-  //   ["folds <=", new ast.BinaryExpression("<=", 5, 8), true],
-  //   ["folds ==", new ast.BinaryExpression("==", 5, 8), false],
-  //   ["folds !=", new ast.BinaryExpression("!=", 5, 8), true],
-  //   ["folds >=", new ast.BinaryExpression(">=", 5, 8), false],
-  //   ["folds >", new ast.BinaryExpression(">", 5, 8), false],
-  //   ["optimizes +0", new ast.BinaryExpression("+", x, 0), x],
-  //   ["optimizes -0", new ast.BinaryExpression("-", x, 0), x],
-  //   ["optimizes *1", new ast.BinaryExpression("*", x, 1), x],
-  //   ["optimizes /1", new ast.BinaryExpression("/", x, 1), x],
-  //   ["optimizes *0", new ast.BinaryExpression("*", x, 0), 0],
-  //   ["optimizes 0*", new ast.BinaryExpression("*", 0, x), 0],
-  //   ["optimizes 0/", new ast.BinaryExpression("/", 0, x), 0],
-  //   ["optimizes 0+", new ast.BinaryExpression("+", 0, x), x],
-  //   ["optimizes 0-", new ast.BinaryExpression("-", 0, x), neg(x)],
-  //   ["optimizes 1*", new ast.BinaryExpression("*", 1, x), x],
-  //   ["folds negation", new ast.UnaryExpression("-", 8), -8],
-  //   ["optimizes 1**", new ast.BinaryExpression("**", 1, x), 1],
-  //   ["optimizes **0", new ast.BinaryExpression("**", x, 0), 1],
-  //   ["removes left false from ||", or(false, less(x, 1)), less(x, 1)],
-  //   ["removes right false from ||", or(less(x, 1), false), less(x, 1)],
-  //   ["removes left true from &&", and(true, less(x, 1)), less(x, 1)],
-  //   ["removes right true from &&", and(less(x, 1), true), less(x, 1)],
-  //   ["removes x=x at beginning", [new ast.Assignment(x, x), xpp], [xpp]],
+  ["folds plus", new ast.BinaryExpression("plus", 5, 8), 13],
+  ["folds minus", new ast.BinaryExpression("minus", 5, 8), -3],
+  ["folds times", new ast.BinaryExpression("times", 5, 8), 40],
+  ["folds divby", new ast.BinaryExpression("divby", 5, 8), 0.625],
+  [
+    "folds to the power of",
+    new ast.BinaryExpression("to the power of", 5, 8),
+    390625
+  ],
+  ["folds less", new ast.BinaryExpression("less", 5, 8), true],
+  ["folds less equals", new ast.BinaryExpression("less equals", 5, 8), true],
+  ["folds equals", new ast.BinaryExpression("equals", 5, 8), false],
+  ["folds not equals", new ast.BinaryExpression("not equals", 5, 8), true],
+  ["folds more equals", new ast.BinaryExpression("more equals", 5, 8), false],
+  ["folds more", new ast.BinaryExpression("more", 5, 8), false],
+  ["optimizes +0", new ast.BinaryExpression("plus", x, 0), x],
+  ["optimizes -0", new ast.BinaryExpression("minus", x, 0), x],
+  ["optimizes *1", new ast.BinaryExpression("times", x, 1), x],
+  ["optimizes /1", new ast.BinaryExpression("divby", x, 1), x],
+  ["optimizes *0", new ast.BinaryExpression("times", x, 0), 0],
+  ["optimizes 0*", new ast.BinaryExpression("times", 0, x), 0],
+  ["optimizes 0/", new ast.BinaryExpression("divby", 0, x), 0],
+  ["optimizes 0+", new ast.BinaryExpression("plus", 0, x), x],
+  ["optimizes 0-", new ast.BinaryExpression("minus", 0, x), neg(x)],
+  ["optimizes 1*", new ast.BinaryExpression("times", 1, x), x],
+  ["folds negation", new ast.UnaryExpression("minus", 8), -8],
+  ["optimizes 1**", new ast.BinaryExpression("to the power of", 1, x), 1],
+  ["optimizes **0", new ast.BinaryExpression("to the power of", x, 0), 1],
+  ["removes left false from orange", or(false, less(x, 1)), less(x, 1)],
+  ["removes right false from orange", or(less(x, 1), false), less(x, 1)],
+  ["removes left true from apple", and(true, less(x, 1)), less(x, 1)],
+  ["removes right true from apple", and(less(x, 1), true), less(x, 1)]
+  //   ["removes x=x at beginning", [new ast.Reassignment(x, x), xpp], [xpp]],
   //   ["removes x=x at end", [xpp, new ast.Assignment(x, x)], [xpp]],
   //   ["removes x=x in middle", [xpp, new ast.Assignment(x, x), xpp], [xpp, xpp]],
   //   ["optimizes if-true", new ast.IfStatement(true, xpp, []), xpp],
