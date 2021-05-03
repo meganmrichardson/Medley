@@ -2,6 +2,7 @@ import * as ast from "./ast.js"
 
 export default function optimize(node) {
   console.log(node)
+  console.log(node.constructor.name)
   return optimizers[node.constructor.name](node)
 }
 
@@ -51,8 +52,12 @@ const optimizers = {
   },
   Conditional(s) {
     s.tests = optimize(s.tests)
-    s.consequents = optimize(s.consequents)
-    s.alternates = optimize(s.alternates)
+    if (s.consequents.length > 0) {
+      optimize(s.consequents) // how to deal with empty arrays??
+    }
+    if (s.alternates.length > 0) {
+      optimize(s.alternates)
+    }
     if (s.tests.constructor === Boolean) {
       return s.tests ? s.consequents : s.alternates
     }
@@ -61,25 +66,24 @@ const optimizers = {
   WLoop(s) {
     s.test = optimize(s.test)
     if (s.test === false) {
-      // while false is a no-op
       return []
     }
     s.body = optimize(s.body)
     return s
   },
-  //   ForRangeStatement(s) {
-  //     s.low = optimize(s.low)
-  //     s.high = optimize(s.high)
-  //     s.body = optimize(s.body)
-  //     if (s.low.constructor === Number) {
-  //       if (s.high.constructor === Number) {
-  //         if (s.low > s.high) {
-  //           return []
-  //         }
-  //       }
-  //     }
-  //     return s
-  //   },
+  FLoop(s) {
+    s.low = optimize(s.low)
+    s.high = optimize(s.high)
+    s.body = optimize(s.body)
+    if (s.low.constructor === Number) {
+      if (s.high.constructor === Number) {
+        if (s.low > s.high) {
+          return []
+        }
+      }
+    }
+    return s
+  },
   //   ForStatement(s) {
   //     s.collection = optimize(s.collection)
   //     s.body = optimize(s.body)
@@ -171,7 +175,7 @@ const optimizers = {
   },
   Boolean(e) {
     return e
-  }
+  },
   //   String(e) {
   //     return e
   //   },

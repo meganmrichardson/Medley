@@ -1,4 +1,4 @@
-import assert from "assert/strict"
+import assert from "assert"
 import optimize from "../src/optimizer.js"
 import * as ast from "../src/ast.js"
 
@@ -22,7 +22,7 @@ const eq = (x, y) => new ast.BinaryExpression("equals", x, y)
 const times = (x, y) => new ast.BinaryExpression("times", x, y)
 const neg = x => new ast.UnaryExpression("minus", x)
 // const array = (...elements) => new ast.ArrayExpression(elements)
-// const emptyArray = new ast.EmptyArray(ast.Type.INT)
+//const emptyArray = new ast.EmptyArray(ast.Type.INT)
 // const sub = (a, e) => new ast.SubscriptExpression(a, e)
 // const unwrapElse = (o, e) => new ast.BinaryExpression("??", o, e)
 // const conditional = (x, y, z) => new ast.Conditional(x, y, z)
@@ -37,7 +37,7 @@ const tests = [
   [
     "folds to the power of",
     new ast.BinaryExpression("to the power of", 5, 8),
-    390625
+    390625,
   ],
   ["folds less", new ast.BinaryExpression("less", 5, 8), true],
   ["folds less equals", new ast.BinaryExpression("less equals", 5, 8), true],
@@ -61,26 +61,26 @@ const tests = [
   ["removes left false from orange", or(false, less(x, 1)), less(x, 1)],
   ["removes right false from orange", or(less(x, 1), false), less(x, 1)],
   ["removes left true from apple", and(true, less(x, 1)), less(x, 1)],
-  ["removes right true from apple", and(less(x, 1), true), less(x, 1)]
+  ["removes right true from apple", and(less(x, 1), true), less(x, 1)],
   //   ["removes x=x at beginning", [new ast.Reassignment(x, x), xpp], [xpp]],
   //   ["removes x=x at end", [xpp, new ast.Assignment(x, x)], [xpp]],
   //   ["removes x=x in middle", [xpp, new ast.Assignment(x, x), xpp], [xpp, xpp]],
-  //   ["optimizes if-true", new ast.IfStatement(true, xpp, []), xpp],
-  //   ["optimizes if-false", new ast.IfStatement(false, [], xpp), xpp],
+  ["optimizes if-true", new ast.Conditional(true, xpp, []), xpp],
+  ["optimizes if-false", new ast.Conditional(false, [], xpp), xpp],
   //   ["optimizes short-if-true", new ast.ShortIfStatement(true, xmm), xmm],
   //   ["optimizes short-if-false", [new ast.ShortIfStatement(false, xpp)], []],
-  //   ["optimizes while-false", [new ast.WhileStatement(false, xpp)], []],
+  ["optimizes while-false", new ast.WLoop(false, xpp), []],
   //   ["optimizes repeat-0", [new ast.RepeatStatement(0, xpp)], []],
   //   ["optimizes for-range", [new ast.ForRangeStatement(x, 5, "...", 3, xpp)], []],
-  //   ["optimizes for-empty-array", [new ast.ForStatement(x, emptyArray, xpp)], []],
+  ["optimizes for-empty-array", new ast.FLoop(x, [], xpp), []], // figure out how to write test and body for this test!!!!!
   //   [
   //     "applies if-false after folding",
   //     new ast.ShortIfStatement(eq(1, 1), xpp),
   //     xpp
   //   ],
   //   ["optimizes away nil", unwrapElse(emptyOptional, 3), 3],
-  //   ["optimizes left conditional true", conditional(true, 55, 89), 55],
-  //   ["optimizes left conditional false", conditional(false, 55, 89), 89],
+  ["optimizes left conditional true", new ast.Conditional(true, 55, 89), 55],
+  ["optimizes left conditional false", new ast.Conditional(false, 55, 89), 89],
   //   ["optimizes in functions", intFun(return1p1), intFun(return2)],
   //   ["optimizes in subscripts", sub(x, onePlusTwo), sub(x, 3)],
   //   ["optimizes in array literals", array(0, onePlusTwo, 9), array(0, 3, 9)],
