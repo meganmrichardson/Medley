@@ -196,7 +196,7 @@ function fibonacci(num) {
 #### Medley
 
 ```
-blend fibonacci(intberry num) ->
+intberry blend fibonacci(intberry num) ->
     intberry num1 is 0 |
     intberry num2 is 1 |
     intberry sum |
@@ -226,11 +226,11 @@ def odd_or_even(num):
 #### Medley
 
 ```
-blend oddOrEven(intberry num) ->
+stringberry blend oddOrEven(intberry num) ->
     ifmelon num mod 2 equals 0 ->
-        juice "The number is even." |
+        squeeze "The number is even." |
     <- elsemelon ->
-        juice "The number is odd." |
+        squeeze "The number is odd." |
     <-
 <-
 ```
@@ -248,7 +248,7 @@ function toCelsius(fahrenheit) {
 #### Medley
 
 ```
-blend toCelsius(floatberry fahrenheit) ->
+floatberry blend toCelsius(floatberry fahrenheit) ->
     squeeze (5 divby 9) times (fahrenheit minus 32) |
 <-
 ```
@@ -269,7 +269,7 @@ function firstFactorial(x) {
 #### Medley
 
 ```
-blend firstFactorial(intberry num) ->
+intberry blend firstFactorial(intberry num) ->
     ifmelon num equals 0 orange num equals 1 ->
         squeeze 1 |
     <-
