@@ -6,12 +6,13 @@ import * as ast from "../src/ast.js"
 const x = new ast.Variable("x")
 const xpp = new ast.Increment(x)
 // const xmm = new ast.Decrement(x)
-// const return1p1 = new ast.ReturnStatement(new ast.BinaryExpression("+", 1, 1))
-// const return2 = new ast.ReturnStatement(2)
+const return1p1 = new ast.Return(new ast.BinaryExpression("plus", 1, 1))
+const return2 = new ast.Return(2)
 // const returnX = new ast.ReturnStatement(x)
 const onePlusTwo = new ast.BinaryExpression("plus", 1, 2)
 // const identity = Object.assign(new ast.Function("id"), { body: returnX })
-// const intFun = body => new ast.FunctionDeclaration("f", [], "int", body)
+const intFun = body =>
+  new ast.FuncDecl(new ast.Function("f", [], "intberry"), body)
 const callIdentity = args => new ast.Call(identity, args)
 const or = (...d) =>
   d.reduce((x, y) => new ast.BinaryExpression("orange", x, y))
@@ -22,7 +23,7 @@ const eq = (x, y) => new ast.BinaryExpression("equals", x, y)
 const times = (x, y) => new ast.BinaryExpression("times", x, y)
 const neg = x => new ast.UnaryExpression("minus", x)
 // const array = (...elements) => new ast.ArrayExpression(elements)
-//const emptyArray = new ast.EmptyArray(ast.Type.INT)
+// const emptyArray = new ast.EmptyArray(ast.Type.INT)
 // const sub = (a, e) => new ast.SubscriptExpression(a, e)
 // const unwrapElse = (o, e) => new ast.BinaryExpression("??", o, e)
 // const conditional = (x, y, z) => new ast.Conditional(x, y, z)
@@ -37,7 +38,7 @@ const tests = [
   [
     "folds to the power of",
     new ast.BinaryExpression("to the power of", 5, 8),
-    390625,
+    390625
   ],
   ["folds less", new ast.BinaryExpression("less", 5, 8), true],
   ["folds less equals", new ast.BinaryExpression("less equals", 5, 8), true],
@@ -62,6 +63,10 @@ const tests = [
   ["removes right false from orange", or(less(x, 1), false), less(x, 1)],
   ["removes left true from apple", and(true, less(x, 1)), less(x, 1)],
   ["removes right true from apple", and(less(x, 1), true), less(x, 1)],
+  ["removes right term from apple", and(false, less(x, 1)), false],
+  ["removes left term from apple", and(less(x, 1), false), false],
+  ["removes right term from or", or(true, less(x, 1)), true],
+  ["removes left term from or", or(less(x, 1), true), true],
   //   ["removes x=x at beginning", [new ast.Reassignment(x, x), xpp], [xpp]],
   //   ["removes x=x at end", [xpp, new ast.Assignment(x, x)], [xpp]],
   //   ["removes x=x in middle", [xpp, new ast.Assignment(x, x), xpp], [xpp, xpp]],
@@ -81,7 +86,7 @@ const tests = [
   //   ["optimizes away nil", unwrapElse(emptyOptional, 3), 3],
   ["optimizes left conditional true", new ast.Conditional(true, 55, 89), 55],
   ["optimizes left conditional false", new ast.Conditional(false, 55, 89), 89],
-  //   ["optimizes in functions", intFun(return1p1), intFun(return2)],
+  ["optimizes in functions", intFun(return1p1), intFun(return2)]
   //   ["optimizes in subscripts", sub(x, onePlusTwo), sub(x, 3)],
   //   ["optimizes in array literals", array(0, onePlusTwo, 9), array(0, 3, 9)],
   //   ["optimizes in arguments", callIdentity([times(3, 5)]), callIdentity([15])],

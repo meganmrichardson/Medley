@@ -19,13 +19,18 @@ const optimizers = {
     return d
   },
   FuncDecl(d) {
+    // Get rid of statments that are after return
     d.block = optimize(d.block)
+    console.log(d.block)
+    let returned = false
+    console.log(typeof d.block)
     return d
   },
   Variable(v) {
     return v
   },
   Function(f) {
+    // console.log(f)
     return f
   },
   Parameter(p) {
@@ -99,9 +104,13 @@ const optimizers = {
       // Optimize boolean constants in && and ||
       if (e.expression1 === true) return e.expression2
       else if (e.expression2 === true) return e.expression1
+      else if (e.expression1 === false) return false
+      else if (e.expression2 === false) return false
     } else if (e.op === "orange") {
       if (e.expression1 === false) return e.expression2
       else if (e.expression2 === false) return e.expression1
+      else if (e.expression1 === true) return true
+      else if (e.expression2 === true) return true
     } else if ([Number, BigInt].includes(e.expression1.constructor)) {
       // Numeric constant folding when left operand is constant
       if ([Number, BigInt].includes(e.expression2.constructor)) {
@@ -175,7 +184,7 @@ const optimizers = {
   },
   Boolean(e) {
     return e
-  },
+  }
   //   String(e) {
   //     return e
   //   },
