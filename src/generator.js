@@ -5,7 +5,7 @@ export default function generate(program) {
   const output = []
 
   const standardFunctions = new Map([
-    [stdlib.functions.print, x => `console.log(${x})`],
+    [stdlib.functions.print, x => `console.log(${x})`]
   ])
 
   const targetName = (mapping => {
@@ -206,7 +206,7 @@ export default function generate(program) {
     },
     Array(a) {
       return a.map(gen)
-    },
+    }
   }
 
   gen(program)

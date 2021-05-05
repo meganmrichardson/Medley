@@ -6,7 +6,7 @@ import {
   FunctionType,
   Function,
   ArrayType,
-  DictType,
+  DictType
 } from "./ast.js"
 import * as stdlib from "./stdlib.js"
 
@@ -20,12 +20,6 @@ const check = self => ({
   isNumeric() {
     must(["intberry", "floatberry"].includes(self.type), `Expected a number`)
   },
-  // isNumericOrString() {
-  //   must(
-  //     ["intberry", "floatberry", "stringberry"].includes(self.type),
-  //     `Expected a number or string`
-  //   )
-  // },
   isBoolean() {
     must(self.type === "boolberry", `Expected a boolean`)
   },
@@ -39,30 +33,12 @@ const check = self => ({
       // self.constructor === DictType
     )
   },
-  // isAnArray() {
-  //   must(self.type.constructor === ArrayType, "Array expected")
-  // },
-  // isADict() {
-  //   must(self.type.constructor === DictType, "Dict expected")
-  // },
   hasSameTypeAs(other) {
     // self is an exp, does it have the same type as other
     if (typeof self.type === "string") {
       must(self.type === other.type, "Not same type")
-    } // } else {
-    //   // Array or dictionary check
-    //   must(
-    //     self.type.isEquivalentTo(other.type),
-    //     "Operands do not have the same type"
-    //   )
-    // }
+    }
   },
-  // allHaveSameType() {
-  //   must(
-  //     self.slice(1).every(e => e.type.isEquivalentTo(self[0].type)),
-  //     "Not all elements have the same type"
-  //   )
-  // },
   isAssignableTo(type) {
     if (typeof self.type === "string") {
       must(self.type === type, "Not assignable")
@@ -98,7 +74,7 @@ const check = self => ({
   },
   matchParametersOf(callee) {
     check(self).match(callee.parameters)
-  },
+  }
 })
 
 class Context {
@@ -192,15 +168,10 @@ class Context {
     const childContext = this.newChild({ inLoop: false, forFunction: d.func })
     d.func.parameters = childContext.analyze(d.func.parameters)
 
-    // need to make parameters vars
-
     d.func.type = new FunctionType(
       d.func.parameters.map(p => p.type),
       d.func.returnType
     )
-    // d.variable = new Variable(d.func.name)
-    // d.variable.type = d.func.type
-    // this.add(d.variable.name, d.variable)
     this.add(d.func.name, d.func)
     d.block = childContext.analyze(d.block)
     return d
@@ -219,14 +190,12 @@ class Context {
     check(s.identifier).isInteger()
     return s
   }
-  // LiteralList used and fixes errors but empty (???)
   LiteralList(l) {}
   Reassignment(s) {
     s.targets = this.lookup(s.targets.name)
     s.source = this.analyze(s.source)
     check(s.source).isAssignableTo(s.targets.type)
     check(s.targets).isNotReadOnly()
-    // add(s.targets.name, s.sources)
     return s
   }
   Block(b) {
@@ -348,7 +317,6 @@ class Context {
 }
 
 export default function analyze(node) {
-  // Allow primitives to be automatically typed
   Number.prototype.type = "floatberry"
   BigInt.prototype.type = "intberry"
   Boolean.prototype.type = "boolberry"
@@ -356,7 +324,6 @@ export default function analyze(node) {
   Type.prototype.type = "typeberry"
   const initialContext = new Context()
 
-  // Add in all the predefined identifiers from the stdlib module
   const library = { ...stdlib.types, ...stdlib.constants, ...stdlib.functions }
   for (const [name, type] of Object.entries(library)) {
     initialContext.add(name, type)
