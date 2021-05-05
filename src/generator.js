@@ -5,7 +5,7 @@ export default function generate(program) {
   const output = []
 
   const standardFunctions = new Map([
-    [stdlib.functions.print, x => `console.log(${x})`]
+    [stdlib.functions.print, x => `console.log(${x})`],
   ])
 
   const targetName = (mapping => {
@@ -64,9 +64,9 @@ export default function generate(program) {
       gen(d.block)
       output.push("}")
     },
-    Parameter(p) {
-      return targetName(p)
-    },
+    // Parameter(p) {
+    //   return targetName(p)
+    // },
     Variable(v) {
       return targetName(v)
     },
@@ -172,20 +172,8 @@ export default function generate(program) {
     UnaryExpression(e) {
       return `!${gen(e.expression)}`
     },
-    ArrayType(e) {
-      // console.log(e.elements.join(", "))
-      return `[${gen(e.elements).join(", ")}]`
-    },
-    DictType(t) {
-      // console.log(t)
-      return t
-    },
     DictContent(t) {
-      // console.log(t)
       return t
-    },
-    DictionaryList(d) {
-      return d
     },
     // Print
     // MemberExpression(e) {
@@ -199,16 +187,10 @@ export default function generate(program) {
       // }
       output.push(`${targetCode};`)
     },
-    Arguments(a) {
-      //gen(a.argumentList)
-      return `${gen(a.argumentList)}`
-    },
-    IdentifierExpression(e) {
-      return e
-    },
-    LiteralList(l) {
-      // console.log("L", l)
-    },
+    // Arguments(a) {
+    //   //gen(a.argumentList)
+    //   return `${gen(a.argumentList)}`
+    // },
     Literal(e) {
       if (typeof e.value === "string") {
         return `"${e.value}"`
@@ -219,18 +201,12 @@ export default function generate(program) {
     Number(e) {
       return e
     },
-    BigInt(e) {
-      return e
-    },
-    Boolean(e) {
-      return e
-    },
     String(e) {
       return JSON.stringify(e)
     },
     Array(a) {
       return a.map(gen)
-    }
+    },
   }
 
   gen(program)

@@ -15,7 +15,7 @@ const fixtures = [
     `,
     expected: dedent`
     let x_1 = 3;
-    `
+    `,
   },
   {
     name: "string assignment",
@@ -24,13 +24,13 @@ const fixtures = [
     `,
     expected: dedent`
     let x_1 = "hi";
-    `
+    `,
   },
   {
     name: "declaration",
     source: `floatberry x |`,
     expected: dedent`let x_1;
-    `
+    `,
   },
   {
     name: "increment",
@@ -41,7 +41,7 @@ const fixtures = [
     expected: dedent`
     let x_1 = 10;
     x_1++;
-    `
+    `,
   },
   {
     name: "binary expression in while",
@@ -56,18 +56,20 @@ const fixtures = [
     while ((i_1 < 10)) {
       i_1++;
     }
-    `
+    `,
   },
   {
     name: "for loop",
     source: `
     formelon intberry i is 0 | i less equals 10 | i++ ->
+      intberry j is 2 |
     <-
     `,
     expected: dedent`
     for (let i_1 = 0; i_1 <= 10; i_1++) {
+      let j_2 = 2;
     }
-    `
+    `,
   },
   {
     name: "negation",
@@ -76,7 +78,7 @@ const fixtures = [
     `,
     expected: dedent`
     let b_1 = !true;
-    `
+    `,
   },
   {
     name: "reassignment",
@@ -87,7 +89,7 @@ const fixtures = [
     expected: dedent`
     let b_1 = !true;
     b_1 = true;
-    `
+    `,
   },
   {
     name: "function",
@@ -99,7 +101,7 @@ const fixtures = [
     function toCelsius_1(fahrenheit_2) {
       
     }
-    `
+    `,
   },
   {
     name: "if statement",
@@ -114,7 +116,7 @@ const fixtures = [
     } else {
 
     }
-    `
+    `,
   },
   {
     name: "multiple if statements",
@@ -135,7 +137,7 @@ const fixtures = [
     } else {
 
     }
-    `
+    `,
   },
   {
     name: "call",
@@ -149,7 +151,7 @@ const fixtures = [
       
     }
     toCelsius_1((2.3 + 3.5));
-    `
+    `,
   },
   {
     name: "array",
@@ -158,7 +160,7 @@ const fixtures = [
     `,
     expected: dedent`
     let s_1 = ["strawberry", "blueberry"];
-    `
+    `,
   },
   {
     name: "dictionary",
@@ -167,8 +169,8 @@ const fixtures = [
     `,
     expected: dedent`
     let toppings_1 = {1: 1, 2: 2};
-    `
-  }
+    `,
+  },
 ]
 
 describe("The code generator", () => {

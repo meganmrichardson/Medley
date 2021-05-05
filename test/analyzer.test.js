@@ -23,16 +23,20 @@ const semanticChecks = [
   ["initialize with empty array", "berrybasket~intberry~ toppings is ~~ |"],
   [
     "initialize with empty dictionary",
-    "fruitbasket~intberry, intberry~ x is ~~~~ |"
+    "fruitbasket~intberry, intberry~ x is ~~~~ |",
+  ],
+  [
+    "initialize with nonempty dictionary",
+    "fruitbasket~intberry, intberry~ x is ~~3,4~~ |",
   ],
 
   [
     "array declaration",
-    'berrybasket~stringberry~ toppings is ~"strawberry" ; "blueberry"~ |'
+    'berrybasket~stringberry~ toppings is ~"strawberry" ; "blueberry"~ |',
   ],
   [
     "dictonary declaration",
-    'fruitbasket~stringberry, stringberry~ flavors is ~~"lemon","tart" ; "starfruit","sweet"~~ |'
+    'fruitbasket~stringberry, stringberry~ flavors is ~~"lemon","tart" ; "starfruit","sweet"~~ |',
   ],
   ["int declaration", "intberry x | x is 2 |"],
   ["int assignment", "intberry x is 4 |"],
@@ -45,41 +49,46 @@ const semanticChecks = [
   ["basic return", 'stringberry blend f() -> squeeze "" | <-'],
   [
     "return in nested if",
-    'stringberry blend f() -> ifmelon organic -> squeeze "" | <- <-'
+    'stringberry blend f() -> ifmelon organic -> squeeze "" | <- <-',
   ],
   ["break in nested if", "whilemelon gmo -> ifmelon organic -> split | <- <-"],
   ["long if", "ifmelon organic -> juice 1 | <- elsemelon -> juice 3 | <-"],
   [
     "else if",
-    "ifmelon organic -> juice 1 | <- elifmelon organic -> juice 0 |<- elsemelon -> juice 2 | <-"
+    "ifmelon organic -> juice 1 | <- elifmelon organic -> juice 0 |<- elsemelon -> juice 2 | <-",
   ],
   [
     "for with conditions",
-    'formelon intberry i is 5 | i less 10 | i++ -> juice "hi" | <-'
+    'formelon intberry i is 5 | i less 10 | i++ -> juice "hi" | <-',
   ],
   ["or", "juice gmo orange organic |"],
   ["and", "juice gmo apple organic |"],
   [
     "arithmetic",
-    "intberry x is 1 | juice 2 times 3 plus 5 divby 2 minus 5 mod 8 |"
+    "intberry x is 1 | juice 2 times 3 plus 5 divby 2 minus 5 mod 8 |",
   ],
   [
     "assigned functions",
-    "intberry blend fn (intberry five) -> intberry seven is 2 plus five | juice seven | <-"
+    "intberry blend fn (intberry five) -> intberry seven is 2 plus five | juice seven | <-",
   ],
   [
     "assigned functions2",
-    "intberry seven is 7 | intberry blend fn () -> juice seven | <-"
+    "intberry seven is 7 | intberry blend fn () -> juice seven | <-",
   ],
   [
     "call of assigned functions",
-    "intberry blend fn (intberry five) -> intberry seven is 2 plus five | juice seven | <- fn(5) |"
+    "intberry blend fn (intberry five) -> intberry seven is 2 plus five | juice seven | <- fn(5) |",
   ],
-  ["binary expression", "intberry seven is 2 plus 5 |"]
+  ["binary expression", "intberry seven is 2 plus 5 |"],
 ]
 
 // Programs that are syntactically correct but have semantic errors
 const semanticErrors = [
+  [
+    "int already declared",
+    "intberry x is 1 | intberry x is 2",
+    /Identifier x already declared/,
+  ],
   ["incorrect typing", "intberry x is organic |", /Not same type/],
   ["non-int increment", "boolberry x is gmo | x++ |", /an integer/],
   ["non-int decrement", 'stringberry x is "" | x-- |', /an integer/],
@@ -94,22 +103,22 @@ const semanticErrors = [
   [
     "Break outside loop but inside function",
     "stringberry blend f() -> split | <-",
-    /Break can only appear in a loop/
+    /Break can only appear in a loop/,
   ],
   [
     "break outside loop at top level",
     "split |",
-    /Break can only appear in a loop/
+    /Break can only appear in a loop/,
   ],
   [
     "break inside function",
     "intberry blend fn (intberry j) -> split | <-",
-    /Break can only appear in a loop/
+    /Break can only appear in a loop/,
   ],
   [
     "return outside function",
     "squeeze 2 |",
-    /Return can only appear in a function/
+    /Return can only appear in a function/,
   ],
   ["non-boolean short if test", "ifmelon 1 -><-", /a boolean/],
   ["non-boolean if test", "ifmelon 1 -><- elsemelon -><-", /a boolean/],
@@ -129,7 +138,7 @@ const semanticErrors = [
   ["bad types for >=", "juice gmo more equals 1 |", /Expected a number/],
   ["bad types for ==", `juice 2 equals "hi" |`, /Not same type/],
   ["bad types for negation", "juice not 1 |", /a boolean/],
-  ["bad types for not", 'juice not "hello" |', /a boolean/]
+  ["bad types for not", 'juice not "hello" |', /a boolean/],
 
   // [
   //   "Too many args",

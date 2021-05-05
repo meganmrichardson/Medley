@@ -6,7 +6,7 @@ import {
   FunctionType,
   Function,
   ArrayType,
-  DictType
+  DictType,
 } from "./ast.js"
 import * as stdlib from "./stdlib.js"
 
@@ -15,68 +15,17 @@ function must(condition, errorMessage) {
     throw new Error(errorMessage)
   }
 }
-Object.assign(Type.prototype, {
-  // Equivalence: when are two types the same
-  isEquivalentTo(target) {
-    return this == target
-  },
-  // T1 assignable to T2 is when x:T1 can be assigned to y:T2. By default
-  // this is only when two types are equivalent; however, for other kinds
-  // of types there may be special rules. For example, in a language with
-  // supertypes and subtypes, an object of a subtype would be assignable
-  // to a variable constrained to a supertype.
-  isAssignableTo(target) {
-    return this.isEquivalentTo(target)
-  }
-})
-
-Object.assign(ArrayType.prototype, {
-  isEquivalentTo(target) {
-    // [T] equivalent to [U] only when T is equivalent to U.
-    return (
-      target.constructor === ArrayType &&
-      this.baseType.isEquivalentTo(target.baseType)
-    )
-  },
-  isAssignableTo(target) {
-    return this.isEquivalentTo(target)
-  }
-})
-
-Object.assign(FunctionType.prototype, {
-  isEquivalentTo(target) {
-    return (
-      target.constructor === FunctionType &&
-      this.returnType.isEquivalentTo(target.returnType) &&
-      this.parameterTypes.length === target.parameterTypes.length &&
-      this.parameterTypes.every((t, i) =>
-        target.parameterTypes[i].isEquivalentTo(t)
-      )
-    )
-  },
-  isAssignableTo(target) {
-    // Functions are covariant on return types, contravariant on parameters.
-    return (
-      target.constructor === FunctionType &&
-      this.returnType.isAssignableTo(target.returnType) &&
-      this.parameterTypes.length === target.parameterTypes.length &&
-      this.parameterTypes.every((t, i) =>
-        target.parameterTypes[i].isAssignableTo(t)
-      )
-    )
-  }
-})
 
 const check = self => ({
   isNumeric() {
     must(["intberry", "floatberry"].includes(self.type), `Expected a number`)
   },
-  isNumericOrString() {
-    must(
-      ["intberry", "floatberry", "stringberry"].includes(self.type),
-      `Expected a number or string`
-    )
-  },
+  // isNumericOrString() {
+  //   must(
+  //     ["intberry", "floatberry", "stringberry"].includes(self.type),
+  //     `Expected a number or string`
+  //   )
+  // },
   isBoolean() {
     must(self.type === "boolberry", `Expected a boolean`)
   },
@@ -86,65 +35,41 @@ const check = self => ({
   isAType() {
     must(
       ["intberry", "floatberry", "stringberry", "boolberry"].includes(self) ||
-        self.constructor === ArrayType ||
-        self.constructor === DictType
+        self.constructor === ArrayType //||
+      // self.constructor === DictType
     )
   },
-  isAnArray() {
-    must(self.type.constructor === ArrayType, "Array expected")
-  },
-  isADict() {
-    must(self.type.constructor === DictType, "Dict expected")
-  },
+  // isAnArray() {
+  //   must(self.type.constructor === ArrayType, "Array expected")
+  // },
+  // isADict() {
+  //   must(self.type.constructor === DictType, "Dict expected")
+  // },
   hasSameTypeAs(other) {
     // self is an exp, does it have the same type as other
     if (typeof self.type === "string") {
       must(self.type === other.type, "Not same type")
-    } else {
-      // Array or dictionary check
-      must(
-        self.type.isEquivalentTo(other.type),
-        "Operands do not have the same type"
-      )
-    }
+    } // } else {
+    //   // Array or dictionary check
+    //   must(
+    //     self.type.isEquivalentTo(other.type),
+    //     "Operands do not have the same type"
+    //   )
+    // }
   },
-  allHaveSameType() {
-    must(
-      self.slice(1).every(e => e.type.isEquivalentTo(self[0].type)),
-      "Not all elements have the same type"
-    )
-  },
+  // allHaveSameType() {
+  //   must(
+  //     self.slice(1).every(e => e.type.isEquivalentTo(self[0].type)),
+  //     "Not all elements have the same type"
+  //   )
+  // },
   isAssignableTo(type) {
     if (typeof self.type === "string") {
       must(self.type === type, "Not assignable")
-    } else {
-      must(
-        type === Type.ANY || self.type.isAssignableTo(type),
-        `Cannot assign a ${self.type.name} to a ${type.name}`
-      )
     }
-    // self is a type, can objects of self be assigned to vars of type
-    // must(
-    //   type === Type.ANY ||
-    //     (self === "intberry" && type === "intberry") ||
-    //     (self === "floatberry" && type === "floatberry") ||
-    //     (self === "stringberry" && type === "stringberry") ||
-    //     (self === "boolberry" && type === "boolberry") ||
-    //     self.type.isAssignableTo(type),
-    //   `Cannot assign a ${self.type.name} to a ${type.name}`
-    // )
   },
   isNotReadOnly() {
     must(!self.readOnly, `Cannot assign to constant ${self.name}`)
-  },
-  areAllDistinct() {
-    must(
-      new Set(self.map(f => f.name)).size === self.length,
-      "Fields must be distinct"
-    )
-  },
-  isInTheObject(object) {
-    must(object.type.fields.map(f => f.name).includes(self), "No such field")
   },
   isInsideALoop() {
     must(self.inLoop, "Break can only appear in a loop")
@@ -152,22 +77,10 @@ const check = self => ({
   isInsideAFunction(context) {
     must(self.function, "Return can only appear in a function")
   },
-  isCallable() {
-    must(
-      self.func.type.constructor == FunctionType,
-      "Call of non-function or non-constructor"
-    )
-  },
   isCallableFromCallee() {
     must(
       self.callee.type.constructor == FunctionType,
       "Call of non-function or non-constructor"
-    )
-  },
-  returnsNothing() {
-    must(
-      self.type.returnType === Type.VOID,
-      "Something should be returned here"
     )
   },
   returnsSomething() {
@@ -185,7 +98,7 @@ const check = self => ({
   },
   matchParametersOf(callee) {
     check(self).match(callee.parameters)
-  }
+  },
 })
 
 class Context {
@@ -226,7 +139,6 @@ class Context {
       ) {
         return type
       }
-      throw new Error("ROTTEN TYPE")
     } else if (type.constructor === ArrayType) {
       type.baseType = this.analyzeType(type.baseType)
       return type
@@ -301,33 +213,6 @@ class Context {
     p.variable.type = p.type
     this.add(p.variable.name, p.variable)
     return p
-  }
-
-  ArrayType(t) {
-    t.baseType = this.analyze(t.baseType)
-    return t
-  }
-  DictType(t) {
-    t.keyType = this.analyze(t.keyType)
-    t.valueType = this.analyze(t.valueType)
-    return t
-  }
-  DictContent(t) {
-    console.log(t)
-    t.literal1 = this.analyze(t.literal1)
-    t.literal2 = this.analyze(t.literal2)
-    check
-    return t
-  }
-  // DictionaryList used and fixes errors but empty (???)
-  DictionaryList(t) {
-    // return t
-    // console.log(t)
-  }
-  FunctionType(t) {
-    t.parameterTypes = this.analyzeType(t.parameterTypes)
-    t.returnType = this.analyzeType(t.returnType)
-    return t
   }
   Increment(s) {
     s.identifier = this.analyze(s.identifier)
@@ -449,15 +334,6 @@ class Context {
     } else if (typeof e.value === "boolean") {
       e.type = "boolberry"
     }
-    return e
-  }
-  Number(e) {
-    return e
-  }
-  BigInt(e) {
-    return e
-  }
-  Boolean(e) {
     return e
   }
   String(e) {
