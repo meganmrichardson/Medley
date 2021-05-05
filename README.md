@@ -14,6 +14,8 @@ Medley is created by [@Henno Kublin](https://github.com/hjkublin), [@Amanda Marq
 
 Visit our [website](https://meganmrichardson.github.io/Medley/) to learn more!
 
+View our [Ohm Grammar](src/medley.ohm).
+
 ## Contents
 
 - [ Introduction ](#introduction)
@@ -27,7 +29,6 @@ Visit our [website](https://meganmrichardson.github.io/Medley/) to learn more!
   - [ Binary Operators ](#binary-operators)
   - [ Unary Operators ](#unary-operators)
 - [ Comments ](#comments)
-- [ Ohm Grammar ](#ohm-grammar)
 - [ Medley Examples ](#medley-examples)
   - [ If Statements ](#if-statements)
   - [ For Loops ](#for-loops)
@@ -132,121 +133,6 @@ Visit our [website](https://meganmrichardson.github.io/Medley/) to learn more!
 ## Comments
 
 - Single Line: `::`
-
-## Ohm Grammar
-
-```
-Medley {
-  Program     = Statement*
-  Statement   = FuncDecl
-              | Assignment                            --assign
-              | Reassignment
-              | Declaration
-              | Conditional
-              | WLoop
-              | FLoop
-              | Print
-              | Break
-              | Return
-              | Call "|"                              --call
-              | Increment "|"                         --increment
-  Assignment  = Type id is Exp "|"?
-  Declaration = Type id "|"
-  Reassignment= id is Exp "|"
-  ArrayType   = berrybasket "~"Type"~"
-  DictType    = fruitbasket "~"Type"," Type"~"
-  Conditional = ifmelon Exp Block (elifmelon Exp Block)*
-                (elsemelon Block)?
-  WLoop       = whilemelon Exp Block
-  FLoop       = formelon (Assignment "|"? | Reassignment "") Exp "|" Increment Block
-  Block       = "->"Statement*"<-"
-  FuncDecl    = Type blend id "(" Parameters ")" Block
-  Print       = juice Exp "|"
-  Return      = squeeze Exp "|"
-  Break       = split "|"
-  Call        = id "(" Args ")"
-  Args        = ListOf<Exp, ",">
-  Parameter   = Type id
-  Parameters  = ListOf<Parameter, ",">
-  LitList     = "~" ListOf<Literal, ";"> "~"
-  DictObj     = "~~" ListOf<DictContent, ";"> "~~"
-  DictContent = Literal "," Literal
-  Exp         = Exp orange Exp2                          --binary
-              | Exp2
-  Exp2        = Exp2 apple Exp3                          --binary
-              | Exp3
-  Exp3        = Exp3 relop Exp4                          --binary
-              | Exp4
-  Exp4        = Exp4 addop Exp5                          --binary
-              | Exp5
-  Exp5        = Exp5 mulop Exp6                          --binary
-              | Exp6
-  Exp6        = Exp7 power Exp6                          --binary
-              | Exp7
-  Exp7        = prefix Exp8                              --unary
-              | Exp8
-  Exp8        = Call
-              | Literal
-              | DictObj
-        	    | LitList
-              | id
-              | "(" Exp ")"                              --parens
-  Increment   = id ("++" | "--")
-  Literal     = strLit
-              | floatLit                                 --float
-              | intLit                                   --int
-              | boolLit
-  Type        = SimpleType | ArrayType | DictType
-  SimpleType  = stringberry | intberry | boolberry | floatberry
-  strLit      = "\"" char* "\"" | "\'" char* "\'"
-  char        = ~"\\" ~"\"" ~"\n" any
-  intLit      = ("-")? digit+
-  floatLit    = ("-")? digit+ "." digit+
-  boolLit     = "organic" | "gmo"
-  noneLit     = "none"
-  blend       = "blend" ~alnum
-  juice       = "juice" ~alnum
-  stringberry = "stringberry" ~alnum
-  intberry    = "intberry" ~alnum
-  floatberry  = "floatberry" ~alnum
-  boolberry   = "boolberry" ~alnum
-  orange      = "orange" ~alnum
-  apple       = "apple" ~alnum
-  lesseq      = "less equals" ~alnum
-  moreeq      = "more equals" ~alnum
-  less        = "less" ~alnum
-  more        = "more" ~alnum
-  equals      = "equals" ~alnum
-  times       = "times" ~alnum
-  divby       = "divby" ~alnum
-  mod         = "mod" ~alnum
-  plus        = "plus" ~alnum
-  minus       = "minus" ~alnum
-  power       = "to the power of" ~alnum
-  is          = "is" ~alnum
-  berrybasket = "berrybasket" ~alnum
-  fruitbasket = "fruitbasket" ~alnum
-  ifmelon     = "ifmelon" ~alnum
-  elifmelon   = "elifmelon" ~alnum
-  elsemelon   = "elsemelon" ~alnum
-  whilemelon  = "whilemelon" ~alnum
-  formelon    = "formelon" ~alnum
-  split       = "split" ~alnum
-  squeeze     = "squeeze" ~alnum
-  relop       = "less equals" | "more equals" | "less" | "more" | "equals"
-  mulop       = "times" | "divby" | "mod"
-  addop       = "plus" | "minus"
-  prefix      = "not"
-  keyword     = juice | blend | orange | apple | less | more | split
-              | lesseq | moreeq | equals | times | divby | mod
-              | plus | minus | power | is | berrybasket | fruitbasket
-              | ifmelon | elifmelon | elsemelon | whilemelon | elsemelon
-              | squeeze | intberry | stringberry | floatberry | boolberry
-  id          = ~keyword letter alnum*
-  comment     = "::" (~"\n" any)* ("\n" | end)           --singleLine
-  space      += comment
-}
-```
 
 ## Medley Examples
 
