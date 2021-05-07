@@ -9,11 +9,13 @@ const zpp = new ast.Increment(z)
 const xpp = new ast.Increment(x)
 const return1p1 = new ast.Return(new ast.BinaryExpression("plus", 1, 1))
 const return2 = new ast.Return(2)
+const print1p1 = new ast.Print(new ast.BinaryExpression("plus", 1, 1))
+const print2 = new ast.Print(2)
 const returnX = new ast.Return(x)
 const onePlusTwo = new ast.BinaryExpression("plus", 1, 2)
 const identity = Object.assign(new ast.Function("id"), { body: returnX })
 const intFun = body =>
-  new ast.FuncDecl(new ast.Function("f", [], "intberry"), body)
+  new ast.FuncDecl(new ast.Function("f", [], "intberry"), new ast.Block(body))
 const callIdentity = args => new ast.Call(identity, args)
 const or = (...d) =>
   d.reduce((x, y) => new ast.BinaryExpression("orange", x, y))
@@ -34,7 +36,7 @@ const tests = [
   [
     "folds to the power of",
     new ast.BinaryExpression("to the power of", 5, 8),
-    390625
+    390625,
   ],
   ["folds less", new ast.BinaryExpression("less", 5, 8), true],
   ["folds less equals", new ast.BinaryExpression("less equals", 5, 8), true],
@@ -79,15 +81,16 @@ const tests = [
   [
     "applies if-false after folding",
     new ast.Conditional(eq(1, 1), xpp, []),
-    xpp
+    xpp,
   ],
   ["optimizes left conditional true", new ast.Conditional(true, 55, 89), 55],
   ["optimizes left conditional false", new ast.Conditional(false, 55, 89), 89],
   ["optimizes in functions", intFun([return1p1]), intFun([return2])],
+  ["optimizes inside prints", print1p1, print2],
   [
     "optimizes removal of statements after return",
     intFun([return2, z]),
-    intFun([return2])
+    intFun([return2]),
   ], // Extra optimizer feature: removing statements after return
   ["optimizes in array literals", array(0, onePlusTwo, 9), array(0, 3, 9)],
   ["optimizes in arguments", callIdentity([times(3, 5)]), callIdentity([15])],
@@ -104,9 +107,10 @@ const tests = [
       new ast.FLoop(x, less, xpp, [new ast.Break()]),
       new ast.WLoop(true, [new ast.Break()]),
       conditional(x, 1, 2),
-      new ast.Conditional(x, [], [])
-    ])
-  ]
+      new ast.Conditional(x, [], []),
+      new ast.Print(new ast.Literal(3)),
+    ]),
+  ],
 ]
 
 describe("The optimizer", () => {

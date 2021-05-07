@@ -237,15 +237,17 @@ const fixtures = [
     name: "apple and orange",
     source: `
     ifmelon organic apple gmo ->
+      juice 1 |
     <- elifmelon gmo orange organic ->
+      juice 2 |
     <- elsemelon ->
     <-
     `,
     expected: dedent`
     if ((true && false)) {
-
+      console.log(1);
     } else if ((false || true)) {
-
+      console.log(2);
     } else {
 
     }

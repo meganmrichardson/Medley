@@ -1,13 +1,4 @@
-import { type } from "os"
-import util from "util"
-import {
-  Variable,
-  Type,
-  FunctionType,
-  Function,
-  ArrayType,
-  DictType
-} from "./ast.js"
+import { Variable, Type, FunctionType, ArrayType } from "./ast.js"
 import * as stdlib from "./stdlib.js"
 
 function must(condition, errorMessage) {
@@ -69,7 +60,7 @@ const check = self => ({
   },
   matchParametersOf(callee) {
     check(self).match(callee.parameters)
-  }
+  },
 })
 
 class Context {
@@ -101,6 +92,7 @@ class Context {
     return new Context(this, configuration)
   }
   analyze(node) {
+    console.log(node.constructor.name)
     return this[node.constructor.name](node)
   }
   analyzeType(type) {
@@ -180,7 +172,6 @@ class Context {
     check(s.identifier).isInteger()
     return s
   }
-  LiteralList(l) {}
   Reassignment(s) {
     s.targets = this.lookup(s.targets.name)
     s.source = this.analyze(s.source)

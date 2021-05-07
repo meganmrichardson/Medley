@@ -8,7 +8,7 @@ export default function generate(program) {
       if (!mapping.has(entity)) {
         mapping.set(entity, mapping.size + 1)
       }
-      return `${entity.name ?? entity.description}_${mapping.get(entity)}`
+      return `${entity.name}_${mapping.get(entity)}`
     }
   })(new Map())
 
@@ -71,17 +71,16 @@ export default function generate(program) {
       output.push(`return ${gen(s.returnValue)};`)
     },
     Conditional(s) {
-      output.push(
-        `if (${gen(s.tests[0])}) {${
-          s.consequents[0].statements.length > 0 ? gen(s.consequents[0]) : ""
-        }`
-      )
+      output.push(`if (${gen(s.tests[0])}) {`)
+      if (s.consequents[0].statements.length > 0) {
+        gen(s.consequents[0])
+      }
+
       for (let i = 1; i < s.tests.length; i++) {
-        output.push(
-          `} else if (${gen(s.tests[i])}) {${
-            s.consequents[i].statements.length > 0 ? gen(s.consequents[i]) : ""
-          }`
-        )
+        output.push(`} else if (${gen(s.tests[i])}) {`)
+        if (s.consequents[i].statements.length > 0) {
+          gen(s.consequents[i])
+        }
       }
       if (s.alternates.length !== 0) {
         output.push(`} else {${gen(s.alternates)}`)
@@ -175,7 +174,7 @@ export default function generate(program) {
     },
     Array(a) {
       return a.map(gen)
-    }
+    },
   }
 
   gen(program)

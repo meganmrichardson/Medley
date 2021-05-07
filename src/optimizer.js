@@ -1,4 +1,5 @@
 import * as ast from "./ast.js"
+import util from "util"
 
 export default function optimize(node) {
   return optimizers[node.constructor.name](node)
@@ -8,6 +9,10 @@ const optimizers = {
   Program(p) {
     p.statements = optimize(p.statements)
     return p
+  },
+  Block(b) {
+    b.statements = optimize(b.statements)
+    return b
   },
   Assignment(d) {
     d.source = optimize(d.source)
@@ -19,13 +24,13 @@ const optimizers = {
   FuncDecl(d) {
     d.block = optimize(d.block)
     var stop = false
-    d.block.forEach(function(statement) {
+    d.block.statements.forEach(function (statement) {
       if (!stop) {
         if (statement.returnValue != null) {
           stop = true
         }
       } else {
-        d.block.pop()
+        d.block.statements.pop()
       }
     })
     return d
@@ -146,6 +151,10 @@ const optimizers = {
     e.literals = optimize(e.literals)
     return e
   },
+  Print(p) {
+    p.argument = optimize(p.argument)
+    return p
+  },
   Call(c) {
     c.callee = optimize(c.callee)
     c.args = optimize(c.args)
@@ -157,7 +166,10 @@ const optimizers = {
   Boolean(e) {
     return e
   },
+  Literal(e) {
+    return e
+  },
   Array(a) {
     return a.flatMap(optimize)
-  }
+  },
 }
