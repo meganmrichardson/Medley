@@ -76,7 +76,6 @@ const tests = [
   ["optimizes short-if-false", [new ast.Conditional(false, xpp, [])], []],
   ["optimizes while-false", new ast.WLoop(false, xpp), []],
   ["optimizes for-loop", [new ast.FLoop(z, less(3, 2), zpp, [])], []],
-  // ["optimizes for-empty-array", new ast.FLoop(x, [], xpp), []], // figure out how to write test and body for this test!!!!!
   ["optimizes not with true", new ast.UnaryExpression("not", true), false],
   ["optimizes not with false", new ast.UnaryExpression("not", false), true],
   [
@@ -86,7 +85,12 @@ const tests = [
   ],
   ["optimizes left conditional true", new ast.Conditional(true, 55, 89), 55],
   ["optimizes left conditional false", new ast.Conditional(false, 55, 89), 89],
-  ["optimizes in functions", intFun(return1p1), intFun(return2)],
+  ["optimizes in functions", intFun([return1p1]), intFun([return2])],
+  [
+    "optimizes removal of statements after return",
+    intFun([return2, z]),
+    intFun([return2])
+  ], // Extra optimizer feature: removing statements after return
   ["optimizes in array literals", array(0, onePlusTwo, 9), array(0, 3, 9)],
   ["optimizes in arguments", callIdentity([times(3, 5)]), callIdentity([15])],
   [
@@ -103,8 +107,6 @@ const tests = [
       new ast.WLoop(true, [new ast.Break()]),
       conditional(x, 1, 2),
       new ast.Conditional(x, [], [])
-      // new ast.ForRangeStatement(x, 2, "..<", 5, []),
-      // new ast.ForStatement(x, array(1, 2, 3), [])
     ])
   ]
 ]
