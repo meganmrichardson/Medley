@@ -1,7 +1,7 @@
 import * as ast from "./ast.js"
 
 export default function optimize(node) {
-  console.log(node)
+  // console.log(node)
   // console.log(node.constructor.name)
   return optimizers[node.constructor.name](node)
 }
@@ -21,9 +21,38 @@ const optimizers = {
   FuncDecl(d) {
     // Get rid of statments that are after return
     d.block = optimize(d.block)
+    // console.log(d.block)
+    // var reducedBlock = new Array(d.block.length)
+    // var stop = false
+    // d.block.forEach(function(statement) {
+    //   if (!stop) {
+    //     reducedBlock.append(statement)
+    //     if (statement.returnValue != null) {
+    //       stop = true
+    //     }
+    //   }
+
+    //   // console.log(statement)
+    // })
+    // console.log(d.block)
+    var stop = false
+    d.block.forEach(function(statement) {
+      if (!stop) {
+        if (statement.returnValue != null) {
+          console.log(statement)
+          stop = true
+        }
+      } else {
+        // console.log(statement)
+        d.block.pop()
+        console.log(d.block)
+      }
+    })
     console.log(d.block)
-    let returned = false
-    console.log(typeof d.block)
+    // d.block.forEach(function(statement) {
+    //   console.log(statement)
+    // })
+
     return d
   },
   Variable(v) {
@@ -56,12 +85,6 @@ const optimizers = {
   },
   Conditional(s) {
     s.tests = optimize(s.tests)
-    // if (s.consequents.length > 0) {
-    //   optimize(s.consequents) // how to deal with empty arrays??
-    // }
-    // if (s.alternates.length > 0) {
-    //   optimize(s.alternates)
-    // }
     if (s.tests.constructor === Boolean) {
       return s.tests ? s.consequents : s.alternates
     }
@@ -155,10 +178,6 @@ const optimizers = {
     e.literals = optimize(e.literals)
     return e
   },
-  //   MemberExpression(e) {
-  //     e.object = optimize(e.object)
-  //     return e
-  //   },
   Call(c) {
     c.callee = optimize(c.callee)
     c.args = optimize(c.args)
