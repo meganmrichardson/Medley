@@ -80,9 +80,6 @@ export class Block {
 }
 
 export class FuncDecl {
-  // constructor(returnType, name, parameters, block) {
-  //   Object.assign(this, { returnType, name, parameters, block })
-  // }
   constructor(func, block) {
     Object.assign(this, { func, block })
   }
@@ -111,12 +108,6 @@ export class Arguments {
     this.argumentList = argumentList
   }
 }
-
-// export class Params {
-//   constructor(params) {
-//     this.params = params
-//   }
-// }
 
 export class Parameter {
   constructor(type, id) {
@@ -148,54 +139,6 @@ export class Literal {
   }
 }
 
-// export class Exp {
-//   constructor(expression1, expression2) {
-//     Object.assign(this, { expression1, expression2 })
-//   }
-// }
-
-// export class Exp2 {
-//   constructor(expression1, expression2) {
-//     Object.assign(this, { expression1, expression2 })
-//   }
-// }
-
-// export class Exp3 {
-//   constructor(expression1, expression2) {
-//     Object.assign(this, { expression1, expression2 })
-//   }
-// }
-
-// export class Exp4 {
-//   constructor(expression1, expression2) {
-//     Object.assign(this, { expression1, expression2 })
-//   }
-// }
-
-// export class Exp5 {
-//   constructor(expression1, expression2) {
-//     Object.assign(this, { expression1, expression2 })
-//   }
-// }
-
-// export class Exp6 {
-//   constructor(expression1, expression2) {
-//     Object.assign(this, { expression1, expression2 })
-//   }
-// }
-
-// export class Exp7 {
-//   constructor(expression) {
-//     this.expression = expression
-//   }
-// }
-
-// export class Exp8 {
-//   constructor(expression) {
-//     this.expression = expression
-//   }
-// }
-
 export class BinaryExpression {
   constructor(op, expression1, expression2) {
     Object.assign(this, { op, expression1, expression2 })
@@ -208,15 +151,8 @@ export class UnaryExpression {
   }
 }
 
-export class BreakStatement {
-  // Intentionally empty
-}
+export class BreakStatement {}
 
-// FOR SEMANTIC ANALYSIS
-
-// Complete Type objects are not created during the parsing; instead, we
-// only know identifiers for the base types. During semantic analysis the
-// type identifiers will be replaced with real type objects.
 export class Type {
   constructor(name) {
     this.name = name
@@ -230,42 +166,26 @@ export class Type {
   static ANY = new Type("any")
 }
 
-// export class ArrayType extends Type {
-//   // Example: [int]
-//   constructor(baseType) {
-//     super(`[${baseType.name}]`)
-//     this.baseType = baseType
-//   }
-// }
-
 export class FunctionType extends Type {
-  // Example: (boolean,[string]?)->float
   constructor(parameterTypes, returnType) {
     super(`(${parameterTypes.map(t => t.name).join(",")})->${returnType.name}`)
     Object.assign(this, { parameterTypes, returnType })
   }
 }
 
-// Created during semantic analysis only!
 export class Variable {
   constructor(name) {
     this.name = name
   }
 }
 
-// Created during semantic analysis only!
 export class Function {
   constructor(name, parameters, returnType) {
     Object.assign(this, { name, parameters, returnType })
   }
 }
 
-// END OF SEMANTIC ANALYSIS PART
-
 function prettied(node) {
-  // Return a compact and pretty string representation of the node graph,
-  // taking care of cycles. Written here from scratch because the built-in
-  // inspect function, while nice, isn't nice enough.
   const tags = new Map()
 
   function tag(node) {

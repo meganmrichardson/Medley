@@ -2,7 +2,6 @@ import assert from "assert"
 import optimize from "../src/optimizer.js"
 import * as ast from "../src/ast.js"
 
-// Make some test cases easier to read
 const x = new ast.Variable("x")
 const y = new ast.Variable("y")
 const z = new ast.Assignment("intberry", "z", 3)
@@ -26,7 +25,6 @@ const times = (x, y) => new ast.BinaryExpression("times", x, y)
 const neg = x => new ast.UnaryExpression("minus", x)
 const array = (...elements) => new ast.LiteralList(elements)
 const conditional = (x, y, z) => new ast.Conditional(x, y, z)
-// const some = x => new ast.UnaryExpression("some", x)
 
 const tests = [
   ["folds plus", new ast.BinaryExpression("plus", 5, 8), 13],

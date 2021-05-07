@@ -27,14 +27,9 @@ const check = self => ({
     must(self.type === "intberry", `Expected an integer`)
   },
   isAType() {
-    must(
-      ["intberry", "floatberry", "stringberry", "boolberry"].includes(self) ||
-        self.constructor === ArrayType //||
-      // self.constructor === DictType
-    )
+    must(["intberry", "floatberry", "stringberry", "boolberry"].includes(self))
   },
   hasSameTypeAs(other) {
-    // self is an exp, does it have the same type as other
     if (typeof self.type === "string") {
       must(self.type === other.type, "Not same type")
     }
@@ -128,13 +123,10 @@ class Context {
     p.statements = this.analyze(p.statements)
     return p
   }
-  // Work on assignment node:
   Assignment(d) {
-    // console.log(d)
     d.name = this.analyze(d.name)
     d.variable = new Variable(d.name)
     d.type = this.analyzeType(d.type)
-    // d.source = this.analyze(d.source)
     d.variable.type = d.type
     this.add(d.variable.name, d.variable)
     if (
@@ -148,10 +140,8 @@ class Context {
     } else if (d.type["baseType"]) {
       d.source = d.source.literals
     } else {
-      // console.log(d)
       d.source = d.source.content
     }
-    // check for types in array list and dictionary list
     return d
   }
   Declaration(d) {
@@ -226,8 +216,6 @@ class Context {
   }
   WLoop(s) {
     s.test = this.analyze(s.test)
-
-    // NOTE: need some way to check if test is binary expression
     check(s.test).isBoolean()
 
     s.body = this.newChild({ inLoop: true }).analyze(s.body)

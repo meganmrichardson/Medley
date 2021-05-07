@@ -1,5 +1,4 @@
 import {} from "./ast.js"
-import * as stdlib from "./stdlib.js"
 
 export default function generate(program) {
   const output = []
@@ -51,7 +50,7 @@ export default function generate(program) {
         `function ${gen(d.func)}(${gen(d.func.parameters[0].variable)}) {`
       )
       gen(d.block)
-      output.push(`}`)
+      output.push("}")
     },
     Variable(v) {
       return targetName(v)
@@ -161,10 +160,6 @@ export default function generate(program) {
       const targetCode = `${gen(c.callee)}(${gen(c.args).join(", ")})`
       output.push(`${targetCode};`)
     },
-    // Arguments(a) {
-    //   //gen(a.argumentList)
-    //   return `${gen(a.argumentList)}`
-    // },
     Literal(e) {
       if (typeof e.value === "string") {
         return `"${e.value}"`
@@ -180,7 +175,7 @@ export default function generate(program) {
     },
     Array(a) {
       return a.map(gen)
-    },
+    }
   }
 
   gen(program)

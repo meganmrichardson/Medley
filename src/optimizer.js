@@ -1,8 +1,6 @@
 import * as ast from "./ast.js"
 
 export default function optimize(node) {
-  // console.log(node)
-  // console.log(node.constructor.name)
   return optimizers[node.constructor.name](node)
 }
 
@@ -19,47 +17,23 @@ const optimizers = {
     return d
   },
   FuncDecl(d) {
-    // Get rid of statments that are after return
     d.block = optimize(d.block)
-    // console.log(d.block)
-    // var reducedBlock = new Array(d.block.length)
-    // var stop = false
-    // d.block.forEach(function(statement) {
-    //   if (!stop) {
-    //     reducedBlock.append(statement)
-    //     if (statement.returnValue != null) {
-    //       stop = true
-    //     }
-    //   }
-
-    //   // console.log(statement)
-    // })
-    // console.log(d.block)
     var stop = false
     d.block.forEach(function(statement) {
       if (!stop) {
         if (statement.returnValue != null) {
-          console.log(statement)
           stop = true
         }
       } else {
-        // console.log(statement)
         d.block.pop()
-        console.log(d.block)
       }
     })
-    console.log(d.block)
-    // d.block.forEach(function(statement) {
-    //   console.log(statement)
-    // })
-
     return d
   },
   Variable(v) {
     return v
   },
   Function(f) {
-    // console.log(f)
     return f
   },
   Parameter(p) {
@@ -111,7 +85,6 @@ const optimizers = {
     e.expression1 = optimize(e.expression1)
     e.expression2 = optimize(e.expression2)
     if (e.op === "apple") {
-      // Optimize boolean constants in && and ||
       if (e.expression1 === true) return e.expression2
       else if (e.expression2 === true) return e.expression1
       else if (e.expression1 === false) return false
@@ -121,9 +94,7 @@ const optimizers = {
       else if (e.expression2 === false) return e.expression1
       else if (e.expression1 === true) return true
       else if (e.expression2 === true) return true
-    }
-    // doing these special case optimizations before the typical ones
-    else if (e.expression1 === 0 && e.op === "plus") return e.expression2
+    } else if (e.expression1 === 0 && e.op === "plus") return e.expression2
     else if (e.expression1 === 1 && e.op === "times") return e.expression2
     else if (e.expression1 === 0 && e.op === "minus")
       return new ast.UnaryExpression("minus", e.expression2)
@@ -131,9 +102,7 @@ const optimizers = {
     else if (e.expression1 === 0 && ["times", "divby"].includes(e.op)) return 0
     else if (e.expression1 < e.expression2 && e.op === "mod")
       return e.expression1
-    // normal binary optimizations
     if ([Number, BigInt].includes(e.expression1.constructor)) {
-      // Numeric constant folding when left operand is constant
       if ([Number, BigInt].includes(e.expression2.constructor)) {
         if (e.op === "plus") {
           return e.expression1 + e.expression2
@@ -151,7 +120,6 @@ const optimizers = {
         else if (e.op === "more") return e.expression1 > e.expression2
       }
     } else if (e.expression2.constructor === Number) {
-      // Numeric constant folding when right operand is constant
       if (["plus", "minus"].includes(e.op) && e.expression2 === 0)
         return e.expression1
       else if (["times", "divby"].includes(e.op) && e.expression2 === 1)
