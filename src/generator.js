@@ -4,10 +4,6 @@ import * as stdlib from "./stdlib.js"
 export default function generate(program) {
   const output = []
 
-  const standardFunctions = new Map([
-    [stdlib.functions.print, x => `console.log(${x})`]
-  ])
-
   const targetName = (mapping => {
     return entity => {
       if (!mapping.has(entity)) {
@@ -50,23 +46,13 @@ export default function generate(program) {
     Declaration(d) {
       output.push(`let ${gen(d.variable)};`)
     },
-    Block(p) {
-      gen(p.statements)
-    },
     FuncDecl(d) {
-      //console.log("d.func params:", d.func.parameters[0])
-      //d.func.parameters.id
-      //${gen(d.func.parameters.id.name).join(", ")}
       output.push(
         `function ${gen(d.func)}(${gen(d.func.parameters[0].variable)}) {`
       )
-      // issue with analyzer.js, maybe the identifier expression isn't defined correctly? That or Params is the issue
       gen(d.block)
-      output.push("}")
+      output.push(`}`)
     },
-    // Parameter(p) {
-    //   return targetName(p)
-    // },
     Variable(v) {
       return targetName(v)
     },
@@ -79,18 +65,13 @@ export default function generate(program) {
     Reassignment(s) {
       output.push(`${gen(s.targets)} = ${gen(s.source)};`)
     },
-    BreakStatement(s) {
+    Break(s) {
       output.push("break;")
     },
-    ReturnStatement(s) {
-      output.push(`return ${gen(s.expression)};`)
+    Return(s) {
+      output.push(`return ${gen(s.returnValue)};`)
     },
     Conditional(s) {
-      //let talliedUpConsequents =
-      //console.log("s in conditional", s)
-      //console.log("s.tests[0]:", s.tests[0])
-      // console.log(`s tests ${s.tests}`)
-      // console.log(`s test ${s.consequents[0].statements}`)
       output.push(
         `if (${gen(s.tests[0])}) {${
           s.consequents[0].statements.length > 0 ? gen(s.consequents[0]) : ""
@@ -109,8 +90,6 @@ export default function generate(program) {
       output.push(`}`)
     },
     Block(b) {
-      // console.log("b", b)
-      // console.log("b.statements", b.statements)
       gen(b.statements)
     },
     WLoop(s) {
@@ -142,7 +121,6 @@ export default function generate(program) {
       output.push("}")
     },
     BinaryExpression(e) {
-      //console.log("binary expression information:", e)
       let op = ""
       if (e.op === "less") {
         op = "<"
@@ -175,16 +153,12 @@ export default function generate(program) {
     DictContent(t) {
       return t
     },
-    // Print
-    // MemberExpression(e) {
-    //   return `(${gen(e.object)}[${JSON.stringify(gen(e.field))}])`
-    // },
+    Print(x) {
+      output.push(`console.log(${gen(x.argument)});`)
+      return x
+    },
     Call(c) {
       const targetCode = `${gen(c.callee)}(${gen(c.args).join(", ")})`
-      // Calls in expressions vs in statements are handled differently
-      // if (c.callee instanceof Type || c.callee.type.returnType !== Type.VOID) {
-      //   return targetCode
-      // }
       output.push(`${targetCode};`)
     },
     // Arguments(a) {
@@ -206,7 +180,7 @@ export default function generate(program) {
     },
     Array(a) {
       return a.map(gen)
-    }
+    },
   }
 
   gen(program)

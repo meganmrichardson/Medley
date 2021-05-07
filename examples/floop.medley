@@ -1,2 +1,4 @@
 formelon intberry i is 0 | i more equals 10 | i++ ->
+juice "hi" |
+split |
 <-

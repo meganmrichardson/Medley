@@ -63,11 +63,13 @@ const fixtures = [
     source: `
     formelon intberry i is 0 | i less equals 10 | i++ ->
       intberry j is 2 |
+      split |
     <-
     `,
     expected: dedent`
     for (let i_1 = 0; i_1 <= 10; i_1++) {
       let j_2 = 2;
+      break;
     }
     `,
   },
@@ -94,12 +96,15 @@ const fixtures = [
   {
     name: "function",
     source: `
-    floatberry blend toCelsius(floatberry fahrenheit) ->
+    intberry blend toCelsius(floatberry fahrenheit) ->
+      juice "hi" |
+      squeeze 3 |
     <-
     `,
     expected: dedent`
     function toCelsius_1(fahrenheit_2) {
-      
+      console.log("hi");
+      return 3;
     }
     `,
   },
@@ -169,6 +174,81 @@ const fixtures = [
     `,
     expected: dedent`
     let toppings_1 = {1: 1, 2: 2};
+    `,
+  },
+  {
+    name: "for loop more equals",
+    source: `
+    formelon intberry i is 0 | i more equals 10 | i++ ->
+      juice "hi" |
+    <-
+    `,
+    expected: dedent`
+    for (let i_1 = 0; i_1 >= 10; i_1++) {
+      console.log("hi");
+    }
+    `,
+  },
+  {
+    name: "for loop more than",
+    source: `
+    formelon intberry i is 0 | i more 10 | i++ ->
+      juice "hi" |
+    <-
+    `,
+    expected: dedent`
+    for (let i_1 = 0; i_1 > 10; i_1++) {
+      console.log("hi");
+    }
+    `,
+  },
+  {
+    name: "for loop less than",
+    source: `
+    formelon intberry i is 0 | i less 10 | i++ ->
+      juice "hi" |
+    <-
+    `,
+    expected: dedent`
+    for (let i_1 = 0; i_1 < 10; i_1++) {
+      console.log("hi");
+    }
+    `,
+  },
+  {
+    name: "more than binary",
+    source: `
+    juice 2 more 3 |
+    `,
+    expected: dedent`
+    console.log((2 > 3));
+    `,
+  },
+  {
+    name: "binary expression",
+    source: `
+    juice 2 times 3 divby 4 mod 10 to the power of 4 |
+    `,
+    expected: dedent`
+    console.log((((2 * 3) / 4) % (10 ** 4)));
+    `,
+  },
+  {
+    name: "apple and orange",
+    source: `
+    ifmelon organic apple gmo ->
+    <- elifmelon gmo orange organic ->
+    <- elsemelon ->
+    <-
+    `,
+    expected: dedent`
+    if ((true && false)) {
+
+    } else if ((false || true)) {
+
+    } else {
+
+    }
     `,
   },
 ]

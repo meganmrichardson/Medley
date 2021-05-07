@@ -1,3 +1,4 @@
-floatberry blend toCelsius(floatberry fahrenheit) ->
+intberry blend toCelsius(floatberry fahrenheit) ->
+  juice "hi" |
+  squeeze 3 |
 <-
-toCelsius(2 plus 3) |
