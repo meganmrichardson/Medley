@@ -23,7 +23,7 @@ const optimizers = {
   },
   FuncDecl(d) {
     d.block = optimize(d.block)
-    var stop = false
+    let stop = false
     d.block.statements.forEach(function (statement) {
       if (!stop) {
         if (statement.returnValue != null) {

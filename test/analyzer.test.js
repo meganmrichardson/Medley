@@ -125,7 +125,7 @@ const semanticErrors = [
   ["non-boolean while test", "whilemelon 1 -><-", /a boolean/],
   ["bad types for ||", "juice gmo orange 1 |", /a boolean/],
   ["bad types for &&", "juice gmo apple 1 |", /a boolean/],
-  ["bad types for ==", "juice gmo equals 1 |", /Not same type/],
+  ["bad types for ===", "juice gmo equals 1 |", /Not same type/],
 
   ["bad types for +", "juice gmo plus 1 |", /a number/],
   ["bad types for -", "juice gmo minus 1 |", /a number/],
@@ -136,7 +136,7 @@ const semanticErrors = [
   ["bad types for <=", "juice gmo less equals 1 |", /Expected a number/],
   ["bad types for >", "juice gmo more 1 |", /Expected a number/],
   ["bad types for >=", "juice gmo more equals 1 |", /Expected a number/],
-  ["bad types for ==", `juice 2 equals "hi" |`, /Not same type/],
+  ["bad types for ===", `juice 2 equals "hi" |`, /Not same type/],
   ["bad types for negation", "juice not 1 |", /a boolean/],
   ["bad types for not", 'juice not "hello" |', /a boolean/],
 

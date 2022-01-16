@@ -182,10 +182,10 @@ juice "Hello, World!" |
 
 ```
 function fibonacci(num) {
-    var num1 = 0;
-    var num2 = 1;
-    var sum;
-    var i = 0;
+    let num1 = 0;
+    let num2 = 1;
+    let sum;
+    let i = 0;
     for (i = 0; i < num; i++) {
         sum = num1 + num2;
         num1 = num2;
@@ -218,7 +218,7 @@ intberry blend fibonacci(intberry num) ->
 
 ```
 def odd_or_even(num):
-    if(num % 2 == 0) {
+    if (num % 2 === 0) {
         console.log("The number is even.");
     } else {
         console.log("The number is odd.");
@@ -261,7 +261,7 @@ floatberry blend toCelsius(floatberry fahrenheit) ->
 
 ```
 function firstFactorial(x) {
-    if (x == 0 || x == 1) {
+    if (x === 0 || x === 1) {
         return 1;
     }
     return x * firstFactorial(x - 1);

@@ -92,7 +92,6 @@ class Context {
     return new Context(this, configuration)
   }
   analyze(node) {
-    console.log(node.constructor.name)
     return this[node.constructor.name](node)
   }
   analyzeType(type) {
